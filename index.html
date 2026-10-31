@@ -1115,6 +1115,317 @@ footer a {
   }
 }
    
+/* =========================================
+   HOSTELHUB — PREMIUM VISUAL FINISH
+   ========================================= */
+
+:root {
+  --hostel-green: #197647;
+  --hostel-green-dark: #105532;
+  --hostel-green-light: #eaf5ed;
+  --hostel-green-border: #d7e8dc;
+  --ink: #192b21;
+  --muted: #68776e;
+  --surface: #f6f9f6;
+}
+
+/* A cleaner, more refined page */
+body {
+  color: var(--ink);
+  background: #fff;
+  letter-spacing: -0.01em;
+}
+
+main {
+  overflow: clip;
+}
+
+section {
+  scroll-margin-top: 90px;
+}
+
+/* Refined header */
+header,
+.site-header {
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid #e6eee8;
+  box-shadow: 0 4px 20px rgba(24, 70, 43, 0.045);
+}
+
+/* More distinctive brand */
+.brand-mark {
+  border-radius: 13px !important;
+  box-shadow: 0 6px 16px rgba(25, 118, 71, 0.2);
+  transition: transform 200ms ease;
+}
+
+.brand-mark:hover {
+  transform: rotate(-4deg) scale(1.04);
+}
+
+/* More polished hero */
+.hero {
+  position: relative;
+  background:
+    radial-gradient(
+      ellipse at 92% 8%,
+      rgba(135, 204, 154, 0.24),
+      transparent 36%
+    ),
+    radial-gradient(
+      ellipse at 5% 100%,
+      rgba(220, 242, 225, 0.7),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #edf7ef, #fbfdfb 72%);
+}
+
+.hero h1 {
+  max-width: 760px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.06em;
+}
+
+.hero h1 span {
+  color: var(--hostel-green-dark) !important;
+}
+
+.hero p {
+  color: #596a60;
+  line-height: 1.85;
+}
+
+.eyebrow {
+  box-shadow: 0 3px 10px rgba(25, 118, 71, 0.055);
+}
+
+/* Better buttons */
+.button,
+button.button,
+#reset-search,
+#dialog-close {
+  border-radius: 12px;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.button:hover,
+button.button:hover,
+#reset-search:hover,
+#dialog-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 20px rgba(25, 118, 71, 0.18);
+}
+
+/* A premium search panel */
+.search-panel {
+  border: 1px solid #e0eae2;
+  border-top: 3px solid var(--hostel-green);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow:
+    0 14px 36px rgba(30, 69, 43, 0.07),
+    0 2px 5px rgba(30, 69, 43, 0.025);
+}
+
+.field input,
+.field select,
+.search-panel input,
+.search-panel select {
+  border-radius: 11px;
+  border-color: #dce6de;
+  background: #fbfdfb;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.field input:focus,
+.field select:focus,
+.search-panel input:focus,
+.search-panel select:focus {
+  border-color: var(--hostel-green);
+  box-shadow: 0 0 0 4px rgba(25, 118, 71, 0.09);
+}
+
+/* Better section headings */
+.section-heading h2,
+.info-section h2 {
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.section-heading p {
+  max-width: 640px;
+  line-height: 1.8;
+}
+
+/* Accommodation cards */
+.hostel-card {
+  border: 1px solid #e4ebe5;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 4px 15px rgba(26, 64, 40, 0.045);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.hostel-card:hover {
+  transform: translateY(-5px);
+  border-color: #c8dfce;
+  box-shadow: 0 16px 34px rgba(26, 64, 40, 0.105);
+}
+
+.card-visual {
+  background:
+    radial-gradient(
+      circle at 80% 18%,
+      rgba(255, 255, 255, 0.9),
+      transparent 32%
+    ),
+    linear-gradient(135deg, #dff0e3, #f4faf5);
+}
+
+.hostel-card h3 {
+  color: #20392a;
+  font-size: 1.12rem;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.hostel-card p {
+  color: #69776e;
+  line-height: 1.7;
+}
+
+.demo-label {
+  border: 1px solid #d4e8da;
+  border-radius: 999px;
+  background: #edf7ef;
+  color: #17623a;
+  font-weight: 750;
+}
+
+.price {
+  color: #176b3e !important;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.details-button {
+  border-radius: 10px;
+  font-weight: 750;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.details-button:hover {
+  transform: translateY(-1px);
+}
+
+/* Information sections */
+.info-section {
+  background:
+    linear-gradient(180deg, #f7faf7, #f0f6f1);
+  border-top: 1px solid #e4ede6;
+}
+
+.info-section h3 {
+  color: #234531;
+  font-weight: 750;
+}
+
+.info-section a {
+  text-underline-offset: 4px;
+}
+
+/* Listing dialog */
+#listing-dialog {
+  border: 1px solid #e0eae2;
+  border-radius: 22px;
+  box-shadow: 0 25px 80px rgba(12, 40, 23, 0.22);
+}
+
+#listing-dialog::backdrop {
+  background: rgba(14, 34, 22, 0.56);
+  backdrop-filter: blur(5px);
+}
+
+/* Elegant footer */
+footer {
+  background: #f0f6f1;
+  border-top: 1px solid #dce9df;
+}
+
+footer a {
+  color: var(--hostel-green-dark);
+}
+
+/* Smooth keyboard accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(25, 118, 71, 0.32);
+  outline-offset: 3px;
+}
+
+/* Mobile refinement */
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 44px;
+    padding-bottom: 42px;
+  }
+
+  .search-panel {
+    border-radius: 16px;
+    padding: 18px;
+  }
+
+  .hostel-card {
+    border-radius: 15px;
+  }
+
+  .hostel-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: clamp(2rem, 8vw, 2.65rem);
+  }
+
+  .search-panel {
+    padding: 15px;
+  }
+
+  #listing-dialog {
+    width: calc(100% - 24px);
+    max-width: 100%;
+    border-radius: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+
   </style>
 </head>
 
