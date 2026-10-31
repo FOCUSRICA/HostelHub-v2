@@ -473,80 +473,219 @@
     </div>
   </dialog>
 
-  <script>
-    const cards = [...document.querySelectorAll(".hostel-card")];
-    const form = document.getElementById("search-form");
-    const searchInput = document.getElementById("search-input");
-    const locationFilter = document.getElementById("location-filter");
-    const roomFilter = document.getElementById("room-filter");
-    const resultsCount = document.getElementById("results-count");
-    const emptyState = document.getElementById("empty-state");
-    const grid = document.getElementById("hostel-grid");
-    const dialog = document.getElementById("listing-dialog");
+<script type="module">
+  import { supabase } from "./js/supabase.js";
 
-    function filterHostels() {
-      const query = searchInput.value.trim().toLowerCase();
-      const location = locationFilter.value;
-      const type = roomFilter.value;
-      let visible = 0;
+  const form = document.getElementById("search-form");
+  const searchInput = document.getElementById("search-input");
+  const locationFilter = document.getElementById("location-filter");
+  const roomFilter = document.getElementById("room-filter");
+  const resultsCount = document.getElementById("results-count");
+  const emptyState = document.getElementById("empty-state");
+  const grid = document.getElementById("hostel-grid");
+  const dialog = document.getElementById("listing-dialog");
 
-      cards.forEach(card => {
-        const matchesQuery =
-          card.dataset.name.includes(query) ||
-          card.querySelector(".location").textContent.toLowerCase().includes(query);
+  let cards = [];
+  let usingExamples = true;
 
-        const matchesLocation =
-          !location || card.dataset.location === location;
+  function refreshCards() {
+    cards = [...grid.querySelectorAll(".hostel-card")];
+  }
 
-        const matchesType =
-          !type || card.dataset.type === type;
-
-        const show = matchesQuery && matchesLocation && matchesType;
-        card.hidden = !show;
-
-        if (show) visible++;
-      });
-
-      resultsCount.textContent =
-        visible + (visible === 1 ? " sample listing" : " sample listings");
-
-      grid.style.display = visible ? "grid" : "none";
-      emptyState.style.display = visible ? "none" : "block";
-    }
-
-    form.addEventListener("submit", event => {
-      event.preventDefault();
-      filterHostels();
-    });
-
-    searchInput.addEventListener("input", filterHostels);
-    locationFilter.addEventListener("change", filterHostels);
-    roomFilter.addEventListener("change", filterHostels);
-
-    document.getElementById("reset-search").addEventListener("click", () => {
-      form.reset();
-      filterHostels();
-    });
+  function filterHostels() {
+    const query = searchInput.value.trim().toLowerCase();
+    const location = locationFilter.value.toLowerCase();
+    const type = roomFilter.value.toLowerCase();
+    let visible = 0;
 
     cards.forEach(card => {
-      card.querySelector(".details-button").addEventListener("click", () => {
-        document.getElementById("dialog-title").textContent =
-          card.querySelector("h3").textContent;
+      const name = card.dataset.name || "";
+      const cardLocation = card.dataset.location || "";
+      const cardType = card.dataset.type || "";
 
-        document.getElementById("dialog-description").textContent =
-          card.querySelector(".location").textContent +
-          " · " + card.querySelector(".room-type").textContent;
+      const matchesQuery =
+        name.includes(query) ||
+        cardLocation.includes(query) ||
+        card.querySelector(".location").textContent
+          .toLowerCase().includes(query);
 
-        document.getElementById("dialog-price").textContent =
-          card.querySelector(".price").textContent;
+      const matchesLocation =
+        !location || cardLocation.includes(location);
 
-        dialog.showModal();
+      const matchesType =
+        !type || cardType === type;
+
+      const show = matchesQuery && matchesLocation && matchesType;
+      card.hidden = !show;
+
+      if (show) visible++;
+    });
+
+    resultsCount.textContent =
+      visible + (visible === 1 ? " listing" : " listings") +
+      (usingExamples ? " (examples only)" : "");
+
+    grid.style.display = visible ? "grid" : "none";
+    emptyState.style.display = visible ? "none" : "block";
+  }
+
+  function createTextElement(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    element.textContent = text;
+    return element;
+  }
+
+  function createHostelCard(hostel) {
+    const card = document.createElement("article");
+    card.className = "hostel-card";
+    card.dataset.id = hostel.id;
+    card.dataset.source = "database";
+    card.dataset.name = (hostel.name || "").toLowerCase();
+    card.dataset.location = (hostel.location || "").toLowerCase();
+    card.dataset.type = (hostel.room_type || "").toLowerCase();
+
+    card.append(createTextElement("div", "card-visual", "🏡"));
+
+    const content = document.createElement("div");
+    content.className = "card-content";
+    content.append(
+      createTextElement("span", "demo-label", "Database listing"),
+      createTextElement("h3", "", hostel.name || "Unnamed hostel"),
+      createTextElement("p", "location", hostel.location || "Location not provided"),
+      createTextElement("p", "room-type", hostel.room_type || "Room type not provided")
+    );
+
+    const bottom = document.createElement("div");
+    bottom.className = "card-bottom";
+
+    const price = document.createElement("span");
+    price.className = "price";
+    price.append(
+      document.createTextNode(
+        "MWK " + Number(hostel.price || 0).toLocaleString("en-US") + " "
+      ),
+      createTextElement("small", "", "/ month")
+    );
+
+    const detailsButton = createTextElement(
+      "button", "details-button", "View details"
+    );
+    detailsButton.type = "button";
+
+    bottom.append(price, detailsButton);
+    content.append(bottom);
+    card.append(content);
+
+    return card;
+  }
+
+  function showDetails(card) {
+    document.getElementById("dialog-title").textContent =
+      card.querySelector("h3").textContent;
+
+    const description = card.querySelector(".location").textContent +
+      " · " + card.querySelector(".room-type").textContent;
+
+    const hostelId = card.dataset.id;
+    const hostel = card.dataset.source === "database";
+
+    document.getElementById("dialog-description").textContent =
+      description +
+      (hostel && card.dataset.description
+        ? " · " + card.dataset.description
+        : "");
+
+    document.getElementById("dialog-price").textContent =
+      card.querySelector(".price").textContent;
+
+    const paragraphs = dialog.querySelectorAll("p");
+    if (paragraphs[2]) {
+      paragraphs[2].textContent = hostel
+        ? "Database listing. Confirm availability and details with the hostel before paying. Applications are not available yet."
+        : "Example listing only. This is not a verified accommodation offer.";
+    }
+
+    dialog.dataset.hostelId = hostelId || "";
+    dialog.showModal();
+  }
+
+  grid.addEventListener("click", event => {
+    const button = event.target.closest(".details-button");
+    if (!button) return;
+
+    const card = button.closest(".hostel-card");
+    if (card) showDetails(card);
+  });
+
+  form.addEventListener("submit", event => {
+    event.preventDefault();
+    filterHostels();
+  });
+
+  searchInput.addEventListener("input", filterHostels);
+  locationFilter.addEventListener("change", filterHostels);
+  roomFilter.addEventListener("change", filterHostels);
+
+  document.getElementById("reset-search").addEventListener("click", () => {
+    form.reset();
+    filterHostels();
+  });
+
+  document.getElementById("dialog-close").addEventListener("click", () => {
+    dialog.close();
+  });
+
+  async function loadHostels() {
+    try {
+      const { data, error } = await supabase
+        .from("hostels")
+        .select("id, name, location, description, room_type, price, created_at")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Could not load hostels:", error.message);
+        resultsCount.textContent =
+          "Showing example listings — database read failed";
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        resultsCount.textContent = "3 example listings — no database listings yet";
+        return;
+      }
+
+      grid.replaceChildren(...data.map(createHostelCard));
+
+      grid.querySelectorAll(".hostel-card").forEach(card => {
+        const hostel = data.find(item => item.id === card.dataset.id);
+        if (hostel) {
+          card.dataset.description = hostel.description || "";
+        }
       });
-    });
 
-    document.getElementById("dialog-close").addEventListener("click", () => {
-      dialog.close();
-    });
-  </script>
+      usingExamples = false;
+      refreshCards();
+
+      const about = document.querySelector("#about p");
+      if (about) {
+        about.textContent =
+          "HostelHub helps students explore accommodation in Malawi. " +
+          "Confirm current availability, ownership and payment details " +
+          "before making any payment.";
+      }
+
+      filterHostels();
+    } catch (error) {
+      console.error("Supabase connection error:", error);
+      resultsCount.textContent =
+        "Showing example listings — unable to load database listings";
+    }
+  }
+
+  refreshCards();
+  loadHostels();
+</script>
 </body>
 </html>
