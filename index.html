@@ -1,0 +1,552 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Find student accommodation, compare rooms and apply for a hostel in Malawi.">
+  <title>HostelHub 2.0 | Find Your Space</title>
+
+  <style>
+    :root {
+      --pink: #d93670;
+      --pink-dark: #bd245b;
+      --ink: #202432;
+      --muted: #6d7280;
+      --surface: #f6f8fa;
+      --white: #ffffff;
+      --border: #e7e9ef;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--surface);
+      line-height: 1.6;
+    }
+
+    button, input, select { font: inherit; }
+
+    button { cursor: pointer; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      color: white;
+      background: var(--pink);
+      border-radius: 12px;
+    }
+
+    nav { display: flex; align-items: center; gap: 24px; }
+    nav a { font-size: 14px; font-weight: 600; }
+
+    .button {
+      border: 0;
+      border-radius: 9px;
+      padding: 11px 17px;
+      font-weight: 700;
+      background: var(--pink);
+      color: white;
+    }
+
+    .button:hover { background: var(--pink-dark); }
+
+    .hero {
+      padding: 70px 0 55px;
+      text-align: center;
+      background: linear-gradient(135deg, #fff0f5, #ffffff 70%);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 30px;
+      background: #fce2ec;
+      color: var(--pink-dark);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 18px auto 12px;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.13;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      max-width: 580px;
+      margin: 0 auto 28px;
+      color: var(--muted);
+    }
+
+    .search-panel {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr auto;
+      gap: 12px;
+      max-width: 900px;
+      margin: auto;
+      padding: 15px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 35px #2024320c;
+      text-align: left;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .search-panel .button { align-self: end; }
+
+    main { padding: 45px 0 65px; }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 27px;
+      letter-spacing: -.5px;
+    }
+
+    .section-heading p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .results-count {
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .hostel-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .hostel-card {
+      overflow: hidden;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      transition: transform .2s, box-shadow .2s;
+    }
+
+    .hostel-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px #20243210;
+    }
+
+    .card-visual {
+      min-height: 145px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #fce4ed, #f2eaff);
+      font-size: 48px;
+    }
+
+    .card-content { padding: 19px; }
+
+    .demo-label {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--pink-dark);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+
+    .card-content h3 { margin: 0 0 4px; font-size: 18px; }
+    .location { margin: 0; color: var(--muted); font-size: 13px; }
+    .room-type { margin: 13px 0; font-size: 13px; }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 13px;
+      border-top: 1px solid var(--border);
+    }
+
+    .price { font-size: 17px; font-weight: 800; }
+    .price small { color: var(--muted); font-size: 11px; font-weight: 400; }
+
+    .details-button {
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .details-button:hover { border-color: var(--pink); color: var(--pink-dark); }
+
+    .empty-state {
+      display: none;
+      padding: 35px;
+      text-align: center;
+      color: var(--muted);
+      background: white;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    .info-section {
+      padding: 35px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .info-section h2 { margin-top: 0; }
+    .info-section p { color: var(--muted); margin-bottom: 0; }
+
+    footer {
+      padding: 25px 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    dialog {
+      width: min(460px, calc(100% - 30px));
+      padding: 25px;
+      border: 0;
+      border-radius: 15px;
+      box-shadow: 0 20px 70px #0003;
+    }
+
+    dialog::backdrop { background: #15172299; }
+    dialog h2 { margin-top: 0; }
+    dialog p { color: var(--muted); }
+    .dialog-actions { display: flex; justify-content: end; margin-top: 20px; }
+
+    @media (max-width: 760px) {
+      .nav { padding: 13px 0; flex-wrap: wrap; }
+      nav { gap: 15px; flex-wrap: wrap; }
+      .search-panel { grid-template-columns: 1fr 1fr; }
+      .search-panel .field:first-child { grid-column: 1 / -1; }
+      .hostel-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 480px) {
+      nav { width: 100%; justify-content: space-between; gap: 10px; }
+      nav a { font-size: 12px; }
+      .hero { padding: 48px 0 38px; }
+      .search-panel { grid-template-columns: 1fr; }
+      .search-panel .field:first-child { grid-column: auto; }
+      .hostel-grid { grid-template-columns: 1fr; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .info-section { padding: 23px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#" aria-label="HostelHub home">
+        <span class="brand-mark">H</span>
+        <span>HostelHub</span>
+      </a>
+
+      <nav aria-label="Main navigation">
+        <a href="#hostels">Find accommodation</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <span class="eyebrow">Made for students in Malawi</span>
+      <h1>Find a place that feels like <span style="color:var(--pink)">yours.</span></h1>
+      <p>
+        Explore student accommodation, compare room options
+        and find a space that fits your needs and budget.
+      </p>
+
+      <form class="search-panel" id="search-form">
+        <div class="field">
+          <label for="search-input">Search hostels</label>
+          <input id="search-input" type="search"
+                 placeholder="Name or location">
+        </div>
+
+        <div class="field">
+          <label for="location-filter">Location</label>
+          <select id="location-filter">
+            <option value="">All locations</option>
+            <option value="lilongwe">Lilongwe</option>
+            <option value="bunda">Bunda</option>
+            <option value="zomba">Zomba</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="room-filter">Room type</label>
+          <select id="room-filter">
+            <option value="">All rooms</option>
+            <option value="shared room">Shared room</option>
+            <option value="private room">Private room</option>
+          </select>
+        </div>
+
+        <button class="button" type="submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <main class="container" id="hostels">
+    <div class="section-heading">
+      <div>
+        <h2>Explore accommodation</h2>
+        <p>Start by finding a room that suits you.</p>
+      </div>
+      <span class="results-count" id="results-count" aria-live="polite">
+        3 sample listings
+      </span>
+    </div>
+
+    <div class="hostel-grid" id="hostel-grid">
+      <article class="hostel-card"
+        data-name="sample student residence"
+        data-location="bunda"
+        data-type="shared room"
+        data-price="45000">
+        <div class="card-visual" aria-hidden="true">🏡</div>
+        <div class="card-content">
+          <span class="demo-label">Example listing</span>
+          <h3>Sample Student Residence</h3>
+          <p class="location">Bunda, Lilongwe</p>
+          <p class="room-type">Shared room</p>
+          <div class="card-bottom">
+            <span class="price">MWK 45,000 <small>/ month</small></span>
+            <button class="details-button" type="button">View details</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="hostel-card"
+        data-name="sample private rooms"
+        data-location="lilongwe"
+        data-type="private room"
+        data-price="80000">
+        <div class="card-visual" aria-hidden="true">🏢</div>
+        <div class="card-content">
+          <span class="demo-label">Example listing</span>
+          <h3>Sample Private Rooms</h3>
+          <p class="location">Lilongwe, Area 18</p>
+          <p class="room-type">Private room</p>
+          <div class="card-bottom">
+            <span class="price">MWK 80,000 <small>/ month</small></span>
+            <button class="details-button" type="button">View details</button>
+          </div>
+        </div>
+      </article>
+
+      <article class="hostel-card"
+        data-name="sample student lodge"
+        data-location="zomba"
+        data-type="shared room"
+        data-price="35000">
+        <div class="card-visual" aria-hidden="true">🏠</div>
+        <div class="card-content">
+          <span class="demo-label">Example listing</span>
+          <h3>Sample Student Lodge</h3>
+          <p class="location">Zomba</p>
+          <p class="room-type">Shared room</p>
+          <div class="card-bottom">
+            <span class="price">MWK 35,000 <small>/ month</small></span>
+            <button class="details-button" type="button">View details</button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="empty-state" id="empty-state">
+      <h3>No matching accommodation</h3>
+      <p>Try another search term or change your filters.</p>
+      <button class="button" id="reset-search" type="button">Clear filters</button>
+    </div>
+
+    <section class="info-section" id="how-it-works" style="margin-top:45px">
+      <h2>Finding accommodation, made simpler.</h2>
+      <p>Discover available options, review listing details, and apply
+        when student applications are available. Future versions will
+        support accounts and application tracking.</p>
+    </section>
+
+    <section class="info-section" id="about" style="margin-top:20px">
+      <h2>About HostelHub</h2>
+      <p>HostelHub is being built to make finding student accommodation
+        in Malawi clearer and easier. These first listings are examples
+        used to test the website and are not verified offers.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <span>HostelHub · Find Your Space</span>
+      <span>HostelHub 2.0 · Early prototype</span>
+    </div>
+  </footer>
+
+  <dialog id="listing-dialog">
+    <h2 id="dialog-title">Accommodation details</h2>
+    <p id="dialog-description"></p>
+    <p><strong id="dialog-price"></strong></p>
+    <p>Example listing only. Applications are not available yet.</p>
+    <div class="dialog-actions">
+      <button class="button" id="dialog-close" type="button">Close</button>
+    </div>
+  </dialog>
+
+  <script>
+    const cards = [...document.querySelectorAll(".hostel-card")];
+    const form = document.getElementById("search-form");
+    const searchInput = document.getElementById("search-input");
+    const locationFilter = document.getElementById("location-filter");
+    const roomFilter = document.getElementById("room-filter");
+    const resultsCount = document.getElementById("results-count");
+    const emptyState = document.getElementById("empty-state");
+    const grid = document.getElementById("hostel-grid");
+    const dialog = document.getElementById("listing-dialog");
+
+    function filterHostels() {
+      const query = searchInput.value.trim().toLowerCase();
+      const location = locationFilter.value;
+      const type = roomFilter.value;
+      let visible = 0;
+
+      cards.forEach(card => {
+        const matchesQuery =
+          card.dataset.name.includes(query) ||
+          card.querySelector(".location").textContent.toLowerCase().includes(query);
+
+        const matchesLocation =
+          !location || card.dataset.location === location;
+
+        const matchesType =
+          !type || card.dataset.type === type;
+
+        const show = matchesQuery && matchesLocation && matchesType;
+        card.hidden = !show;
+
+        if (show) visible++;
+      });
+
+      resultsCount.textContent =
+        visible + (visible === 1 ? " sample listing" : " sample listings");
+
+      grid.style.display = visible ? "grid" : "none";
+      emptyState.style.display = visible ? "none" : "block";
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      filterHostels();
+    });
+
+    searchInput.addEventListener("input", filterHostels);
+    locationFilter.addEventListener("change", filterHostels);
+    roomFilter.addEventListener("change", filterHostels);
+
+    document.getElementById("reset-search").addEventListener("click", () => {
+      form.reset();
+      filterHostels();
+    });
+
+    cards.forEach(card => {
+      card.querySelector(".details-button").addEventListener("click", () => {
+        document.getElementById("dialog-title").textContent =
+          card.querySelector("h3").textContent;
+
+        document.getElementById("dialog-description").textContent =
+          card.querySelector(".location").textContent +
+          " · " + card.querySelector(".room-type").textContent;
+
+        document.getElementById("dialog-price").textContent =
+          card.querySelector(".price").textContent;
+
+        dialog.showModal();
+      });
+    });
+
+    document.getElementById("dialog-close").addEventListener("click", () => {
+      dialog.close();
+    });
+  </script>
+</body>
+</html>
