@@ -607,6 +607,514 @@ h1 span,
 footer {
   border-top: 2px solid var(--hostel-green);
 }
+ 
+/* ==========================================
+   HOSTELHUB — MODERN PROFESSIONAL REDESIGN
+   Green • White • Clean • Responsive
+   ========================================== */
+
+:root {
+  --hostel-green: #21834f;
+  --hostel-green-dark: #145b37;
+  --hostel-green-light: #eaf6ee;
+  --hostel-green-border: #d5e9db;
+
+  --ink: #182a21;
+  --muted: #69776f;
+  --surface: #f5f8f6;
+  --white: #ffffff;
+  --border: #e2eae4;
+
+  --shadow-sm: 0 3px 12px rgba(22, 65, 41, 0.06);
+  --shadow-md: 0 12px 32px rgba(22, 65, 41, 0.10);
+  --shadow-lg: 0 20px 50px rgba(22, 65, 41, 0.14);
+
+  --radius: 18px;
+}
+
+/* ---------- GLOBAL FOUNDATION ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+}
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: "DM Sans", sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--ink);
+  font-family: "Manrope", sans-serif;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+p {
+  color: var(--muted);
+}
+
+a {
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(33, 131, 79, 0.28);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: #ccebd6;
+  color: var(--hostel-green-dark);
+}
+
+/* ---------- HEADER AND BRAND ---------- */
+
+header,
+.site-header {
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(22, 65, 41, 0.035);
+}
+
+.brand,
+.logo,
+.site-logo {
+  color: var(--ink);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+}
+
+.brand-mark {
+  background: var(--hostel-green) !important;
+  color: #fff !important;
+  border-radius: 12px;
+  box-shadow: 0 5px 12px rgba(33, 131, 79, 0.20);
+}
+
+nav a {
+  color: #53635a;
+  font-weight: 600;
+  transition: color 180ms ease;
+}
+
+nav a:hover,
+nav a:focus-visible {
+  color: var(--hostel-green-dark);
+}
+
+/* ---------- HERO SECTION ---------- */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(173, 223, 187, 0.30),
+      transparent 32%
+    ),
+    linear-gradient(
+      135deg,
+      #edf8f0 0%,
+      #f7fbf8 58%,
+      #ffffff 100%
+    );
+  padding-top: clamp(48px, 7vw, 88px);
+  padding-bottom: clamp(42px, 6vw, 76px);
+}
+
+.hero h1 {
+  max-width: 780px;
+  font-size: clamp(2.25rem, 5vw, 4.2rem);
+  line-height: 1.09;
+  letter-spacing: -0.06em;
+}
+
+.hero h1 span {
+  color: var(--hostel-green-dark) !important;
+}
+
+.hero p {
+  max-width: 620px;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.8;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 7px 13px;
+  border: 1px solid var(--hostel-green-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--hostel-green-dark);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.045em;
+}
+
+/* ---------- BUTTON SYSTEM ---------- */
+
+.button,
+button.button,
+#reset-search,
+#dialog-close {
+  min-height: 45px;
+  border: 1px solid var(--hostel-green);
+  border-radius: 11px;
+  background: var(--hostel-green) !important;
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 5px 12px rgba(33, 131, 79, 0.12);
+  transition:
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.button:hover,
+button.button:hover,
+#reset-search:hover,
+#dialog-close:hover {
+  background: var(--hostel-green-dark) !important;
+  border-color: var(--hostel-green-dark);
+  box-shadow: 0 8px 18px rgba(33, 131, 79, 0.19);
+  transform: translateY(-1px);
+}
+
+.button:active,
+button.button:active {
+  transform: translateY(0);
+}
+
+/* ---------- SEARCH PANEL ---------- */
+
+.search-panel {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--hostel-green);
+  border-radius: 18px;
+  padding: clamp(18px, 3vw, 28px);
+  box-shadow: var(--shadow-md);
+}
+
+.field label,
+.search-panel label {
+  color: #394c40;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.field input,
+.field select,
+.search-panel input,
+.search-panel select {
+  width: 100%;
+  min-height: 47px;
+  border: 1px solid #dce5de;
+  border-radius: 10px;
+  background: #fbfdfb;
+  color: var(--ink);
+  padding: 11px 13px;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.field input:focus,
+.field select:focus,
+.search-panel input:focus,
+.search-panel select:focus {
+  border-color: var(--hostel-green);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(33, 131, 79, 0.09);
+  outline: none;
+}
+
+.field input::placeholder,
+.search-panel input::placeholder {
+  color: #9aa69e;
+}
+
+/* ---------- SECTION HEADINGS ---------- */
+
+.section-heading {
+  margin-bottom: 28px;
+}
+
+.section-heading h2,
+.info-section h2 {
+  color: var(--ink);
+  font-size: clamp(1.65rem, 3vw, 2.3rem);
+  letter-spacing: -0.045em;
+}
+
+.section-heading p {
+  max-width: 650px;
+}
+
+.section-heading h2 span,
+.info-section h2 span {
+  color: var(--hostel-green-dark);
+}
+
+/* ---------- ACCOMMODATION CARDS ---------- */
+
+.hostel-card {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--hostel-green);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.hostel-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--hostel-green-border);
+  box-shadow: var(--shadow-md);
+}
+
+.card-visual {
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 255, 255, 0.8),
+      transparent 35%
+    ),
+    linear-gradient(135deg, #e0f2e5, #f4faf5);
+}
+
+.hostel-card h3 {
+  color: var(--ink);
+  font-size: 1.12rem;
+  letter-spacing: -0.025em;
+}
+
+.hostel-card p {
+  line-height: 1.65;
+}
+
+.demo-label {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--hostel-green-border);
+  border-radius: 999px;
+  background: var(--hostel-green-light);
+  color: var(--hostel-green-dark);
+  padding: 5px 10px;
+  font-size: 0.74rem;
+  font-weight: 750;
+}
+
+.price {
+  color: var(--hostel-green-dark) !important;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+.details-button {
+  min-height: 41px;
+  border: 1px solid var(--hostel-green);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--hostel-green-dark);
+  font-weight: 750;
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+.details-button:hover {
+  background: var(--hostel-green) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* ---------- INFORMATION SECTIONS ---------- */
+
+.info-section {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding-top: clamp(40px, 6vw, 68px);
+  padding-bottom: clamp(40px, 6vw, 68px);
+}
+
+.info-section h3 {
+  font-size: 1.08rem;
+}
+
+.info-section a {
+  color: var(--hostel-green-dark);
+  font-weight: 650;
+}
+
+.info-section a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- LISTING DETAILS DIALOG ---------- */
+
+#listing-dialog {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: #fff;
+  color: var(--ink);
+  padding: clamp(22px, 4vw, 34px);
+  box-shadow: var(--shadow-lg);
+}
+
+#listing-dialog::backdrop {
+  background: rgba(15, 35, 24, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+#dialog-title {
+  color: var(--hostel-green-dark);
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+#dialog-close {
+  box-shadow: none;
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+  border-top: 1px solid var(--hostel-green-border);
+  background: #f1f7f2;
+  color: var(--muted);
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+footer a {
+  color: var(--hostel-green-dark);
+  font-weight: 650;
+}
+
+/* ---------- RESPONSIVE POLISH ---------- */
+
+@media (max-width: 768px) {
+  .hero {
+    padding-top: 42px;
+    padding-bottom: 42px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.1rem, 8vw, 3rem);
+  }
+
+  .search-panel {
+    padding: 18px;
+    border-radius: 15px;
+  }
+
+  .hostel-card {
+    border-radius: 15px;
+  }
+
+  .hostel-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .section-heading {
+    margin-bottom: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+
+  nav {
+    gap: 10px;
+  }
+
+  nav a {
+    font-size: 12px;
+  }
+
+  .hero {
+    padding-top: 34px;
+    padding-bottom: 34px;
+  }
+
+  .hero h1 {
+    font-size: 2.15rem;
+    letter-spacing: -0.05em;
+  }
+
+  .search-panel {
+    padding: 15px;
+  }
+
+  .button,
+  button.button,
+  #reset-search,
+  #dialog-close {
+    min-height: 44px;
+  }
+
+  #listing-dialog {
+    width: calc(100% - 24px);
+    max-width: 100%;
+    border-radius: 16px;
+  }
+}
+
+/* ---------- REDUCED MOTION ACCESSIBILITY ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+   
   </style>
 </head>
 
