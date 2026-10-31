@@ -309,6 +309,41 @@
       .section-heading { align-items: start; flex-direction: column; }
       .info-section { padding: 23px; }
     }
+    
+/* HOSTELHUB GREEN ACCENT POLISH */
+:root {
+  --hostel-green: #238653;
+  --hostel-green-dark: #17663d;
+  --hostel-green-light: #eaf6ee;
+}
+
+.price {
+  color: var(--hostel-green);
+}
+
+.details-button {
+  border-color: var(--hostel-green);
+}
+
+.details-button:hover {
+  background: var(--hostel-green);
+  border-color: var(--hostel-green);
+  color: #ffffff;
+}
+
+.demo-label {
+  background: var(--hostel-green-light);
+  color: var(--hostel-green-dark);
+}
+
+.hostel-card {
+  border-top: 3px solid var(--hostel-green);
+}
+
+#reset-search:hover {
+  color: var(--hostel-green-dark);
+}
+
   </style>
 </head>
 
@@ -686,42 +721,6 @@
 
   refreshCards();
   loadHostels();
-  
-/* HOSTELHUB GREEN ACCENT POLISH */
-:root {
-  --hostel-green: #238653;
-  --hostel-green-dark: #17663d;
-  --hostel-green-light: #eaf6ee;
-}
-
-/* Green accents without replacing the pink brand */
-.price {
-  color: var(--hostel-green);
-}
-
-.details-button {
-  border-color: var(--hostel-green);
-}
-
-.details-button:hover {
-  background: var(--hostel-green);
-  border-color: var(--hostel-green);
-  color: #ffffff;
-}
-
-.demo-label {
-  background: var(--hostel-green-light);
-  color: var(--hostel-green-dark);
-}
-
-.hostel-card {
-  border-top: 3px solid var(--hostel-green);
-}
-
-#reset-search:hover {
-  color: var(--hostel-green-dark);
-}
-
 </script>
 </body>
 </html>
