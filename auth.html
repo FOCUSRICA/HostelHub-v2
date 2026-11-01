@@ -12,6 +12,115 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
+  
+/* Professional animated green light bulb */
+.bulb-scene {
+  --bulb-brightness: 1;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 165px;
+  margin: -5px 0 18px;
+  overflow: hidden;
+}
+
+.bulb-halo {
+  position: absolute;
+  z-index: -1;
+  width: 145px;
+  height: 115px;
+  top: 5px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(53, 184, 121, .38) 0%,
+    rgba(53, 184, 121, .12) 40%,
+    transparent 72%
+  );
+  filter: blur(15px);
+  opacity: var(--bulb-brightness);
+  transform: scale(var(--bulb-brightness));
+  transition: opacity .8s ease, transform .8s ease;
+}
+
+.bulb-icon {
+  width: 75px;
+  height: 100px;
+  overflow: visible;
+  filter:
+    drop-shadow(0 0 calc(5px * var(--bulb-brightness))
+      rgba(53, 184, 121, .7))
+    drop-shadow(0 0 calc(22px * var(--bulb-brightness))
+      rgba(53, 184, 121, .42));
+  transform-origin: 50% 85%;
+  animation: bulbFloat 4s ease-in-out infinite;
+  transition: filter .8s ease;
+}
+
+.bulb-glass {
+  opacity: calc(.65 + .35 * var(--bulb-brightness));
+  transition: opacity .8s ease;
+}
+
+.bulb-rays {
+  opacity: var(--bulb-brightness);
+  transform-origin: center;
+  animation: rayPulse 3s ease-in-out infinite;
+  transition: opacity .8s ease;
+}
+
+.bulb-filament {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 220, .9));
+}
+
+.bulb-caption {
+  margin-top: 7px;
+  color: #b8d9c4;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-align: center;
+  transition: color .5s ease, transform .5s ease;
+}
+
+.bulb-scene.register-mode {
+  --bulb-brightness: 1.35;
+}
+
+.bulb-scene.signin-mode {
+  --bulb-brightness: .7;
+}
+
+.bulb-scene.register-mode .bulb-caption {
+  color: #8af0b2;
+}
+
+@keyframes bulbFloat {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-5px) rotate(1deg); }
+}
+
+@keyframes rayPulse {
+  0%, 100% { opacity: .55; }
+  50% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bulb-icon,
+  .bulb-rays {
+    animation: none;
+  }
+
+  .bulb-halo,
+  .bulb-icon,
+  .bulb-caption {
+    transition: none;
+  }
+}
+    
   :root {
   --green: #197647;
   --green-dark: #105532;
