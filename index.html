@@ -1,38 +1,50 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Find student accommodation, compare rooms and apply for a hostel in Malawi.">
-  <title>HostelHub 2.0 | Find Your Space</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#176b45">
+
+  <title>HostelHub | Find Your Space</title>
+  <meta
+    name="description"
+    content="Find student accommodation in Malawi, compare rooms, and connect with hostel owners."
+  >
 
   <style>
     :root {
-      --pink: #d93670;
-      --pink-dark: #bd245b;
-      --ink: #202432;
-      --muted: #6d7280;
-      --surface: #f6f8fa;
+      --green: #176b45;
+      --green-dark: #105335;
+      --green-light: #eaf5ee;
+      --surface: #f6f8f7;
       --white: #ffffff;
-      --border: #e7e9ef;
-
-      /* HOSTELHUB GREEN ACCENTS */
-      --hostel-green: #238653;
-      --hostel-green-dark: #17663d;
-      --hostel-green-light: #eaf6ee;
-      --hostel-green-border: #c9e5d2;
+      --text: #17251d;
+      --muted: #66736b;
+      --border: #e0e8e2;
+      --radius: 16px;
+      --shadow: 0 8px 28px rgba(20, 55, 35, 0.07);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Arial, Helvetica, sans-serif;
-      color: var(--ink);
+      color: var(--text);
       background: var(--surface);
       line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     button,
@@ -41,194 +53,218 @@
       font: inherit;
     }
 
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
     button {
       cursor: pointer;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
     .container {
-      width: min(1100px, 92%);
-      margin: auto;
+      width: min(1120px, calc(100% - 36px));
+      margin-inline: auto;
     }
 
-    header {
-      background: var(--white);
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.97);
       border-bottom: 1px solid var(--border);
     }
 
-    .nav {
-      min-height: 72px;
+    .header-inner {
+      min-height: 76px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 24px;
     }
 
     .brand {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-size: 21px;
       font-weight: 800;
+      font-size: 21px;
+      letter-spacing: -0.7px;
+      white-space: nowrap;
     }
 
     .brand-mark {
       display: grid;
       place-items: center;
-      width: 38px;
-      height: 38px;
-      color: white;
-      background: var(--pink);
+      width: 39px;
+      height: 39px;
       border-radius: 12px;
+      background: var(--green);
+      color: white;
+      font-size: 22px;
     }
 
-    nav {
+    .header-actions,
+    nav,
+    .hero-actions {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 20px;
     }
 
     nav a {
       font-size: 14px;
+      color: #435249;
       font-weight: 600;
     }
 
-    nav a:hover {
-      color: var(--hostel-green-dark);
+    nav a:hover,
+    .text-link:hover {
+      color: var(--green);
     }
 
     .button {
-      border: 0;
-      border-radius: 9px;
-      padding: 11px 17px;
-      font-weight: 700;
-      background: var(--pink);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 43px;
+      padding: 10px 17px;
+      border: 1px solid var(--green);
+      border-radius: 10px;
+      background: var(--green);
       color: white;
-      transition: background-color 0.2s ease;
+      font-weight: 700;
+      font-size: 14px;
+      transition: background 0.2s, transform 0.2s;
     }
 
     .button:hover {
-      background: var(--pink-dark);
+      background: var(--green-dark);
+      transform: translateY(-1px);
     }
 
-    .button:focus-visible,
-    .details-button:focus-visible {
-      outline: 3px solid var(--hostel-green-border);
-      outline-offset: 3px;
+    .button-outline {
+      color: var(--green);
+      background: white;
+    }
+
+    .button-outline:hover {
+      color: white;
+    }
+
+    .button-small {
+      min-height: 38px;
+      padding: 8px 13px;
     }
 
     .hero {
-      padding: 70px 0 55px;
-      text-align: center;
-      background: linear-gradient(
-        135deg,
-        #eaf6ee,
-        #ffffff 70%
-      );
+      padding: 65px 0 50px;
+      background:
+        radial-gradient(circle at 85% 10%, #dcefe2 0, transparent 35%),
+        linear-gradient(135deg, #ffffff, #f0f7f2);
+      border-bottom: 1px solid var(--border);
     }
 
     .eyebrow {
       display: inline-block;
-      padding: 5px 12px;
-      border-radius: 30px;
-      background: var(--hostel-green-light);
-      color: var(--hostel-green-dark);
+      color: var(--green);
+      background: var(--green-light);
+      border-radius: 999px;
+      padding: 6px 12px;
       font-size: 12px;
       font-weight: 800;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
 
     h1 {
       max-width: 720px;
-      margin: 18px auto 12px;
-      font-size: clamp(32px, 5vw, 52px);
-      line-height: 1.13;
-      letter-spacing: -1.5px;
+      margin: 19px 0 15px;
+      font-size: clamp(35px, 5vw, 57px);
+      line-height: 1.12;
+      letter-spacing: -2px;
     }
 
     .hero p {
-      max-width: 580px;
-      margin: 0 auto 28px;
+      max-width: 620px;
       color: var(--muted);
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      margin-top: 25px;
+      flex-wrap: wrap;
     }
 
     .search-panel {
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 12px;
-      max-width: 900px;
-      margin: auto;
-      padding: 15px;
+      grid-template-columns: 1.5fr 1fr 1fr auto;
+      gap: 13px;
+      margin-top: 32px;
+      padding: 17px;
       background: white;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      box-shadow: 0 10px 35px #2024320c;
-      text-align: left;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .field {
+      min-width: 0;
     }
 
     .field label {
       display: block;
       margin-bottom: 5px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
+      color: #425248;
     }
 
     .field input,
     .field select {
       width: 100%;
-      min-width: 0;
-      padding: 10px;
+      min-height: 43px;
+      padding: 9px 11px;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 9px;
+      color: var(--text);
       background: white;
-      color: var(--ink);
+      outline-color: var(--green);
     }
 
-    .field input:focus,
-    .field select:focus {
-      border-color: var(--hostel-green);
-      outline: 2px solid #23865326;
-      outline-offset: 1px;
-    }
-
-    .search-panel .button {
+    .search-button {
       align-self: end;
+      min-height: 43px;
     }
 
-    main {
-      padding: 45px 0 65px;
+    .listings-section {
+      padding: 46px 0 30px;
     }
 
     .section-heading {
       display: flex;
       justify-content: space-between;
       align-items: end;
-      gap: 16px;
+      gap: 20px;
       margin-bottom: 22px;
     }
 
-    .section-heading h2 {
-      margin: 0;
-      font-size: 27px;
-      letter-spacing: -0.5px;
+    h2 {
+      margin: 0 0 5px;
+      font-size: clamp(23px, 3vw, 30px);
+      letter-spacing: -0.7px;
     }
 
-    .section-heading p {
-      margin: 5px 0 0;
+    .section-heading p,
+    .info-section p {
+      margin: 0;
       color: var(--muted);
-      font-size: 14px;
     }
 
     .results-count {
       color: var(--muted);
       font-size: 13px;
-      white-space: normal;
-      text-align: right;
+      white-space: nowrap;
     }
 
     .hostel-grid {
@@ -239,62 +275,68 @@
 
     .hostel-card {
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
       background: white;
       border: 1px solid var(--border);
-      border-top: 3px solid var(--hostel-green);
-      border-radius: 13px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: var(--radius);
+      box-shadow: 0 3px 12px rgba(20, 55, 35, 0.035);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .hostel-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 12px 28px #23865319;
+      box-shadow: var(--shadow);
     }
 
     .card-visual {
-      min-height: 145px;
+      min-height: 130px;
       display: grid;
       place-items: center;
-      background: linear-gradient(
-        135deg,
-        var(--hostel-green-light),
-        #f2eaff
-      );
-      font-size: 48px;
+      background: linear-gradient(135deg, #e4f1e8, #f4f8f4);
+      font-size: 49px;
     }
 
     .card-content {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
       padding: 19px;
     }
 
     .demo-label {
-      display: inline-block;
-      margin-bottom: 8px;
+      align-self: flex-start;
+      margin-bottom: 9px;
       padding: 3px 8px;
-      border: 1px solid var(--hostel-green-border);
       border-radius: 5px;
-      background: var(--hostel-green-light);
-      color: var(--hostel-green-dark);
+      background: #fff2d9;
+      color: #815615;
       font-size: 11px;
       font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+    }
+
+    .verified-label {
+      align-self: flex-start;
+      margin-bottom: 9px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      background: var(--green-light);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 800;
     }
 
     .card-content h3 {
-      margin: 0 0 4px;
+      margin: 0 0 5px;
       font-size: 18px;
+      line-height: 1.35;
     }
 
-    .location {
-      margin: 0;
+    .card-content p {
+      margin: 4px 0;
       color: var(--muted);
-      font-size: 13px;
-    }
-
-    .room-type {
-      margin: 13px 0;
-      font-size: 13px;
+      font-size: 14px;
     }
 
     .card-bottom {
@@ -302,141 +344,161 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      padding-top: 13px;
-      border-top: 1px solid var(--border);
+      margin-top: auto;
+      padding-top: 19px;
     }
 
     .price {
-      color: var(--hostel-green-dark);
-      font-size: 17px;
+      color: var(--green);
       font-weight: 800;
+      font-size: 15px;
     }
 
     .price small {
+      display: block;
       color: var(--muted);
       font-size: 11px;
-      font-weight: 400;
+      font-weight: 500;
     }
 
     .details-button {
       padding: 8px 11px;
-      border: 1px solid var(--hostel-green);
+      border: 1px solid var(--border);
       border-radius: 8px;
       background: white;
-      color: var(--hostel-green-dark);
-      font-weight: 700;
+      color: var(--green);
       font-size: 12px;
-      transition: background-color 0.2s ease,
-                  color 0.2s ease,
-                  border-color 0.2s ease;
+      font-weight: 800;
     }
 
     .details-button:hover {
-      border-color: var(--hostel-green);
-      background: var(--hostel-green);
-      color: white;
+      background: var(--green-light);
     }
 
-    .empty-state {
+    .empty-state,
+    .status-message {
       display: none;
-      padding: 35px;
-      text-align: center;
-      color: var(--muted);
+      padding: 28px 20px;
+      margin-top: 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       background: white;
-      border: 1px dashed var(--border);
-      border-radius: 12px;
+      text-align: center;
     }
 
-    #reset-search {
-      background: var(--hostel-green);
+    .empty-state h3 {
+      margin: 0 0 5px;
     }
 
-    #reset-search:hover {
-      background: var(--hostel-green-dark);
+    .empty-state p,
+    .status-message {
+      color: var(--muted);
     }
 
     .info-section {
-      padding: 35px;
+      padding: 28px;
+      margin-top: 25px;
       background: white;
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius);
     }
 
     .info-section h2 {
-      margin-top: 0;
-    }
-
-    .info-section p {
-      color: var(--muted);
-      margin-bottom: 0;
+      margin-bottom: 10px;
     }
 
     footer {
+      margin-top: 55px;
       padding: 25px 0;
-      background: white;
       border-top: 1px solid var(--border);
+      background: white;
       color: var(--muted);
       font-size: 13px;
     }
 
-    .footer-content {
+    .footer-inner {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 15px;
       flex-wrap: wrap;
     }
 
     dialog {
-      width: min(460px, calc(100% - 30px));
-      padding: 25px;
+      width: min(500px, calc(100% - 28px));
+      padding: 0;
       border: 0;
-      border-radius: 15px;
-      box-shadow: 0 20px 70px #0003;
+      border-radius: 18px;
+      box-shadow: 0 20px 70px rgba(0, 0, 0, 0.2);
     }
 
     dialog::backdrop {
-      background: #15172299;
+      background: rgba(13, 32, 21, 0.55);
     }
 
-    dialog h2 {
-      margin-top: 0;
+    .dialog-content {
+      padding: 25px;
     }
 
-    dialog p {
+    .dialog-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .dialog-header h2 {
+      font-size: 24px;
+    }
+
+    .dialog-close {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: white;
+      font-size: 20px;
+    }
+
+    .dialog-body {
+      margin: 18px 0;
       color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+
+    .dialog-body p {
+      margin: 9px 0;
     }
 
     .dialog-actions {
       display: flex;
-      justify-content: end;
-      margin-top: 20px;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
-    #dialog-close {
-      background: var(--hostel-green);
-    }
-
-    #dialog-close:hover {
-      background: var(--hostel-green-dark);
-    }
-
-    @media (max-width: 760px) {
-      .nav {
+    @media (max-width: 850px) {
+      .header-inner {
+        flex-wrap: wrap;
         padding: 13px 0;
+        gap: 12px;
+      }
+
+      .header-actions {
+        gap: 10px;
         flex-wrap: wrap;
       }
 
       nav {
-        gap: 15px;
+        order: 3;
+        width: 100%;
+        gap: 18px;
         flex-wrap: wrap;
       }
 
       .search-panel {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .search-panel .field:first-child {
-        grid-column: 1 / -1;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
       .hostel-grid {
@@ -444,9 +506,35 @@
       }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
+      .container {
+        width: calc(100% - 28px);
+      }
+
+      .brand {
+        font-size: 18px;
+      }
+
+      .brand-mark {
+        width: 35px;
+        height: 35px;
+      }
+
+      .header-inner {
+        justify-content: space-between;
+      }
+
+      .header-actions {
+        gap: 7px;
+      }
+
+      .header-actions .button {
+        min-height: 36px;
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+
       nav {
-        width: 100%;
         justify-content: space-between;
         gap: 10px;
       }
@@ -456,995 +544,74 @@
       }
 
       .hero {
-        padding: 48px 0 38px;
+        padding: 43px 0 34px;
+      }
+
+      h1 {
+        letter-spacing: -1.2px;
+      }
+
+      .hero p {
+        font-size: 15px;
       }
 
       .search-panel {
         grid-template-columns: 1fr;
+        padding: 13px;
       }
 
-      .search-panel .field:first-child {
-        grid-column: auto;
+      .search-button {
+        width: 100%;
       }
 
       .hostel-grid {
         grid-template-columns: 1fr;
       }
 
+      .card-visual {
+        min-height: 110px;
+      }
+
       .section-heading {
         align-items: start;
         flex-direction: column;
-      }
-
-      .results-count {
-        text-align: left;
+        gap: 6px;
       }
 
       .info-section {
-        padding: 23px;
+        padding: 20px;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: start;
       }
     }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-      }
-    }
-    /* =========================================
-   HOSTELHUB — FULL GREEN THEME
-   ========================================= */
-
-/* Brand logo */
-.brand-mark {
-  background: var(--hostel-green);
-}
-
-/* Main navigation */
-nav a:hover,
-nav a:focus-visible {
-  color: var(--hostel-green-dark);
-}
-
-/* Main buttons, including Search */
-.button {
-  background: var(--hostel-green);
-}
-
-.button:hover {
-  background: var(--hostel-green-dark);
-}
-
-/* Hero section */
-.hero {
-  background: linear-gradient(
-    135deg,
-    #e1f3e7 0%,
-    #f2faf4 55%,
-    #ffffff 100%
-  );
-}
-
-.eyebrow {
-  background: var(--hostel-green-light);
-  color: var(--hostel-green-dark);
-}
-
-/* Main heading and section headings */
-h1 span,
-.section-heading h2,
-.info-section h2 {
-  color: var(--hostel-green-dark);
-}
-
-/* Search panel */
-.search-panel {
-  border-top: 3px solid var(--hostel-green);
-}
-
-/* Accommodation cards */
-.hostel-card {
-  border-top: 4px solid var(--hostel-green);
-}
-
-.card-visual {
-  background: linear-gradient(
-    135deg,
-    #e1f3e7,
-    #f3faf5
-  );
-}
-
-/* Listing labels and prices */
-.demo-label {
-  background: var(--hostel-green-light);
-  color: var(--hostel-green-dark);
-  border-color: var(--hostel-green-border);
-}
-
-.price {
-  color: var(--hostel-green-dark);
-}
-
-/* Listing action buttons */
-.details-button {
-  border-color: var(--hostel-green);
-  color: var(--hostel-green-dark);
-}
-
-.details-button:hover {
-  background: var(--hostel-green);
-  color: #ffffff;
-}
-
-/* Information sections */
-.info-section {
-  border-top: 3px solid var(--hostel-green);
-}
-
-/* Clear filters and dialog button */
-#reset-search,
-#dialog-close {
-  background: var(--hostel-green);
-}
-
-#reset-search:hover,
-#dialog-close:hover {
-  background: var(--hostel-green-dark);
-}
-
-/* Search field focus */
-.field input:focus,
-.field select:focus {
-  border-color: var(--hostel-green);
-  outline: 2px solid #23865326;
-}
-
-/* Footer accent */
-footer {
-  border-top: 2px solid var(--hostel-green);
-}
- 
-/* ==========================================
-   HOSTELHUB — MODERN PROFESSIONAL REDESIGN
-   Green • White • Clean • Responsive
-   ========================================== */
-
-:root {
-  --hostel-green: #21834f;
-  --hostel-green-dark: #145b37;
-  --hostel-green-light: #eaf6ee;
-  --hostel-green-border: #d5e9db;
-
-  --ink: #182a21;
-  --muted: #69776f;
-  --surface: #f5f8f6;
-  --white: #ffffff;
-  --border: #e2eae4;
-
-  --shadow-sm: 0 3px 12px rgba(22, 65, 41, 0.06);
-  --shadow-md: 0 12px 32px rgba(22, 65, 41, 0.10);
-  --shadow-lg: 0 20px 50px rgba(22, 65, 41, 0.14);
-
-  --radius: 18px;
-}
-
-/* ---------- GLOBAL FOUNDATION ---------- */
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 90px;
-}
-
-body {
-  background: var(--white);
-  color: var(--ink);
-  font-family: "DM Sans", sans-serif;
-  line-height: 1.65;
-  -webkit-font-smoothing: antialiased;
-}
-
-h1,
-h2,
-h3,
-h4 {
-  color: var(--ink);
-  font-family: "Manrope", sans-serif;
-  font-weight: 750;
-  letter-spacing: -0.035em;
-  line-height: 1.2;
-}
-
-p {
-  color: var(--muted);
-}
-
-a {
-  text-decoration: none;
-  transition: color 180ms ease;
-}
-
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-button:focus-visible,
-a:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid rgba(33, 131, 79, 0.28);
-  outline-offset: 3px;
-}
-
-::selection {
-  background: #ccebd6;
-  color: var(--hostel-green-dark);
-}
-
-/* ---------- HEADER AND BRAND ---------- */
-
-header,
-.site-header {
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 2px 12px rgba(22, 65, 41, 0.035);
-}
-
-.brand,
-.logo,
-.site-logo {
-  color: var(--ink);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-}
-
-.brand-mark {
-  background: var(--hostel-green) !important;
-  color: #fff !important;
-  border-radius: 12px;
-  box-shadow: 0 5px 12px rgba(33, 131, 79, 0.20);
-}
-
-nav a {
-  color: #53635a;
-  font-weight: 600;
-  transition: color 180ms ease;
-}
-
-nav a:hover,
-nav a:focus-visible {
-  color: var(--hostel-green-dark);
-}
-
-/* ---------- HERO SECTION ---------- */
-
-.hero {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(
-      circle at 90% 10%,
-      rgba(173, 223, 187, 0.30),
-      transparent 32%
-    ),
-    linear-gradient(
-      135deg,
-      #edf8f0 0%,
-      #f7fbf8 58%,
-      #ffffff 100%
-    );
-  padding-top: clamp(48px, 7vw, 88px);
-  padding-bottom: clamp(42px, 6vw, 76px);
-}
-
-.hero h1 {
-  max-width: 780px;
-  font-size: clamp(2.25rem, 5vw, 4.2rem);
-  line-height: 1.09;
-  letter-spacing: -0.06em;
-}
-
-.hero h1 span {
-  color: var(--hostel-green-dark) !important;
-}
-
-.hero p {
-  max-width: 620px;
-  font-size: clamp(1rem, 1.5vw, 1.12rem);
-  line-height: 1.8;
-}
-
-.eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  padding: 7px 13px;
-  border: 1px solid var(--hostel-green-border);
-  border-radius: 999px;
-  background: #fff;
-  color: var(--hostel-green-dark);
-  font-size: 0.78rem;
-  font-weight: 750;
-  letter-spacing: 0.045em;
-}
-
-/* ---------- BUTTON SYSTEM ---------- */
-
-.button,
-button.button,
-#reset-search,
-#dialog-close {
-  min-height: 45px;
-  border: 1px solid var(--hostel-green);
-  border-radius: 11px;
-  background: var(--hostel-green) !important;
-  color: #fff !important;
-  font-weight: 700;
-  box-shadow: 0 5px 12px rgba(33, 131, 79, 0.12);
-  transition:
-    background 180ms ease,
-    transform 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.button:hover,
-button.button:hover,
-#reset-search:hover,
-#dialog-close:hover {
-  background: var(--hostel-green-dark) !important;
-  border-color: var(--hostel-green-dark);
-  box-shadow: 0 8px 18px rgba(33, 131, 79, 0.19);
-  transform: translateY(-1px);
-}
-
-.button:active,
-button.button:active {
-  transform: translateY(0);
-}
-
-/* ---------- SEARCH PANEL ---------- */
-
-.search-panel {
-  position: relative;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--hostel-green);
-  border-radius: 18px;
-  padding: clamp(18px, 3vw, 28px);
-  box-shadow: var(--shadow-md);
-}
-
-.field label,
-.search-panel label {
-  color: #394c40;
-  font-size: 0.86rem;
-  font-weight: 700;
-}
-
-.field input,
-.field select,
-.search-panel input,
-.search-panel select {
-  width: 100%;
-  min-height: 47px;
-  border: 1px solid #dce5de;
-  border-radius: 10px;
-  background: #fbfdfb;
-  color: var(--ink);
-  padding: 11px 13px;
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
-}
-
-.field input:focus,
-.field select:focus,
-.search-panel input:focus,
-.search-panel select:focus {
-  border-color: var(--hostel-green);
-  background: #fff;
-  box-shadow: 0 0 0 4px rgba(33, 131, 79, 0.09);
-  outline: none;
-}
-
-.field input::placeholder,
-.search-panel input::placeholder {
-  color: #9aa69e;
-}
-
-/* ---------- SECTION HEADINGS ---------- */
-
-.section-heading {
-  margin-bottom: 28px;
-}
-
-.section-heading h2,
-.info-section h2 {
-  color: var(--ink);
-  font-size: clamp(1.65rem, 3vw, 2.3rem);
-  letter-spacing: -0.045em;
-}
-
-.section-heading p {
-  max-width: 650px;
-}
-
-.section-heading h2 span,
-.info-section h2 span {
-  color: var(--hostel-green-dark);
-}
-
-/* ---------- ACCOMMODATION CARDS ---------- */
-
-.hostel-card {
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--hostel-green);
-  border-radius: var(--radius);
-  background: #fff;
-  box-shadow: var(--shadow-sm);
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease,
-    border-color 220ms ease;
-}
-
-.hostel-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--hostel-green-border);
-  box-shadow: var(--shadow-md);
-}
-
-.card-visual {
-  background:
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(255, 255, 255, 0.8),
-      transparent 35%
-    ),
-    linear-gradient(135deg, #e0f2e5, #f4faf5);
-}
-
-.hostel-card h3 {
-  color: var(--ink);
-  font-size: 1.12rem;
-  letter-spacing: -0.025em;
-}
-
-.hostel-card p {
-  line-height: 1.65;
-}
-
-.demo-label {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid var(--hostel-green-border);
-  border-radius: 999px;
-  background: var(--hostel-green-light);
-  color: var(--hostel-green-dark);
-  padding: 5px 10px;
-  font-size: 0.74rem;
-  font-weight: 750;
-}
-
-.price {
-  color: var(--hostel-green-dark) !important;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-}
-
-.details-button {
-  min-height: 41px;
-  border: 1px solid var(--hostel-green);
-  border-radius: 10px;
-  background: #fff;
-  color: var(--hostel-green-dark);
-  font-weight: 750;
-  transition:
-    color 180ms ease,
-    background 180ms ease,
-    transform 180ms ease;
-}
-
-.details-button:hover {
-  background: var(--hostel-green) !important;
-  color: #fff !important;
-  transform: translateY(-1px);
-}
-
-/* ---------- INFORMATION SECTIONS ---------- */
-
-.info-section {
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-  padding-top: clamp(40px, 6vw, 68px);
-  padding-bottom: clamp(40px, 6vw, 68px);
-}
-
-.info-section h3 {
-  font-size: 1.08rem;
-}
-
-.info-section a {
-  color: var(--hostel-green-dark);
-  font-weight: 650;
-}
-
-.info-section a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-/* ---------- LISTING DETAILS DIALOG ---------- */
-
-#listing-dialog {
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: #fff;
-  color: var(--ink);
-  padding: clamp(22px, 4vw, 34px);
-  box-shadow: var(--shadow-lg);
-}
-
-#listing-dialog::backdrop {
-  background: rgba(15, 35, 24, 0.55);
-  backdrop-filter: blur(4px);
-}
-
-#dialog-title {
-  color: var(--hostel-green-dark);
-  font-size: clamp(1.35rem, 3vw, 1.8rem);
-}
-
-#dialog-close {
-  box-shadow: none;
-}
-
-/* ---------- FOOTER ---------- */
-
-footer {
-  border-top: 1px solid var(--hostel-green-border);
-  background: #f1f7f2;
-  color: var(--muted);
-  padding-top: 26px;
-  padding-bottom: 26px;
-}
-
-footer a {
-  color: var(--hostel-green-dark);
-  font-weight: 650;
-}
-
-/* ---------- RESPONSIVE POLISH ---------- */
-
-@media (max-width: 768px) {
-  .hero {
-    padding-top: 42px;
-    padding-bottom: 42px;
-  }
-
-  .hero h1 {
-    font-size: clamp(2.1rem, 8vw, 3rem);
-  }
-
-  .search-panel {
-    padding: 18px;
-    border-radius: 15px;
-  }
-
-  .hostel-card {
-    border-radius: 15px;
-  }
-
-  .hostel-card:hover {
-    transform: translateY(-2px);
-  }
-
-  .section-heading {
-    margin-bottom: 22px;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    font-size: 14px;
-  }
-
-  nav {
-    gap: 10px;
-  }
-
-  nav a {
-    font-size: 12px;
-  }
-
-  .hero {
-    padding-top: 34px;
-    padding-bottom: 34px;
-  }
-
-  .hero h1 {
-    font-size: 2.15rem;
-    letter-spacing: -0.05em;
-  }
-
-  .search-panel {
-    padding: 15px;
-  }
-
-  .button,
-  button.button,
-  #reset-search,
-  #dialog-close {
-    min-height: 44px;
-  }
-
-  #listing-dialog {
-    width: calc(100% - 24px);
-    max-width: 100%;
-    border-radius: 16px;
-  }
-}
-
-/* ---------- REDUCED MOTION ACCESSIBILITY ---------- */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-  }
-}
-   
-/* =========================================
-   HOSTELHUB — PREMIUM VISUAL FINISH
-   ========================================= */
-
-:root {
-  --hostel-green: #197647;
-  --hostel-green-dark: #105532;
-  --hostel-green-light: #eaf5ed;
-  --hostel-green-border: #d7e8dc;
-  --ink: #192b21;
-  --muted: #68776e;
-  --surface: #f6f9f6;
-}
-
-/* A cleaner, more refined page */
-body {
-  color: var(--ink);
-  background: #fff;
-  letter-spacing: -0.01em;
-}
-
-main {
-  overflow: clip;
-}
-
-section {
-  scroll-margin-top: 90px;
-}
-
-/* Refined header */
-header,
-.site-header {
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid #e6eee8;
-  box-shadow: 0 4px 20px rgba(24, 70, 43, 0.045);
-}
-
-/* More distinctive brand */
-.brand-mark {
-  border-radius: 13px !important;
-  box-shadow: 0 6px 16px rgba(25, 118, 71, 0.2);
-  transition: transform 200ms ease;
-}
-
-.brand-mark:hover {
-  transform: rotate(-4deg) scale(1.04);
-}
-
-/* More polished hero */
-.hero {
-  position: relative;
-  background:
-    radial-gradient(
-      ellipse at 92% 8%,
-      rgba(135, 204, 154, 0.24),
-      transparent 36%
-    ),
-    radial-gradient(
-      ellipse at 5% 100%,
-      rgba(220, 242, 225, 0.7),
-      transparent 38%
-    ),
-    linear-gradient(135deg, #edf7ef, #fbfdfb 72%);
-}
-
-.hero h1 {
-  max-width: 760px;
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.06em;
-}
-
-.hero h1 span {
-  color: var(--hostel-green-dark) !important;
-}
-
-.hero p {
-  color: #596a60;
-  line-height: 1.85;
-}
-
-.eyebrow {
-  box-shadow: 0 3px 10px rgba(25, 118, 71, 0.055);
-}
-
-/* Better buttons */
-.button,
-button.button,
-#reset-search,
-#dialog-close {
-  border-radius: 12px;
-  font-weight: 750;
-  letter-spacing: -0.01em;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    background 180ms ease;
-}
-
-.button:hover,
-button.button:hover,
-#reset-search:hover,
-#dialog-close:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 9px 20px rgba(25, 118, 71, 0.18);
-}
-
-/* A premium search panel */
-.search-panel {
-  border: 1px solid #e0eae2;
-  border-top: 3px solid var(--hostel-green);
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow:
-    0 14px 36px rgba(30, 69, 43, 0.07),
-    0 2px 5px rgba(30, 69, 43, 0.025);
-}
-
-.field input,
-.field select,
-.search-panel input,
-.search-panel select {
-  border-radius: 11px;
-  border-color: #dce6de;
-  background: #fbfdfb;
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease;
-}
-
-.field input:focus,
-.field select:focus,
-.search-panel input:focus,
-.search-panel select:focus {
-  border-color: var(--hostel-green);
-  box-shadow: 0 0 0 4px rgba(25, 118, 71, 0.09);
-}
-
-/* Better section headings */
-.section-heading h2,
-.info-section h2 {
-  font-weight: 800;
-  letter-spacing: -0.045em;
-}
-
-.section-heading p {
-  max-width: 640px;
-  line-height: 1.8;
-}
-
-/* Accommodation cards */
-.hostel-card {
-  border: 1px solid #e4ebe5;
-  border-radius: 18px;
-  background: #fff;
-  box-shadow: 0 4px 15px rgba(26, 64, 40, 0.045);
-  transition:
-    transform 220ms ease,
-    box-shadow 220ms ease,
-    border-color 220ms ease;
-}
-
-.hostel-card:hover {
-  transform: translateY(-5px);
-  border-color: #c8dfce;
-  box-shadow: 0 16px 34px rgba(26, 64, 40, 0.105);
-}
-
-.card-visual {
-  background:
-    radial-gradient(
-      circle at 80% 18%,
-      rgba(255, 255, 255, 0.9),
-      transparent 32%
-    ),
-    linear-gradient(135deg, #dff0e3, #f4faf5);
-}
-
-.hostel-card h3 {
-  color: #20392a;
-  font-size: 1.12rem;
-  line-height: 1.4;
-  letter-spacing: -0.025em;
-}
-
-.hostel-card p {
-  color: #69776e;
-  line-height: 1.7;
-}
-
-.demo-label {
-  border: 1px solid #d4e8da;
-  border-radius: 999px;
-  background: #edf7ef;
-  color: #17623a;
-  font-weight: 750;
-}
-
-.price {
-  color: #176b3e !important;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-}
-
-.details-button {
-  border-radius: 10px;
-  font-weight: 750;
-  transition:
-    background 180ms ease,
-    color 180ms ease,
-    transform 180ms ease;
-}
-
-.details-button:hover {
-  transform: translateY(-1px);
-}
-
-/* Information sections */
-.info-section {
-  background:
-    linear-gradient(180deg, #f7faf7, #f0f6f1);
-  border-top: 1px solid #e4ede6;
-}
-
-.info-section h3 {
-  color: #234531;
-  font-weight: 750;
-}
-
-.info-section a {
-  text-underline-offset: 4px;
-}
-
-/* Listing dialog */
-#listing-dialog {
-  border: 1px solid #e0eae2;
-  border-radius: 22px;
-  box-shadow: 0 25px 80px rgba(12, 40, 23, 0.22);
-}
-
-#listing-dialog::backdrop {
-  background: rgba(14, 34, 22, 0.56);
-  backdrop-filter: blur(5px);
-}
-
-/* Elegant footer */
-footer {
-  background: #f0f6f1;
-  border-top: 1px solid #dce9df;
-}
-
-footer a {
-  color: var(--hostel-green-dark);
-}
-
-/* Smooth keyboard accessibility */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible {
-  outline: 3px solid rgba(25, 118, 71, 0.32);
-  outline-offset: 3px;
-}
-
-/* Mobile refinement */
-@media (max-width: 768px) {
-  .hero {
-    padding-top: 44px;
-    padding-bottom: 42px;
-  }
-
-  .search-panel {
-    border-radius: 16px;
-    padding: 18px;
-  }
-
-  .hostel-card {
-    border-radius: 15px;
-  }
-
-  .hostel-card:hover {
-    transform: translateY(-2px);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: clamp(2rem, 8vw, 2.65rem);
-  }
-
-  .search-panel {
-    padding: 15px;
-  }
-
-  #listing-dialog {
-    width: calc(100% - 24px);
-    max-width: 100%;
-    border-radius: 17px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition: none !important;
-  }
-}
-
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="container nav">
-      <a class="brand" href="#" aria-label="HostelHub home">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./index.html" aria-label="HostelHub home">
         <span class="brand-mark">H</span>
         <span>HostelHub</span>
       </a>
 
-     
-<nav aria-label="Main navigation">
-  <a href="#hostels">Find accommodation</a>
-  <a href="#how-it-works">How it works</a>
-  <a href="#about">About</a>
-  <a href="./auth.html">Sign in</a>
-</nav>
+      <nav aria-label="Main navigation">
+        <a href="#hostels">Find accommodation</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#about">About</a>
+      </nav>
 
+      <div class="header-actions">
+        <a class="button button-outline button-small" href="./auth.html">
+          Sign in
+        </a>
+        <a class="button button-small" href="./auth.html#register">
+          Create account
+        </a>
+      </div>
     </div>
   </header>
 
@@ -1454,13 +621,20 @@ select:focus-visible {
 
       <h1>
         Find a place that feels like
-        <span style="color:var(--hostel-green)">yours.</span>
+        <span style="color:var(--green)">yours.</span>
       </h1>
 
       <p>
         Explore student accommodation, compare room options
         and find a space that fits your needs and budget.
       </p>
+
+      <div class="hero-actions">
+        <a class="button" href="#hostels">Explore accommodation</a>
+        <a class="button button-outline" href="./auth.html#register">
+          Join HostelHub
+        </a>
+      </div>
 
       <form class="search-panel" id="search-form">
         <div class="field">
@@ -1491,433 +665,457 @@ select:focus-visible {
           </select>
         </div>
 
-        <button class="button" type="submit">Search</button>
+        <button class="button search-button" type="submit">Search</button>
       </form>
     </div>
   </section>
 
-  <main class="container" id="hostels">
-    <div class="section-heading">
-      <div>
-        <h2>Explore accommodation</h2>
-        <p>Start by finding a room that suits you.</p>
+  <main class="container">
+    <section class="listings-section" id="hostels">
+      <div class="section-heading">
+        <div>
+          <h2>Explore accommodation</h2>
+          <p>Start by finding a room that suits you.</p>
+        </div>
+
+        <span class="results-count" id="results-count" aria-live="polite">
+          Loading listings...
+        </span>
       </div>
 
-      <span class="results-count" id="results-count" aria-live="polite">
-        3 sample listings
-      </span>
-    </div>
-
-    <div class="hostel-grid" id="hostel-grid">
-      <article
-        class="hostel-card"
-        data-name="sample student residence"
-        data-location="bunda"
-        data-type="shared room"
-        data-price="45000"
-      >
-        <div class="card-visual" aria-hidden="true">🏡</div>
-
-        <div class="card-content">
-          <span class="demo-label">Example listing</span>
-          <h3>Sample Student Residence</h3>
-          <p class="location">Bunda, Lilongwe</p>
-          <p class="room-type">Shared room</p>
-
-          <div class="card-bottom">
-            <span class="price">
-              MWK 45,000 <small>/ month</small>
-            </span>
-            <button class="details-button" type="button">
-              View details
-            </button>
+      <div class="hostel-grid" id="hostel-grid">
+        <article
+          class="hostel-card"
+          data-demo="true"
+          data-name="sample student residence"
+          data-location="bunda"
+          data-type="shared room"
+          data-price="45000"
+        >
+          <div class="card-visual" aria-hidden="true">🏡</div>
+          <div class="card-content">
+            <span class="demo-label">Example listing</span>
+            <h3>Sample Student Residence</h3>
+            <p class="location">Bunda, Lilongwe</p>
+            <p class="room-type">Shared room</p>
+            <div class="card-bottom">
+              <span class="price">MWK 45,000 <small>/ month</small></span>
+              <button class="details-button" type="button">View details</button>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article
-        class="hostel-card"
-        data-name="sample private rooms"
-        data-location="lilongwe"
-        data-type="private room"
-        data-price="80000"
-      >
-        <div class="card-visual" aria-hidden="true">🏢</div>
-
-        <div class="card-content">
-          <span class="demo-label">Example listing</span>
-          <h3>Sample Private Rooms</h3>
-          <p class="location">Lilongwe, Area 18</p>
-          <p class="room-type">Private room</p>
-
-          <div class="card-bottom">
-            <span class="price">
-              MWK 80,000 <small>/ month</small>
-            </span>
-            <button class="details-button" type="button">
-              View details
-            </button>
+        <article
+          class="hostel-card"
+          data-demo="true"
+          data-name="sample private rooms"
+          data-location="lilongwe"
+          data-type="private room"
+          data-price="80000"
+        >
+          <div class="card-visual" aria-hidden="true">🏢</div>
+          <div class="card-content">
+            <span class="demo-label">Example listing</span>
+            <h3>Sample Private Rooms</h3>
+            <p class="location">Lilongwe, Area 18</p>
+            <p class="room-type">Private room</p>
+            <div class="card-bottom">
+              <span class="price">MWK 80,000 <small>/ month</small></span>
+              <button class="details-button" type="button">View details</button>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
 
-      <article
-        class="hostel-card"
-        data-name="sample student lodge"
-        data-location="zomba"
-        data-type="shared room"
-        data-price="35000"
-      >
-        <div class="card-visual" aria-hidden="true">🏠</div>
-
-        <div class="card-content">
-          <span class="demo-label">Example listing</span>
-          <h3>Sample Student Lodge</h3>
-          <p class="location">Zomba</p>
-          <p class="room-type">Shared room</p>
-
-          <div class="card-bottom">
-            <span class="price">
-              MWK 35,000 <small>/ month</small>
-            </span>
-            <button class="details-button" type="button">
-              View details
-            </button>
+        <article
+          class="hostel-card"
+          data-demo="true"
+          data-name="sample student lodge"
+          data-location="zomba"
+          data-type="shared room"
+          data-price="35000"
+        >
+          <div class="card-visual" aria-hidden="true">🏠</div>
+          <div class="card-content">
+            <span class="demo-label">Example listing</span>
+            <h3>Sample Student Lodge</h3>
+            <p class="location">Zomba</p>
+            <p class="room-type">Shared room</p>
+            <div class="card-bottom">
+              <span class="price">MWK 35,000 <small>/ month</small></span>
+              <button class="details-button" type="button">View details</button>
+            </div>
           </div>
-        </div>
-      </article>
-    </div>
+        </article>
+      </div>
 
-    <div class="empty-state" id="empty-state">
-      <h3>No matching accommodation</h3>
-      <p>Try another search term or change your filters.</p>
-      <button class="button" id="reset-search" type="button">
-        Clear filters
-      </button>
-    </div>
+      <div class="empty-state" id="empty-state">
+        <h3>No matching accommodation</h3>
+        <p>Try another search term or change your filters.</p>
+        <button class="button" id="reset-search" type="button">
+          Clear filters
+        </button>
+      </div>
 
-    <section
-      class="info-section"
-      id="how-it-works"
-      style="margin-top:45px"
-    >
+      <p class="status-message" id="listing-status" role="status"></p>
+    </section>
+
+    <section class="info-section" id="how-it-works">
       <h2>Finding accommodation, made simpler.</h2>
       <p>
-        Discover available options, review listing details, and apply
-        when student applications are available. Future versions will
-        support accounts and application tracking.
+        Discover accommodation options, review listing details, and
+        create an account to access student features as they become
+        available. Listing and application availability depends on
+        the information published by hostel owners.
       </p>
     </section>
 
-    <section
-      class="info-section"
-      id="about"
-      style="margin-top:20px"
-    >
+    <section class="info-section" id="about">
       <h2>About HostelHub</h2>
       <p>
         HostelHub is being built to make finding student accommodation
-        in Malawi clearer and easier. These first listings are examples
-        used to test the website and are not verified offers.
+        in Malawi clearer and easier. Example listings are for testing
+        only and are not verified accommodation offers.
       </p>
     </section>
   </main>
 
   <footer>
-    <div class="container footer-content">
-      <span>HostelHub · Find Your Space</span>
-      <span>HostelHub 2.0 · Early prototype</span>
+    <div class="container footer-inner">
+      <span>Student accommodation, made clearer.</span>
+      <span>HostelHub · Prototype</span>
     </div>
   </footer>
 
-  <dialog id="listing-dialog">
-    <h2 id="dialog-title">Accommodation details</h2>
-    <p id="dialog-description"></p>
-    <p><strong id="dialog-price"></strong></p>
-    <p>
-      Example listing only. Applications are not available yet.
-    </p>
+  <dialog id="listing-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-content">
+      <div class="dialog-header">
+        <h2 id="dialog-title">Accommodation details</h2>
+        <button
+          class="dialog-close"
+          id="dialog-close"
+          type="button"
+          aria-label="Close details"
+        >×</button>
+      </div>
 
-    <div class="dialog-actions">
-      <button class="button" id="dialog-close" type="button">
-        Close
-      </button>
+      <div class="dialog-body" id="dialog-body"></div>
+
+      <div class="dialog-actions">
+        <button class="button button-outline" id="dialog-ok" type="button">
+          Close
+        </button>
+        <a class="button" id="dialog-account-link" href="./auth.html">
+          Sign in
+        </a>
+      </div>
     </div>
   </dialog>
 
   <script type="module">
     import { supabase } from "./js/supabase.js";
 
-    const form = document.getElementById("search-form");
+    const searchForm = document.getElementById("search-form");
     const searchInput = document.getElementById("search-input");
     const locationFilter = document.getElementById("location-filter");
     const roomFilter = document.getElementById("room-filter");
+    const hostelGrid = document.getElementById("hostel-grid");
     const resultsCount = document.getElementById("results-count");
     const emptyState = document.getElementById("empty-state");
-    const grid = document.getElementById("hostel-grid");
-    const dialog = document.getElementById("listing-dialog");
+    const resetSearch = document.getElementById("reset-search");
+    const listingStatus = document.getElementById("listing-status");
 
-    let cards = [];
-    let usingExamples = true;
+    const listingDialog = document.getElementById("listing-dialog");
+    const dialogTitle = document.getElementById("dialog-title");
+    const dialogBody = document.getElementById("dialog-body");
+    const dialogClose = document.getElementById("dialog-close");
+    const dialogOk = document.getElementById("dialog-ok");
+    const dialogAccountLink = document.getElementById("dialog-account-link");
 
-    function refreshCards() {
-      cards = [...grid.querySelectorAll(".hostel-card")];
+    let databaseHostels = [];
+    let usingDemoListings = true;
+
+    const demoHostels = [
+      {
+        id: "demo-1",
+        name: "Sample Student Residence",
+        location: "Bunda, Lilongwe",
+        description: "Example shared-room listing for website testing.",
+        room_type: "Shared room",
+        price: 45000,
+        total_rooms: 0,
+        available_rooms: 0,
+        accepting_applications: false,
+        demo: true
+      },
+      {
+        id: "demo-2",
+        name: "Sample Private Rooms",
+        location: "Lilongwe, Area 18",
+        description: "Example private-room listing for website testing.",
+        room_type: "Private room",
+        price: 80000,
+        total_rooms: 0,
+        available_rooms: 0,
+        accepting_applications: false,
+        demo: true
+      },
+      {
+        id: "demo-3",
+        name: "Sample Student Lodge",
+        location: "Zomba",
+        description: "Example shared-room listing for website testing.",
+        room_type: "Shared room",
+        price: 35000,
+        total_rooms: 0,
+        available_rooms: 0,
+        accepting_applications: false,
+        demo: true
+      }
+    ];
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[character]);
     }
 
-    function filterHostels() {
-      const query = searchInput.value.trim().toLowerCase();
-      const location = locationFilter.value.toLowerCase();
-      const type = roomFilter.value.toLowerCase();
+    function formatPrice(value) {
+      return "MWK " + Number(value || 0).toLocaleString("en-US");
+    }
+
+    function normalise(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function currentCards() {
+      return [...hostelGrid.querySelectorAll(".hostel-card")];
+    }
+
+    function applyFilters() {
+      const query = normalise(searchInput.value);
+      const location = normalise(locationFilter.value);
+      const roomType = normalise(roomFilter.value);
 
       let visible = 0;
 
-      cards.forEach(card => {
-        const name = card.dataset.name || "";
-        const cardLocation = card.dataset.location || "";
-        const cardType = card.dataset.type || "";
+      currentCards().forEach(card => {
+        const name = normalise(card.dataset.name);
+        const cardLocation = normalise(card.dataset.location);
+        const type = normalise(card.dataset.type);
+        const description = normalise(card.dataset.description);
 
         const matchesQuery =
+          !query ||
           name.includes(query) ||
           cardLocation.includes(query) ||
-          card.querySelector(".location").textContent
-            .toLowerCase().includes(query);
+          description.includes(query);
 
         const matchesLocation =
           !location || cardLocation.includes(location);
 
-        const matchesType =
-          !type || cardType === type;
+        const matchesRoom =
+          !roomType || type === roomType;
 
-        const show =
-          matchesQuery && matchesLocation && matchesType;
+        const matches =
+          matchesQuery && matchesLocation && matchesRoom;
 
-        card.hidden = !show;
+        card.hidden = !matches;
 
-        if (show) visible++;
+        if (matches) visible++;
       });
 
       resultsCount.textContent =
-        visible +
-        (visible === 1 ? " listing" : " listings") +
-        (usingExamples ? " (examples only)" : "");
+        `${visible} ${visible === 1 ? "listing" : "listings"}`;
 
-      grid.style.display = visible ? "grid" : "none";
-      emptyState.style.display = visible ? "none" : "block";
+      emptyState.style.display = visible === 0 ? "block" : "none";
     }
 
-    function createTextElement(tag, className, text) {
-      const element = document.createElement(tag);
+    function renderHostels(hostels, demoMode = false) {
+      hostelGrid.replaceChildren();
 
-      if (className) {
-        element.className = className;
-      }
+      hostels.forEach(hostel => {
+        const card = document.createElement("article");
+        card.className = "hostel-card";
 
-      element.textContent = text;
+        const name = String(hostel.name || "Untitled hostel");
+        const location = String(hostel.location || "Location not provided");
+        const roomType = String(hostel.room_type || "Room type not specified");
+        const description = String(hostel.description || "");
+        const price = Number(hostel.price || 0);
+        const isDemo = demoMode || Boolean(hostel.demo);
 
-      return element;
-    }
+        card.dataset.name = normalise(name);
+        card.dataset.location = normalise(location);
+        card.dataset.type = normalise(roomType);
+        card.dataset.price = String(price);
+        card.dataset.description = normalise(description);
+        card.dataset.hostelId = String(hostel.id || "");
+        card.dataset.demo = String(isDemo);
 
-    function createHostelCard(hostel) {
-      const card = document.createElement("article");
+        const visual = document.createElement("div");
+        visual.className = "card-visual";
+        visual.setAttribute("aria-hidden", "true");
+        visual.textContent = "🏡";
 
-      card.className = "hostel-card";
-      card.dataset.id = hostel.id;
-      card.dataset.source = "database";
-      card.dataset.name = (hostel.name || "").toLowerCase();
-      card.dataset.location = (hostel.location || "").toLowerCase();
-      card.dataset.type = (hostel.room_type || "").toLowerCase();
-      card.dataset.description = hostel.description || "";
+        const content = document.createElement("div");
+        content.className = "card-content";
 
-      const visual = createTextElement(
-        "div",
-        "card-visual",
-        "🏡"
-      );
+        const label = document.createElement("span");
+        label.className = isDemo ? "demo-label" : "verified-label";
+        label.textContent = isDemo ? "Example listing" : "Published listing";
 
-      visual.setAttribute("aria-hidden", "true");
+        const heading = document.createElement("h3");
+        heading.textContent = name;
 
-      const content = document.createElement("div");
-      content.className = "card-content";
+        const locationText = document.createElement("p");
+        locationText.className = "location";
+        locationText.textContent = location;
 
-      content.append(
-        createTextElement(
-          "span",
-          "demo-label",
-          "Database listing"
-        ),
-        createTextElement(
-          "h3",
-          "",
-          hostel.name || "Unnamed hostel"
-        ),
-        createTextElement(
-          "p",
-          "location",
-          hostel.location || "Location not provided"
-        ),
-        createTextElement(
-          "p",
-          "room-type",
-          hostel.room_type || "Room type not provided"
-        )
-      );
+        const typeText = document.createElement("p");
+        typeText.className = "room-type";
+        typeText.textContent = roomType;
 
-      const bottom = document.createElement("div");
-      bottom.className = "card-bottom";
+        const bottom = document.createElement("div");
+        bottom.className = "card-bottom";
 
-      const price = document.createElement("span");
-      price.className = "price";
+        const priceText = document.createElement("span");
+        priceText.className = "price";
+        priceText.append(document.createTextNode(formatPrice(price)));
 
-      price.append(
-        document.createTextNode(
-          "MWK " +
-          Number(hostel.price || 0).toLocaleString("en-US") +
-          " "
-        ),
-        createTextElement("small", "", "/ month")
-      );
+        const monthly = document.createElement("small");
+        monthly.textContent = "/ month";
+        priceText.append(monthly);
 
-      const detailsButton = createTextElement(
-        "button",
-        "details-button",
-        "View details"
-      );
+        const detailsButton = document.createElement("button");
+        detailsButton.className = "details-button";
+        detailsButton.type = "button";
+        detailsButton.textContent = "View details";
+        detailsButton.addEventListener("click", () => openDetails(hostel, isDemo));
 
-      detailsButton.type = "button";
+        bottom.append(priceText, detailsButton);
+        content.append(label, heading, locationText, typeText);
 
-      bottom.append(price, detailsButton);
-      content.append(bottom);
-      card.append(visual, content);
+        if (description) {
+          const descriptionText = document.createElement("p");
+          descriptionText.textContent = description;
+          content.append(descriptionText);
+        }
 
-      return card;
-    }
-
-    function showDetails(card) {
-      document.getElementById("dialog-title").textContent =
-        card.querySelector("h3").textContent;
-
-      const description =
-        card.querySelector(".location").textContent +
-        " · " +
-        card.querySelector(".room-type").textContent;
-
-      const isDatabaseListing =
-        card.dataset.source === "database";
-
-      document.getElementById("dialog-description").textContent =
-        description +
-        (isDatabaseListing && card.dataset.description
-          ? " · " + card.dataset.description
-          : "");
-
-      document.getElementById("dialog-price").textContent =
-        card.querySelector(".price").textContent.trim();
-
-      const paragraphs = dialog.querySelectorAll("p");
-
-      if (paragraphs[2]) {
-        paragraphs[2].textContent = isDatabaseListing
-          ? "Database listing. Confirm availability and details with the hostel before paying. Applications are not available yet."
-          : "Example listing only. This is not a verified accommodation offer.";
-      }
-
-      dialog.dataset.hostelId = card.dataset.id || "";
-
-      if (!dialog.open) {
-        dialog.showModal();
-      }
-    }
-
-    grid.addEventListener("click", event => {
-      const button = event.target.closest(".details-button");
-
-      if (!button) return;
-
-      const card = button.closest(".hostel-card");
-
-      if (card) {
-        showDetails(card);
-      }
-    });
-
-    form.addEventListener("submit", event => {
-      event.preventDefault();
-      filterHostels();
-    });
-
-    searchInput.addEventListener("input", filterHostels);
-    locationFilter.addEventListener("change", filterHostels);
-    roomFilter.addEventListener("change", filterHostels);
-
-    document
-      .getElementById("reset-search")
-      .addEventListener("click", () => {
-        form.reset();
-        filterHostels();
+        content.append(bottom);
+        card.append(visual, content);
+        hostelGrid.append(card);
       });
 
-    document
-      .getElementById("dialog-close")
-      .addEventListener("click", () => {
-        dialog.close();
-      });
+      applyFilters();
+    }
+
+    function openDetails(hostel, isDemo) {
+      dialogTitle.textContent = hostel.name || "Accommodation details";
+
+      const location = escapeHTML(hostel.location || "Not provided");
+      const type = escapeHTML(hostel.room_type || "Not specified");
+      const description = escapeHTML(hostel.description || "No description provided.");
+      const price = escapeHTML(formatPrice(hostel.price));
+      const availability = isDemo
+        ? "This is an example listing. Availability has not been verified."
+        : Number(hostel.available_rooms || 0) > 0 &&
+          hostel.accepting_applications === true
+          ? `${Number(hostel.available_rooms)} room(s) currently listed as available.`
+          : "Applications are not currently shown as open for this listing.";
+
+      dialogBody.innerHTML = `
+        <p><strong>Location:</strong> ${location}</p>
+        <p><strong>Room type:</strong> ${type}</p>
+        <p><strong>Rent:</strong> ${price} per month</p>
+        <p><strong>Description:</strong> ${description}</p>
+        <p>${escapeHTML(availability)}</p>
+      `;
+
+      dialogAccountLink.href = "./auth.html";
+
+      if (typeof listingDialog.showModal === "function") {
+        listingDialog.showModal();
+      } else {
+        alert(
+          `${hostel.name}\n${hostel.location}\n${formatPrice(hostel.price)} per month`
+        );
+      }
+    }
+
+    function closeDetails() {
+      if (listingDialog.open) listingDialog.close();
+    }
 
     async function loadHostels() {
+      listingStatus.style.display = "none";
+
       try {
         const { data, error } = await supabase
           .from("hostels")
           .select(
-            "id, name, location, description, room_type, price, created_at"
+            "id, name, location, description, room_type, price, is_active, total_rooms, available_rooms, accepting_applications"
           )
           .eq("is_active", true)
           .order("created_at", { ascending: false });
 
-        if (error) {
-          console.error(
-            "Could not load hostels:",
-            error.message
-          );
+        if (error) throw error;
 
-          resultsCount.textContent =
-            "Showing example listings — database read failed";
+        databaseHostels = data || [];
 
+        if (databaseHostels.length > 0) {
+          usingDemoListings = false;
+          renderHostels(databaseHostels, false);
           return;
         }
 
-        if (!data || data.length === 0) {
-          resultsCount.textContent =
-            "3 example listings — no database listings yet";
+        usingDemoListings = true;
+        renderHostels(demoHostels, true);
 
-          return;
-        }
-
-        grid.replaceChildren(...data.map(createHostelCard));
-
-        usingExamples = false;
-        refreshCards();
-
-        const about = document.querySelector("#about p");
-
-        if (about) {
-          about.textContent =
-            "HostelHub helps students explore accommodation in Malawi. " +
-            "Confirm current availability, ownership and payment details " +
-            "before making any payment.";
-        }
-
-        filterHostels();
+        listingStatus.textContent =
+          "No published hostel listings were found yet. The cards shown are examples for testing.";
+        listingStatus.style.display = "block";
       } catch (error) {
-        console.error(
-          "Supabase connection error:",
-          error
-        );
+        console.error("Could not load hostel listings:", error);
 
-        resultsCount.textContent =
-          "Showing example listings — unable to load database listings";
+        usingDemoListings = true;
+        renderHostels(demoHostels, true);
+
+        listingStatus.textContent =
+          "Live listings could not be loaded. Example listings are displayed instead.";
+        listingStatus.style.display = "block";
       }
     }
 
-    refreshCards();
+    searchForm.addEventListener("submit", event => {
+      event.preventDefault();
+      applyFilters();
+      document.getElementById("hostels").scrollIntoView({ behavior: "smooth" });
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+    locationFilter.addEventListener("change", applyFilters);
+    roomFilter.addEventListener("change", applyFilters);
+
+    resetSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      locationFilter.value = "";
+      roomFilter.value = "";
+      applyFilters();
+    });
+
+    dialogClose.addEventListener("click", closeDetails);
+    dialogOk.addEventListener("click", closeDetails);
+
+    listingDialog.addEventListener("click", event => {
+      if (event.target === listingDialog) closeDetails();
+    });
+
+    // A registration link can use #register. The auth page must
+    // support that fragment to automatically select its registration tab.
     loadHostels();
   </script>
 </body>
