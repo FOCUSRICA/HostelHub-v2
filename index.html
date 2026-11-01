@@ -587,6 +587,64 @@
         align-items: start;
       }
     }
+    
+/* Floating navigation animation */
+.site-header nav {
+  animation: navFloat 4s ease-in-out infinite;
+}
+
+.site-header nav a {
+  position: relative;
+  display: inline-block;
+  padding: 7px 0;
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.site-header nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--green);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.25s ease;
+}
+
+.site-header nav a:hover {
+  color: var(--green);
+  transform: translateY(-3px);
+}
+
+.site-header nav a:hover::after {
+  transform: scaleX(1);
+}
+
+/* Gentle floating motion */
+@keyframes navFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Respect reduced-motion accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  .site-header nav,
+  .site-header nav a,
+  .site-header nav a::after {
+    animation: none;
+    transition: none;
+  }
+}
+
   </style>
 </head>
 
