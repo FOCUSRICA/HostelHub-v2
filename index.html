@@ -16,17 +16,16 @@
 
   <style>
    
+
 :root {
-  --pink: #f02d83;
-  --pink-dark: #cf1768;
   --green: #197647;
   --green-dark: #105532;
+  --green-light: #35b879;
   --ink: #f7f4f8;
   --muted: #bcb5c3;
   --surface: rgba(23, 27, 30, .78);
   --border: rgba(255, 255, 255, .13);
   --background: #111719;
-  --shadow: 0 20px 55px rgba(0, 0, 0, .28);
 }
 
 * {
@@ -56,22 +55,22 @@ body::after {
   z-index: -1;
   pointer-events: none;
   filter: blur(65px);
-  opacity: .55;
+  opacity: .5;
 }
 
 body::before {
   background:
     radial-gradient(ellipse at 15% 20%,
-      rgba(223, 42, 112, .35), transparent 38%),
+      rgba(25, 118, 71, .4), transparent 38%),
     radial-gradient(ellipse at 85% 55%,
-      rgba(34, 104, 74, .25), transparent 40%);
+      rgba(53, 184, 121, .2), transparent 40%);
   animation: ambientDrift 15s ease-in-out infinite alternate;
 }
 
 body::after {
   background:
     radial-gradient(ellipse at 50% 95%,
-      rgba(132, 31, 87, .2), transparent 42%);
+      rgba(16, 85, 50, .3), transparent 42%);
   animation: ambientDrift 19s ease-in-out infinite alternate-reverse;
 }
 
@@ -95,12 +94,12 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible {
-  outline: 3px solid rgba(240, 45, 131, .65);
+  outline: 3px solid rgba(53, 184, 121, .65);
   outline-offset: 3px;
 }
 
 ::selection {
-  background: rgba(240, 45, 131, .4);
+  background: rgba(53, 184, 121, .4);
   color: white;
 }
 
@@ -110,7 +109,7 @@ select:focus-visible {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(14, 18, 20, .82);
+  background: rgba(14, 18, 20, .84);
   border-bottom: 1px solid rgba(255, 255, 255, .08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -149,7 +148,6 @@ select:focus-visible {
 
 .site-header nav a,
 #main-nav a {
-  position: relative;
   display: inline-block;
   padding: 9px 12px;
   border-radius: 10px;
@@ -157,16 +155,14 @@ select:focus-visible {
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
-  transition:
-    color .25s ease,
-    background .25s ease,
-    transform .25s ease;
+  transition: color .25s ease, background .25s ease,
+              transform .25s ease;
 }
 
 .site-header nav a:hover,
 #main-nav a:hover {
-  color: white;
-  background: rgba(240, 45, 131, .1);
+  color: #fff;
+  background: rgba(53, 184, 121, .12);
   transform: translateY(-2px);
 }
 
@@ -176,7 +172,7 @@ select:focus-visible {
   gap: 10px;
 }
 
-/* BUTTONS */
+/* GREEN BUTTONS */
 
 .button,
 button.button,
@@ -193,18 +189,16 @@ button.button,
   border: 1px solid rgba(255, 255, 255, .13);
   border-radius: 11px;
   background: linear-gradient(
-    110deg, var(--pink-dark), var(--pink), #f34e9a
+    110deg, var(--green-dark), var(--green), var(--green-light)
   );
   background-size: 180% 100%;
-  color: white;
+  color: #fff;
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
-  box-shadow: 0 7px 22px rgba(240, 45, 131, .16);
-  transition:
-    background-position .3s ease,
-    transform .25s ease,
-    box-shadow .25s ease;
+  box-shadow: 0 7px 22px rgba(25, 118, 71, .2);
+  transition: background-position .3s ease,
+              transform .25s ease, box-shadow .25s ease;
 }
 
 .button:hover,
@@ -215,7 +209,7 @@ button.button:hover,
 #hostel-reset-filters:hover {
   background-position: 100% 0;
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px rgba(240, 45, 131, .25);
+  box-shadow: 0 10px 28px rgba(53, 184, 121, .25);
 }
 
 .button-outline,
@@ -226,7 +220,7 @@ button.button:hover,
 
 .button-outline:hover,
 .header-actions .button-outline:hover {
-  background: rgba(240, 45, 131, .12);
+  background: rgba(53, 184, 121, .12);
 }
 
 .button-small {
@@ -234,7 +228,7 @@ button.button:hover,
   padding: 8px 13px;
 }
 
-/* HERO SECTION */
+/* HERO */
 
 .hero {
   position: relative;
@@ -259,8 +253,8 @@ button.button:hover,
 }
 
 .hero h1 span {
-  color: var(--pink);
-  text-shadow: 0 0 35px rgba(240, 45, 131, .2);
+  color: var(--green-light);
+  text-shadow: 0 0 35px rgba(53, 184, 121, .2);
 }
 
 .hero p {
@@ -270,11 +264,7 @@ button.button:hover,
   line-height: 1.8;
 }
 
-.hero .button {
-  margin-top: 15px;
-}
-
-/* SEARCH PANEL */
+/* GLASS SEARCH PANEL */
 
 .search-panel {
   position: relative;
@@ -286,10 +276,10 @@ button.button:hover,
   align-items: end;
   gap: 15px;
   border: 1px solid var(--border);
-  border-top: 2px solid rgba(240, 45, 131, .75);
+  border-top: 2px solid var(--green-light);
   border-radius: 20px;
   background: var(--surface);
-  box-shadow: var(--shadow);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, .28);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
   animation: riseIn .7s .1s ease both;
@@ -337,8 +327,8 @@ button.button:hover,
 #location-filter:focus,
 #room-filter:focus {
   outline: none;
-  border-color: var(--pink);
-  box-shadow: 0 0 0 3px rgba(240, 45, 131, .13);
+  border-color: var(--green-light);
+  box-shadow: 0 0 0 3px rgba(53, 184, 121, .13);
 }
 
 #reset-search,
@@ -347,11 +337,7 @@ button.button:hover,
   box-shadow: none;
 }
 
-/* CONTENT SECTIONS */
-
-section:not(.panel):not(.search-panel) {
-  scroll-margin-top: 95px;
-}
+/* SECTIONS */
 
 #hostels,
 #how-it-works,
@@ -359,6 +345,7 @@ section:not(.panel):not(.search-panel) {
   width: min(1180px, 92%);
   margin: 0 auto;
   padding: 55px 0;
+  scroll-margin-top: 95px;
 }
 
 #hostels h2,
@@ -376,7 +363,7 @@ section:not(.panel):not(.search-panel) {
   color: var(--muted);
 }
 
-/* LISTING GRID AND CARDS */
+/* ACCOMMODATION CARDS */
 
 #hostel-grid,
 .hostel-grid {
@@ -397,24 +384,21 @@ section:not(.panel):not(.search-panel) {
   box-shadow: 0 12px 32px rgba(0, 0, 0, .16);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition:
-    transform .3s ease,
-    border-color .3s ease,
-    box-shadow .3s ease;
+  transition: transform .3s ease, border-color .3s ease,
+              box-shadow .3s ease;
   animation: riseIn .55s ease both;
 }
 
 .hostel-card:hover {
   transform: translateY(-6px);
-  border-color: rgba(240, 45, 131, .42);
-  box-shadow:
-    0 20px 42px rgba(0, 0, 0, .25),
-    0 0 24px rgba(240, 45, 131, .07);
+  border-color: rgba(53, 184, 121, .42);
+  box-shadow: 0 20px 42px rgba(0, 0, 0, .25),
+              0 0 24px rgba(53, 184, 121, .07);
 }
 
 .hostel-card h3 {
   margin: 0 0 10px;
-  color: white;
+  color: #fff;
   font-size: 20px;
   line-height: 1.35;
 }
@@ -426,14 +410,8 @@ section:not(.panel):not(.search-panel) {
 
 .hostel-card .price,
 .hostel-card [class*="price"] {
-  color: #ff83bb;
+  color: var(--green-light);
   font-weight: 800;
-}
-
-.hostel-card button,
-.hostel-card .button,
-.hostel-card a {
-  text-decoration: none;
 }
 
 .hostel-card button,
@@ -441,7 +419,7 @@ section:not(.panel):not(.search-panel) {
   margin-top: 12px;
 }
 
-/* STATUS AND RESULTS */
+/* EMPTY AND STATUS MESSAGES */
 
 #results-count,
 .results-count,
@@ -459,12 +437,7 @@ section:not(.panel):not(.search-panel) {
   text-align: center;
 }
 
-/* HOW IT WORKS / ABOUT */
-
-#how-it-works > *,
-#about > * {
-  max-width: 850px;
-}
+/* HOW IT WORKS AND ABOUT */
 
 #how-it-works .card,
 #how-it-works article,
@@ -480,10 +453,10 @@ section:not(.panel):not(.search-panel) {
 #how-it-works article:hover,
 #about .card:hover {
   transform: translateY(-4px);
-  border-color: rgba(240, 45, 131, .35);
+  border-color: rgba(53, 184, 121, .35);
 }
 
-/* LISTING DETAILS DIALOG */
+/* LISTING DETAILS */
 
 dialog,
 #listing-dialog {
@@ -492,7 +465,7 @@ dialog,
   overflow-y: auto;
   padding: 28px;
   border: 1px solid rgba(255, 255, 255, .17);
-  border-top: 2px solid var(--pink);
+  border-top: 2px solid var(--green-light);
   border-radius: 20px;
   background: #171b1e;
   color: var(--ink);
@@ -505,21 +478,10 @@ dialog::backdrop,
   backdrop-filter: blur(7px);
 }
 
-dialog h2,
-#listing-dialog h2 {
-  margin-top: 0;
-  font-size: 27px;
-}
-
 dialog p,
 #listing-dialog p {
   color: var(--muted);
   line-height: 1.8;
-}
-
-dialog button,
-#listing-dialog button {
-  margin: 8px 8px 0 0;
 }
 
 /* FOOTER */
@@ -535,7 +497,7 @@ footer {
 }
 
 footer a {
-  color: #f4b8d2;
+  color: var(--green-light);
 }
 
 /* MOBILE NAVIGATION */
@@ -568,17 +530,6 @@ footer a {
   #hostel-grid,
   .hostel-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .site-header nav,
-  #main-nav {
-    gap: 2px;
-  }
-
-  .site-header nav a,
-  #main-nav a {
-    padding: 8px;
-    font-size: 13px;
   }
 }
 
@@ -673,6 +624,7 @@ footer a {
     transition-duration: .01ms !important;
   }
 }
+
 
   </style>
 </head>
