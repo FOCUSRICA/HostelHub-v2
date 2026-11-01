@@ -1,0 +1,383 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sign in or create your HostelHub student account.">
+  <title>Sign in | HostelHub</title>
+  <style>
+    :root {
+      --green: #197647;
+      --green-dark: #105532;
+      --pale: #eaf5ed;
+      --ink: #192b21;
+      --muted: #68776e;
+      --border: #dce7df;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: linear-gradient(135deg, #edf7ef, #fff 70%);
+    }
+
+    header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav {
+      width: min(1050px, 92%);
+      min-height: 72px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 21px;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--green);
+    }
+
+    .back-link {
+      color: var(--green-dark);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    main {
+      width: min(460px, 92%);
+      margin: 48px auto;
+    }
+
+    .intro { text-align: center; margin-bottom: 24px; }
+
+    .intro h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 5vw, 36px);
+      letter-spacing: -1px;
+    }
+
+    .intro p { margin: 0; color: var(--muted); line-height: 1.7; }
+
+    .panel {
+      background: #fff;
+      padding: clamp(22px, 5vw, 34px);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--green);
+      border-radius: 18px;
+      box-shadow: 0 16px 40px #194d2a10;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 5px;
+      background: #f2f7f3;
+      border-radius: 11px;
+      margin-bottom: 24px;
+    }
+
+    .tab {
+      padding: 11px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      color: var(--green-dark);
+      background: #fff;
+      box-shadow: 0 2px 8px #0000000c;
+    }
+
+    .field { margin-bottom: 16px; }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      min-height: 47px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fcfdfc;
+      font: inherit;
+    }
+
+    input:focus {
+      outline: 3px solid #19764720;
+      border-color: var(--green);
+    }
+
+    .submit {
+      width: 100%;
+      min-height: 48px;
+      margin-top: 4px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .submit:hover { background: var(--green-dark); }
+    .submit:disabled { opacity: .65; cursor: wait; }
+
+    .message {
+      display: none;
+      margin: 16px 0 0;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.show { display: block; }
+    .message.error { color: #8c2525; background: #fff0f0; }
+    .message.success { color: #145b37; background: var(--pale); }
+
+    .help {
+      margin: 20px 0 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    footer {
+      padding: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">H</span>
+        <span>HostelHub</span>
+      </a>
+      <a class="back-link" href="./index.html">← Back to accommodation</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="intro">
+      <h1 id="page-title">Welcome back</h1>
+      <p>Sign in to continue with HostelHub.</p>
+    </div>
+
+    <section class="panel" aria-label="Account access">
+      <div class="tabs" role="tablist" aria-label="Account action">
+        <button class="tab active" id="signin-tab" type="button"
+          role="tab" aria-selected="true">Sign in</button>
+        <button class="tab" id="register-tab" type="button"
+          role="tab" aria-selected="false">Create account</button>
+      </div>
+
+      <form id="auth-form">
+        <div class="field" id="name-field" hidden>
+          <label for="full-name">Full name</label>
+          <input id="full-name" name="fullName" autocomplete="name">
+        </div>
+
+        <div class="field" id="phone-field" hidden>
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel"
+            autocomplete="tel" placeholder="e.g. 09XXXXXXXX">
+        </div>
+
+        <div class="field">
+          <label for="email">Email address</label>
+          <input id="email" name="email" type="email"
+            autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password"
+            autocomplete="current-password" minlength="8" required>
+        </div>
+
+        <button class="submit" id="submit-button" type="submit">
+          Sign in
+        </button>
+
+        <p id="message" class="message" role="status" aria-live="polite"></p>
+      </form>
+
+      <p class="help">
+        Student registration is open here. Hostel owners use their existing
+        authorized account to sign in; owner access is controlled by the
+        profile role and database permissions.
+      </p>
+    </section>
+  </main>
+
+  <footer>HostelHub · Find Your Space</footer>
+
+  <script type="module">
+    import {
+      registerStudent,
+      signIn,
+      getMyProfile
+    } from "./js/auth.js";
+
+    const form = document.getElementById("auth-form");
+    const signinTab = document.getElementById("signin-tab");
+    const registerTab = document.getElementById("register-tab");
+    const nameField = document.getElementById("name-field");
+    const phoneField = document.getElementById("phone-field");
+    const fullName = document.getElementById("full-name");
+    const phone = document.getElementById("phone");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    const submitButton = document.getElementById("submit-button");
+    const message = document.getElementById("message");
+    const pageTitle = document.getElementById("page-title");
+
+    let mode = "signin";
+
+    function showMessage(text, type) {
+      message.textContent = text;
+      message.className = "message show " + type;
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      const registering = mode === "register";
+
+      nameField.hidden = !registering;
+      phoneField.hidden = !registering;
+      fullName.required = registering;
+      phone.required = registering;
+      password.autocomplete = registering
+        ? "new-password"
+        : "current-password";
+
+      signinTab.classList.toggle("active", !registering);
+      registerTab.classList.toggle("active", registering);
+      signinTab.setAttribute("aria-selected", String(!registering));
+      registerTab.setAttribute("aria-selected", String(registering));
+
+      pageTitle.textContent = registering
+        ? "Create your account"
+        : "Welcome back";
+
+      submitButton.textContent = registering
+        ? "Create student account"
+        : "Sign in";
+
+      message.className = "message";
+      message.textContent = "";
+    }
+
+    signinTab.addEventListener("click", () => setMode("signin"));
+    registerTab.addEventListener("click", () => setMode("register"));
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      submitButton.disabled = true;
+      message.className = "message";
+
+      try {
+        if (mode === "register") {
+          await registerStudent({
+            email: email.value,
+            password: password.value,
+            fullName: fullName.value,
+            phone: phone.value
+          });
+
+          showMessage(
+            "Registration submitted. If email confirmation is enabled, " +
+            "check your inbox before signing in. New registrations are " +
+            "student accounts.",
+            "success"
+          );
+        } else {
+          await signIn(email.value, password.value);
+
+          const profile = await getMyProfile();
+
+          if (!profile) {
+            showMessage(
+              "You signed in, but your profile could not be found. " +
+              "Please contact the site administrator.",
+              "error"
+            );
+            return;
+          }
+
+          if (profile.role === "owner") {
+            showMessage(
+              "Signed in successfully as an owner. Owner dashboard " +
+              "features still need to be connected.",
+              "success"
+            );
+          } else if (profile.role === "student") {
+            showMessage(
+              "Signed in successfully as a student. Student dashboard " +
+              "features still need to be connected.",
+              "success"
+            );
+          } else {
+            showMessage(
+              "Your account role is not recognized. Please contact " +
+              "the site administrator.",
+              "error"
+            );
+          }
+        }
+      } catch (error) {
+        showMessage(
+          error?.message || "Something went wrong. Please try again.",
+          "error"
+        );
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
