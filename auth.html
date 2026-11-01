@@ -676,9 +676,24 @@
         ? "Create student account"
         : "Sign in";
 
+     
       message.className = "message";
       message.textContent = "";
+
+      // Update the animated bulb when switching between modes.
+      const bulbScene = document.getElementById("bulb-scene");
+      const bulbCaption = document.getElementById("bulb-caption");
+
+      if (bulbScene && bulbCaption) {
+        bulbScene.classList.toggle("register-mode", registering);
+        bulbScene.classList.toggle("signin-mode", !registering);
+
+        bulbCaption.textContent = registering
+          ? "Your next chapter starts here"
+          : "Welcome back to your space";
+      }
     }
+
 
     signinTab.addEventListener("click", () => setMode("signin"));
     registerTab.addEventListener("click", () => setMode("register"));
@@ -687,6 +702,7 @@
     if (window.location.hash === "#register") {
       setMode("register");
     }
+        setMode(mode);
 
     form.addEventListener("submit", async event => {
       event.preventDefault();
