@@ -725,6 +725,52 @@
     const pageTitle = document.getElementById("page-title");
 
     let mode = "signin";
+    
+const passwordGuidance = document.getElementById("password-guidance");
+
+const passwordChecks = [
+  {
+    id: "pw-length",
+    test: value => value.length >= 8
+  },
+  {
+    id: "pw-upper",
+    test: value => /[A-Z]/.test(value)
+  },
+  {
+    id: "pw-lower",
+    test: value => /[a-z]/.test(value)
+  },
+  {
+    id: "pw-number",
+    test: value => /[0-9]/.test(value)
+  },
+  {
+    id: "pw-special",
+    test: value => /[^A-Za-z0-9]/.test(value)
+  }
+];
+
+function updatePasswordGuidance() {
+  const value = password.value;
+
+  passwordChecks.forEach(check => {
+    const item = document.getElementById(check.id);
+    const valid = check.test(value);
+
+    item.classList.toggle("valid", valid);
+    item.textContent =
+      `${valid ? "✓" : "○"} ${{
+        "pw-length": "At least 8 characters",
+        "pw-upper": "One uppercase letter (A–Z)",
+        "pw-lower": "One lowercase letter (a–z)",
+        "pw-number": "One number (0–9)",
+        "pw-special": "One special character (!@#$...)"
+      }[check.id]}`;
+  });
+}
+
+password.addEventListener("input", updatePasswordGuidance);
 
     function showMessage(text, type) {
       message.textContent = text;
@@ -734,7 +780,12 @@
     function setMode(nextMode) {
       mode = nextMode;
       const registering = mode === "register";
-
+      passwordGuidance.hidden = !registering;
+password.setAttribute(
+  "autocomplete",
+  registering ? "new-password" : "current-password"
+);
+updatePasswordGuidance();
       nameField.hidden = !registering;
       phoneField.hidden = !registering;
 
@@ -789,6 +840,24 @@
 
     form.addEventListener("submit", async event => {
       event.preventDefault();
+      
+if (mode === "register") {
+  const passwordIsStrong = passwordChecks.every(
+    check => check.test(password.value)
+  );
+
+  if (!passwordIsStrong) {
+    showMessage(
+      "Please meet all password requirements before creating your account.",
+      "error"
+    );
+    updatePasswordGuidance();
+    password.focus();
+    return;
+  }
+}
+
+submitButton.disabled = true;
 
       submitButton.disabled = true;
       message.className = "message";
