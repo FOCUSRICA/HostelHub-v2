@@ -38,7 +38,7 @@
       position: sticky;
       top: 0;
       z-index: 5;
-      background: rgba(255, 255, 255, .95);
+      background: rgba(255,255,255,.95);
       border-bottom: 1px solid var(--border);
       backdrop-filter: blur(14px);
     }
@@ -70,10 +70,12 @@
       height: 38px;
       border-radius: 11px;
       color: white;
-      background: linear-gradient(135deg, var(--green-light), var(--green-dark));
+      background: linear-gradient(135deg,var(--green-light),var(--green-dark));
     }
 
     button, a { -webkit-tap-highlight-color: transparent; }
+
+    button, input, textarea, select { font: inherit; }
 
     .button {
       display: inline-flex;
@@ -86,7 +88,6 @@
       background: white;
       color: var(--ink);
       text-decoration: none;
-      font: inherit;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
@@ -111,10 +112,11 @@
     button:disabled {
       opacity: .65;
       cursor: wait;
+      transform: none;
     }
 
     main {
-      width: min(1160px, 92%);
+      width: min(1160px,92%);
       margin: 34px auto 60px;
     }
 
@@ -124,8 +126,8 @@
       padding: 32px;
       border-radius: 20px;
       color: white;
-      background: linear-gradient(120deg, #105532, #197647 65%, #35b879);
-      box-shadow: 0 12px 35px rgba(16, 85, 50, .12);
+      background: linear-gradient(120deg,#105532,#197647 65%,#35b879);
+      box-shadow: 0 12px 35px rgba(16,85,50,.12);
       animation: riseIn .5s ease both;
     }
 
@@ -137,7 +139,7 @@
       right: -70px;
       top: -110px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, .1);
+      background: rgba(255,255,255,.1);
       pointer-events: none;
     }
 
@@ -152,7 +154,7 @@
 
     h1 {
       margin: 0 0 10px;
-      font-size: clamp(27px, 4vw, 38px);
+      font-size: clamp(27px,4vw,38px);
       letter-spacing: -1px;
     }
 
@@ -168,9 +170,16 @@
       font-size: 19px;
     }
 
+    .section-intro {
+      margin: -7px 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3,minmax(0,1fr));
       gap: 18px;
     }
 
@@ -180,7 +189,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      box-shadow: 0 5px 18px rgba(25, 55, 35, .035);
+      box-shadow: 0 5px 18px rgba(25,55,35,.035);
       animation: riseIn .5s ease both;
     }
 
@@ -219,25 +228,254 @@
       font-weight: 800;
     }
 
-    .account-card {
-      margin-top: 20px;
-      padding: 23px;
+    .account-card, .panel {
+      margin-top: 22px;
+      padding: 24px;
       border: 1px solid var(--border);
       border-radius: 16px;
       background: white;
+      box-shadow: 0 5px 18px rgba(25,55,35,.025);
     }
 
-    .account-card h2 {
-      margin: 0 0 8px;
-      font-size: 16px;
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
-    .account-card > p {
-      margin: 0 0 15px;
+    .panel-heading h2, .account-card h2 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .panel-heading p, .account-card > p {
+      margin: 7px 0 0;
       color: var(--muted);
       font-size: 14px;
       line-height: 1.7;
     }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-height: 45px;
+      padding: 11px 12px;
+      border: 1px solid #d7e3da;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .field textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .field input:focus, .field textarea:focus, .field select:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(25,118,71,.1);
+    }
+
+    .field small {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .check-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fbfdfb;
+    }
+
+    .check-row input {
+      width: 17px;
+      height: 17px;
+      margin-top: 2px;
+      accent-color: var(--green);
+      flex-shrink: 0;
+    }
+
+    .check-row label {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.5;
+      cursor: pointer;
+    }
+
+    .check-row small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .listing-list {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .listing-card {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+    }
+
+    .listing-card h3 {
+      margin: 0 0 7px;
+      font-size: 17px;
+      overflow-wrap: anywhere;
+    }
+
+    .listing-location {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .listing-price {
+      margin: 0 0 15px;
+      color: var(--green-dark);
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .listing-price small {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .listing-details {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .detail-box {
+      padding: 11px;
+      border-radius: 9px;
+      background: #f5f9f6;
+    }
+
+    .detail-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 5px;
+    }
+
+    .detail-box strong {
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .listing-description {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .listing-statuses {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #edf1ee;
+      color: #46564a;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .pill.good {
+      color: #12633b;
+      background: #e3f6e9;
+    }
+
+    .pill.warning {
+      color: #8a5300;
+      background: #fff3d8;
+    }
+
+    .listing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .listing-actions .button {
+      flex: 1;
+      min-width: 100px;
+      padding: 9px 11px;
+    }
+
+    .empty-state {
+      padding: 30px 20px;
+      border: 1px dashed #cbdacf;
+      border-radius: 12px;
+      text-align: center;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .empty-state strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink);
+    }
+
+    .account-card { margin-top: 22px; }
 
     .profile-row {
       display: flex;
@@ -307,16 +545,19 @@
     }
 
     @media (max-width: 850px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .listing-list { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 580px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid, .form-grid { grid-template-columns: 1fr; }
       .welcome { padding: 25px; }
       main { margin-top: 24px; }
       .nav { min-height: 64px; }
       .brand { font-size: 18px; }
-      .card, .account-card { padding: 19px; }
+      .card, .account-card, .panel { padding: 19px; }
+      .field.full { grid-column: auto; }
+      .profile-row { align-items: flex-start; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -335,7 +576,6 @@
         <span class="brand-mark">H</span>
         <span>HostelHub</span>
       </a>
-
       <button class="button button-danger" id="signout-button" type="button">
         Sign out
       </button>
@@ -359,8 +599,8 @@
         <section class="card">
           <div class="card-icon" aria-hidden="true">⌂</div>
           <h2>My hostel listings</h2>
-          <p>Manage your accommodation listings and keep property information up to date.</p>
-          <span class="status">Listing management coming next</span>
+          <p>View your properties, manage room availability, and update listing information.</p>
+          <span class="status" id="listing-count">Loading listings...</span>
         </section>
 
         <section class="card">
@@ -371,12 +611,109 @@
         </section>
 
         <section class="card">
-          <div class="card-icon" aria-hidden="true">₱</div>
+          <div class="card-icon" aria-hidden="true">MK</div>
           <h2>Rent and payments</h2>
           <p>Track rent records and payment verification for your accommodation.</p>
           <span class="status">Payment tracking coming next</span>
         </section>
       </div>
+
+      <section class="panel" id="listing-form-panel">
+        <div class="panel-heading">
+          <div>
+            <h2 id="form-title">Add a hostel</h2>
+            <p>Add your accommodation details. Fields marked required must be completed.</p>
+          </div>
+        </div>
+
+        <form id="hostel-form">
+          <div class="form-grid">
+            <div class="field">
+              <label for="hostel-name">Hostel name *</label>
+              <input id="hostel-name" name="name" type="text" maxlength="120" required>
+            </div>
+
+            <div class="field">
+              <label for="hostel-location">Location *</label>
+              <input id="hostel-location" name="location" type="text" maxlength="180" placeholder="e.g. Area 18, Lilongwe" required>
+            </div>
+
+            <div class="field">
+              <label for="hostel-room-type">Room type *</label>
+              <input id="hostel-room-type" name="room_type" type="text" maxlength="80" placeholder="e.g. Shared room" required>
+            </div>
+
+            <div class="field">
+              <label for="hostel-price">Monthly rent (MK) *</label>
+              <input id="hostel-price" name="price" type="number" min="0" step="0.01" required>
+              <small>Enter the monthly rent in Malawi kwacha.</small>
+            </div>
+
+            <div class="field">
+              <label for="hostel-total-rooms">Total rooms *</label>
+              <input id="hostel-total-rooms" name="total_rooms" type="number" min="0" step="1" value="0" required>
+            </div>
+
+            <div class="field">
+              <label for="hostel-available-rooms">Available rooms *</label>
+              <input id="hostel-available-rooms" name="available_rooms" type="number" min="0" step="1" value="0" required>
+            </div>
+
+            <div class="field full">
+              <label for="hostel-description">Description</label>
+              <textarea id="hostel-description" name="description" maxlength="3000" placeholder="Describe the accommodation, facilities, and nearby services."></textarea>
+            </div>
+
+            <div class="field full">
+              <div class="check-row">
+                <input id="hostel-active" name="is_active" type="checkbox" checked>
+                <label for="hostel-active">
+                  Listing is active
+                  <small>Active listings may be visible to students according to your existing database permissions.</small>
+                </label>
+              </div>
+            </div>
+
+            <div class="field full">
+              <div class="check-row">
+                <input id="hostel-accepting" name="accepting_applications" type="checkbox">
+                <label for="hostel-accepting">
+                  Accepting applications
+                  <small>This saves your application preference. Student submission eligibility is still controlled by the existing database policies.</small>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button class="button button-primary" id="save-hostel-button" type="submit">
+              Save hostel
+            </button>
+            <button class="button" id="cancel-edit-button" type="button" hidden>
+              Cancel editing
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>My hostel listings</h2>
+            <p>Only listings belonging to your signed-in owner account are shown here.</p>
+          </div>
+          <button class="button" id="refresh-listings-button" type="button">
+            Refresh listings
+          </button>
+        </div>
+
+        <p id="listings-loading" class="loading">Loading your listings...</p>
+        <div id="listing-list" class="listing-list"></div>
+        <div id="listing-empty" class="empty-state" hidden>
+          <strong>No hostel listings yet</strong>
+          Add your first hostel using the form above.
+        </div>
+      </section>
 
       <section class="account-card">
         <h2>Owner account</h2>
@@ -386,17 +723,14 @@
           <span class="profile-label">Full name</span>
           <span class="profile-value" id="profile-name">—</span>
         </div>
-
         <div class="profile-row">
           <span class="profile-label">Email address</span>
           <span class="profile-value" id="profile-email">—</span>
         </div>
-
         <div class="profile-row">
           <span class="profile-label">Phone number</span>
           <span class="profile-value" id="profile-phone">—</span>
         </div>
-
         <div class="profile-row">
           <span class="profile-label">Account role</span>
           <span class="profile-value">Hostel owner</span>
@@ -415,11 +749,415 @@
     const content = document.getElementById("dashboard-content");
     const notice = document.getElementById("notice");
     const signoutButton = document.getElementById("signout-button");
+    const hostelForm = document.getElementById("hostel-form");
+    const saveButton = document.getElementById("save-hostel-button");
+    const cancelButton = document.getElementById("cancel-edit-button");
+    const listingList = document.getElementById("listing-list");
+    const listingsLoading = document.getElementById("listings-loading");
+    const listingEmpty = document.getElementById("listing-empty");
+    const listingCount = document.getElementById("listing-count");
+    const refreshButton = document.getElementById("refresh-listings-button");
 
-    function showNotice(text, type = "info") {
-      notice.textContent = text;
+    let currentUser = null;
+    let editingHostelId = null;
+    let isSaving = false;
+    let isLoadingListings = false;
+
+    const field = (id) => document.getElementById(id);
+
+    function showNotice(message, type = "info") {
+      notice.textContent = message;
       notice.className = `notice show ${type}`;
+      notice.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
+
+    function clearNotice() {
+      notice.textContent = "";
+      notice.className = "notice";
+    }
+
+    function formatMoney(value) {
+      return "MK " + Number(value || 0).toLocaleString("en-US", {
+        maximumFractionDigits: 2
+      });
+    }
+
+    function addTextElement(parent, tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      element.textContent = text;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function addPill(parent, text, kind = "") {
+      const pill = document.createElement("span");
+      pill.className = `pill ${kind}`.trim();
+      pill.textContent = text;
+      parent.appendChild(pill);
+    }
+
+    function createDetail(parent, label, value) {
+      const box = document.createElement("div");
+      box.className = "detail-box";
+      addTextElement(box, "span", "", label);
+      addTextElement(box, "strong", "", String(value));
+      parent.appendChild(box);
+    }
+
+    function renderHostels(hostels) {
+      listingList.replaceChildren();
+
+      listingCount.textContent =
+        `${hostels.length} ${hostels.length === 1 ? "listing" : "listings"}`;
+
+      listingEmpty.hidden = hostels.length !== 0;
+
+      for (const hostel of hostels) {
+        const card = document.createElement("article");
+        card.className = "listing-card";
+
+        addTextElement(card, "h3", "", hostel.name);
+        addTextElement(card, "p", "listing-location", `⌖ ${hostel.location}`);
+        addTextElement(
+          card,
+          "p",
+          "listing-price",
+          formatMoney(hostel.price)
+        );
+
+        const priceNote = document.createElement("small");
+        priceNote.textContent = " / month";
+        card.querySelector(".listing-price").appendChild(priceNote);
+
+        const details = document.createElement("div");
+        details.className = "listing-details";
+        createDetail(details, "Room type", hostel.room_type);
+        createDetail(
+          details,
+          "Available rooms",
+          `${hostel.available_rooms} of ${hostel.total_rooms}`
+        );
+        card.appendChild(details);
+
+        if (hostel.description) {
+          addTextElement(card, "p", "listing-description", hostel.description);
+        }
+
+        const statuses = document.createElement("div");
+        statuses.className = "listing-statuses";
+        addPill(
+          statuses,
+          hostel.is_active ? "Active listing" : "Inactive listing",
+          hostel.is_active ? "good" : "warning"
+        );
+        addPill(
+          statuses,
+          hostel.accepting_applications
+            ? "Accepting applications"
+            : "Applications closed",
+          hostel.accepting_applications ? "good" : "warning"
+        );
+        card.appendChild(statuses);
+
+        const actions = document.createElement("div");
+        actions.className = "listing-actions";
+
+        const editButton = document.createElement("button");
+        editButton.type = "button";
+        editButton.className = "button button-primary";
+        editButton.textContent = "Edit details";
+        editButton.addEventListener("click", () => beginEdit(hostel));
+
+        const visibilityButton = document.createElement("button");
+        visibilityButton.type = "button";
+        visibilityButton.className = "button";
+        visibilityButton.textContent = hostel.is_active
+          ? "Deactivate"
+          : "Activate";
+        visibilityButton.addEventListener("click", () => {
+          updateHostelStatus(hostel, {
+            is_active: !hostel.is_active,
+            accepting_applications: hostel.is_active
+              ? false
+              : hostel.accepting_applications
+          });
+        });
+
+        const applicationsButton = document.createElement("button");
+        applicationsButton.type = "button";
+        applicationsButton.className = "button";
+        applicationsButton.textContent = hostel.accepting_applications
+          ? "Close applications"
+          : "Accept applications";
+        applicationsButton.disabled = !hostel.is_active;
+        applicationsButton.title = !hostel.is_active
+          ? "Activate the listing before enabling applications."
+          : "";
+        applicationsButton.addEventListener("click", () => {
+          updateHostelStatus(hostel, {
+            accepting_applications: !hostel.accepting_applications
+          });
+        });
+
+        actions.append(editButton, visibilityButton, applicationsButton);
+        card.appendChild(actions);
+        listingList.appendChild(card);
+      }
+    }
+
+    async function loadHostels() {
+      if (!currentUser || isLoadingListings) return;
+
+      isLoadingListings = true;
+      listingsLoading.hidden = false;
+      listingsLoading.textContent = "Loading your listings...";
+      listingList.hidden = true;
+      listingEmpty.hidden = true;
+      refreshButton.disabled = true;
+
+      try {
+        const { data, error } = await supabase
+          .from("hostels")
+          .select(
+            "id, owner_id, name, location, description, room_type, price, is_active, total_rooms, available_rooms, accepting_applications, created_at"
+          )
+          .eq("owner_id", currentUser.id)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        renderHostels(data || []);
+        listingList.hidden = false;
+        listingsLoading.hidden = true;
+      } catch (error) {
+        listingsLoading.hidden = false;
+        listingsLoading.textContent =
+          "Your listings could not be loaded. Check your connection and existing Supabase permissions, then try refreshing.";
+        listingList.hidden = true;
+        listingCount.textContent = "Unable to load";
+        showNotice(
+          `Could not load hostel listings: ${error?.message || "Unknown error"}`,
+          "error"
+        );
+      } finally {
+        isLoadingListings = false;
+        refreshButton.disabled = false;
+      }
+    }
+
+    function beginEdit(hostel) {
+      clearNotice();
+      editingHostelId = hostel.id;
+
+      field("hostel-name").value = hostel.name || "";
+      field("hostel-location").value = hostel.location || "";
+      field("hostel-room-type").value = hostel.room_type || "";
+      field("hostel-price").value = hostel.price ?? 0;
+      field("hostel-total-rooms").value = hostel.total_rooms ?? 0;
+      field("hostel-available-rooms").value = hostel.available_rooms ?? 0;
+      field("hostel-description").value = hostel.description || "";
+      field("hostel-active").checked = Boolean(hostel.is_active);
+      field("hostel-accepting").checked =
+        Boolean(hostel.accepting_applications);
+
+      field("form-title").textContent = "Edit hostel";
+      saveButton.textContent = "Save changes";
+      cancelButton.hidden = false;
+
+      document.getElementById("listing-form-panel").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+      field("hostel-name").focus({ preventScroll: true });
+    }
+
+    function resetHostelForm() {
+      hostelForm.reset();
+      editingHostelId = null;
+      field("form-title").textContent = "Add a hostel";
+      saveButton.textContent = "Save hostel";
+      cancelButton.hidden = true;
+      field("hostel-active").checked = true;
+      field("hostel-accepting").checked = false;
+    }
+
+    async function updateHostelStatus(hostel, changes) {
+      clearNotice();
+
+      const updates = { ...changes };
+
+      if (updates.is_active === false) {
+        updates.accepting_applications = false;
+      }
+
+      if (
+        updates.accepting_applications === true &&
+        hostel.is_active === false
+      ) {
+        showNotice(
+          "Activate this listing before enabling applications.",
+          "error"
+        );
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("hostels")
+          .update(updates)
+          .eq("id", hostel.id)
+          .eq("owner_id", currentUser.id)
+          .select("id")
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          throw new Error(
+            "No listing was updated. Check that this hostel belongs to your account and that your owner permissions allow updates."
+          );
+        }
+
+        showNotice("Hostel listing updated successfully.");
+        await loadHostels();
+      } catch (error) {
+        showNotice(
+          `Could not update the listing: ${error?.message || "Unknown error"}`,
+          "error"
+        );
+      }
+    }
+
+    hostelForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (isSaving || !currentUser) return;
+
+      clearNotice();
+
+      const name = field("hostel-name").value.trim();
+      const location = field("hostel-location").value.trim();
+      const roomType = field("hostel-room-type").value.trim();
+      const price = Number(field("hostel-price").value);
+      const totalRooms = Number(field("hostel-total-rooms").value);
+      const availableRooms = Number(field("hostel-available-rooms").value);
+      const description = field("hostel-description").value.trim();
+      const isActive = field("hostel-active").checked;
+      const acceptingApplications = field("hostel-accepting").checked;
+
+      if (!name || !location || !roomType) {
+        showNotice("Please complete all required hostel details.", "error");
+        return;
+      }
+
+      if (
+        !Number.isFinite(price) || price < 0 ||
+        !Number.isInteger(totalRooms) || totalRooms < 0 ||
+        !Number.isInteger(availableRooms) || availableRooms < 0
+      ) {
+        showNotice(
+          "Enter a valid non-negative rent amount and whole numbers for room counts.",
+          "error"
+        );
+        return;
+      }
+
+      if (availableRooms > totalRooms) {
+        showNotice(
+          "Available rooms cannot exceed the total number of rooms.",
+          "error"
+        );
+        return;
+      }
+
+      if (!isActive && acceptingApplications) {
+        showNotice(
+          "Activate the listing before enabling applications.",
+          "error"
+        );
+        return;
+      }
+
+      const payload = {
+        name,
+        location,
+        room_type: roomType,
+        price,
+        total_rooms: totalRooms,
+        available_rooms: availableRooms,
+        description,
+        is_active: isActive,
+        accepting_applications: acceptingApplications && isActive
+      };
+
+      isSaving = true;
+      saveButton.disabled = true;
+      cancelButton.disabled = true;
+      saveButton.textContent = editingHostelId
+        ? "Saving changes..."
+        : "Adding hostel...";
+
+      try {
+        if (editingHostelId) {
+          const { data, error } = await supabase
+            .from("hostels")
+            .update(payload)
+            .eq("id", editingHostelId)
+            .eq("owner_id", currentUser.id)
+            .select("id")
+            .maybeSingle();
+
+          if (error) throw error;
+
+          if (!data) {
+            throw new Error(
+              "No listing was updated. Check your owner permissions and that this listing belongs to your account."
+            );
+          }
+
+          showNotice("Hostel details updated successfully.");
+        } else {
+          const { data, error } = await supabase
+            .from("hostels")
+            .insert({
+              ...payload,
+              owner_id: currentUser.id
+            })
+            .select("id")
+            .single();
+
+          if (error) throw error;
+          if (!data) throw new Error("The new hostel could not be confirmed.");
+
+          showNotice("Your hostel has been added successfully.");
+        }
+
+        resetHostelForm();
+        await loadHostels();
+      } catch (error) {
+        showNotice(
+          `Could not save the hostel: ${error?.message || "Unknown error"}`,
+          "error"
+        );
+      } finally {
+        isSaving = false;
+        saveButton.disabled = false;
+        cancelButton.disabled = false;
+        saveButton.textContent = editingHostelId
+          ? "Save changes"
+          : "Save hostel";
+      }
+    });
+
+    cancelButton.addEventListener("click", () => {
+      resetHostelForm();
+      clearNotice();
+    });
+
+    refreshButton.addEventListener("click", () => {
+      clearNotice();
+      loadHostels();
+    });
 
     async function loadDashboard() {
       try {
@@ -457,20 +1195,21 @@
           return;
         }
 
-        document.getElementById("welcome-title").textContent =
+        currentUser = user;
+
+        field("welcome-title").textContent =
           `Welcome, ${profile.full_name || "Hostel Owner"}`;
-
-        document.getElementById("profile-name").textContent =
+        field("profile-name").textContent =
           profile.full_name || "Not provided";
-
-        document.getElementById("profile-email").textContent =
+        field("profile-email").textContent =
           user.email || "Not available";
-
-        document.getElementById("profile-phone").textContent =
+        field("profile-phone").textContent =
           profile.phone || "Not provided";
 
         loading.hidden = true;
         content.hidden = false;
+
+        await loadHostels();
       } catch (error) {
         loading.hidden = true;
         showNotice(
@@ -492,7 +1231,6 @@
           error?.message || "Sign-out failed. Please try again.",
           "error"
         );
-
         signoutButton.disabled = false;
         signoutButton.textContent = "Sign out";
       }
@@ -502,4 +1240,3 @@
   </script>
 </body>
 </html>
-
