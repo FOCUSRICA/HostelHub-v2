@@ -13,6 +13,31 @@
 
   <style>
   
+/* Password guidance */
+.password-guidance {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid rgba(53, 217, 138, 0.22);
+  border-radius: 12px;
+  background: rgba(53, 217, 138, 0.06);
+  font-size: 12px;
+}
+
+.password-heading {
+  margin: 0 0 8px;
+  color: #a8eec5;
+  font-weight: 700;
+}
+
+.password-guidance p:not(.password-heading) {
+  margin: 5px 0;
+  color: #c0c9c4;
+}
+
+.password-guidance p.valid {
+  color: #54e39b;
+}
+
 /* Professional animated green light bulb */
 .bulb-scene {
   --bulb-brightness: 1;
@@ -650,6 +675,15 @@
           <input id="password" name="password" type="password"
             autocomplete="current-password" placeholder="Enter your password"
             minlength="8" required>
+          
+<div id="password-guidance" class="password-guidance" hidden>
+  <p class="password-heading">Password requirements</p>
+  <p id="pw-length">○ At least 8 characters</p>
+  <p id="pw-upper">○ One uppercase letter (A–Z)</p>
+  <p id="pw-lower">○ One lowercase letter (a–z)</p>
+  <p id="pw-number">○ One number (0–9)</p>
+  <p id="pw-special">○ One special character (!@#$...)</p>
+</div>
         </div>
 
         <button class="submit" id="submit-button" type="submit">
