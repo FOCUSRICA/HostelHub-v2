@@ -1,1 +1,467 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Manage your student accommodation account on HostelHub.">
+  <title>Student Dashboard | HostelHub</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green: #197647;
+      --green-dark: #105532;
+      --green-light: #35b879;
+      --background: #f4f8f5;
+      --surface: #ffffff;
+      --ink: #17251c;
+      --muted: #647368;
+      --border: #e1eae3;
+      --danger: #b42332;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "DM Sans", Arial, sans-serif;
+      color: var(--ink);
+      background: var(--background);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: rgba(255, 255, 255, .95);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      width: min(1120px, 92%);
+      min-height: 70px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--green-light), var(--green-dark));
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      text-decoration: none;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button-primary {
+      color: white;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .button-primary:hover { background: var(--green-dark); }
+
+    .button-danger {
+      color: var(--danger);
+      border-color: #f0d5d8;
+    }
+
+    button:disabled {
+      opacity: .65;
+      cursor: wait;
+    }
+
+    main {
+      width: min(1120px, 92%);
+      margin: 36px auto 60px;
+    }
+
+    .welcome {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      border-radius: 20px;
+      color: white;
+      background: linear-gradient(120deg, #105532, #197647 65%, #35b879);
+      box-shadow: 0 12px 35px rgba(16, 85, 50, .12);
+      animation: riseIn .5s ease both;
+    }
+
+    .welcome::after {
+      content: "";
+      position: absolute;
+      width: 230px;
+      height: 230px;
+      right: -70px;
+      top: -110px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.1);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      margin: 0 0 9px;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      opacity: .85;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(27px, 4vw, 38px);
+      letter-spacing: -1px;
+    }
+
+    .welcome p:last-child {
+      margin: 0;
+      max-width: 600px;
+      color: #e3f6e9;
+      line-height: 1.7;
+    }
+
+    .section-heading {
+      margin: 30px 0 16px;
+      font-size: 19px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 23px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 5px 18px rgba(25, 55, 35, .035);
+      animation: riseIn .5s ease both;
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .card > p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-row:last-child { border-bottom: 0; }
+
+    .profile-label {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .profile-value {
+      max-width: 65%;
+      text-align: right;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #e7f7ed;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .notice {
+      display: none;
+      margin: 20px 0;
+      padding: 14px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .notice.show { display: block; }
+
+    .notice.error {
+      color: #9c202b;
+      background: #fff0f0;
+      border: 1px solid #f1d0d0;
+    }
+
+    .notice.info {
+      color: var(--green-dark);
+      background: #eaf6ee;
+      border: 1px solid #cfe8d6;
+    }
+
+    .loading {
+      padding: 25px 0;
+      color: var(--muted);
+    }
+
+    footer {
+      padding: 22px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    [hidden] { display: none !important; }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 650px) {
+      .grid { grid-template-columns: 1fr; }
+      .welcome { padding: 25px; }
+      main { margin-top: 24px; }
+      .nav { min-height: 64px; }
+      .brand { font-size: 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="nav">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark">H</span>
+        <span>HostelHub</span>
+      </a>
+
+      <button class="button button-danger" id="signout-button" type="button">
+        Sign out
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <p class="eyebrow">Student portal</p>
+      <h1 id="welcome-title">Welcome to HostelHub</h1>
+      <p>Find accommodation, manage your applications, and keep track of your student account.</p>
+    </section>
+
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <p id="loading" class="loading">Checking your account...</p>
+
+    <div id="dashboard-content" hidden>
+      <h2 class="section-heading">Your dashboard</h2>
+
+      <div class="grid">
+        <section class="card">
+          <h2>Profile information</h2>
+          <p>Your details associated with your HostelHub account.</p>
+
+          <div class="profile-row">
+            <span class="profile-label">Full name</span>
+            <span class="profile-value" id="profile-name">—</span>
+          </div>
+
+          <div class="profile-row">
+            <span class="profile-label">Email address</span>
+            <span class="profile-value" id="profile-email">—</span>
+          </div>
+
+          <div class="profile-row">
+            <span class="profile-label">Phone number</span>
+            <span class="profile-value" id="profile-phone">—</span>
+          </div>
+
+          <div class="profile-row">
+            <span class="profile-label">Account role</span>
+            <span class="profile-value">Student</span>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Find accommodation</h2>
+          <p>Explore available hostels and choose accommodation that suits your needs.</p>
+          <a class="button button-primary" href="./index.html">
+            Browse hostels
+          </a>
+        </section>
+
+        <section class="card">
+          <h2>My applications</h2>
+          <p>Use the accommodation page to explore listings and submit an application. Application history will be connected after verifying your existing database structure and permissions.</p>
+          <span class="status">Application history coming next</span>
+        </section>
+
+        <section class="card">
+          <h2>Rent and payments</h2>
+          <p>Your rent and payment history will be displayed here after the payment records and verification process are connected.</p>
+          <span class="status">Payment tracking coming next</span>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>HostelHub · Find Your Space</footer>
+
+  <script type="module">
+    import { supabase } from "./js/supabase.js";
+    import { getMyProfile, signOut } from "./js/auth.js";
+
+    const loading = document.getElementById("loading");
+    const content = document.getElementById("dashboard-content");
+    const notice = document.getElementById("notice");
+    const signoutButton = document.getElementById("signout-button");
+
+    function showNotice(text, type = "info") {
+      notice.textContent = text;
+      notice.className = `notice show ${type}`;
+    }
+
+    async function loadDashboard() {
+      try {
+        const {
+          data: { user },
+          error
+        } = await supabase.auth.getUser();
+
+        if (error) throw error;
+
+        if (!user) {
+          window.location.replace("./auth.html");
+          return;
+        }
+
+        const profile = await getMyProfile();
+
+        if (!profile) {
+          loading.hidden = true;
+          showNotice(
+            "Your account is signed in, but its profile could not be found. Please contact the site administrator.",
+            "error"
+          );
+          return;
+        }
+
+        if (profile.role === "owner") {
+          window.location.replace("./owner-dashboard.html");
+          return;
+        }
+
+        if (profile.role !== "student") {
+          await signOut();
+          window.location.replace("./auth.html");
+          return;
+        }
+
+        document.getElementById("welcome-title").textContent =
+          `Welcome, ${profile.full_name || "Student"}`;
+
+        document.getElementById("profile-name").textContent =
+          profile.full_name || "Not provided";
+
+        document.getElementById("profile-email").textContent =
+          user.email || "Not available";
+
+        document.getElementById("profile-phone").textContent =
+          profile.phone || "Not provided";
+
+        loading.hidden = true;
+        content.hidden = false;
+      } catch (error) {
+        loading.hidden = true;
+        showNotice(
+          error?.message || "We couldn't load your account. Please try again.",
+          "error"
+        );
+      }
+    }
+
+    signoutButton.addEventListener("click", async () => {
+      signoutButton.disabled = true;
+      signoutButton.textContent = "Signing out...";
+
+      try {
+        await signOut();
+        window.location.replace("./auth.html");
+      } catch (error) {
+        showNotice(
+          error?.message || "Sign-out failed. Please try again.",
+          "error"
+        );
+        signoutButton.disabled = false;
+        signoutButton.textContent = "Sign out";
+      }
+    });
+
+    loadDashboard();
+  </script>
+</body>
+</html>
+
