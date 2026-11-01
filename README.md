@@ -1,2 +1,2 @@
 # HostelHub-v2
-A simple student accommodation platform for Malawi.
+Making student accommodation easier by helping students find hostels, apply for rooms, and manage rent payments in one place.
