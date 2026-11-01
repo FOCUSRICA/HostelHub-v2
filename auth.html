@@ -394,6 +394,68 @@
     </div>
 
     <section class="panel" aria-label="Account access">
+      
+<div class="bulb-scene" id="bulb-scene">
+  <div class="bulb-halo"></div>
+
+  <svg class="bulb-icon" id="auth-bulb"
+       viewBox="0 0 100 120"
+       role="img"
+       aria-label="Animated glowing light bulb">
+    <defs>
+      <linearGradient id="glassGradient" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#eafff1"/>
+        <stop offset="45%" stop-color="#75e8a5"/>
+        <stop offset="100%" stop-color="#198754"/>
+      </linearGradient>
+      <linearGradient id="baseGradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#a7b9ae"/>
+        <stop offset="50%" stop-color="#f1fff6"/>
+        <stop offset="100%" stop-color="#7c9686"/>
+      </linearGradient>
+    </defs>
+
+    <path class="bulb-rays"
+      d="M50 5V0 M17 20L10 13 M83 20L90 13
+         M7 49H0 M93 49H100"
+      fill="none" stroke="#70e6a0" stroke-width="3"
+      stroke-linecap="round"/>
+
+    <path class="bulb-glass"
+      d="M28 61C17 52 15 37 22 25
+         C29 12 42 9 50 9
+         C65 9 79 21 79 39
+         C79 49 74 57 66 64
+         C62 68 61 73 61 78H39
+         C39 71 36 66 28 61Z"
+      fill="url(#glassGradient)"
+      stroke="#c8ffdc" stroke-width="2"/>
+
+    <path d="M34 31C37 23 43 20 49 20"
+      fill="none" stroke="#ffffff" stroke-width="4"
+      stroke-linecap="round" opacity=".8"/>
+
+    <path class="bulb-filament"
+      d="M39 43L44 55L50 42L56 55L61 43"
+      fill="none" stroke="#fffbd0" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round"/>
+
+    <path d="M39 77H61V84H39Z"
+      fill="url(#baseGradient)" stroke="#d7e9dd" stroke-width="1.5"/>
+
+    <path d="M40 87H60 M41 92H59 M44 97H56"
+      stroke="url(#baseGradient)" stroke-width="4"
+      stroke-linecap="round"/>
+
+    <path d="M45 102H55L52 108H48Z"
+      fill="#b7d4c2"/>
+  </svg>
+
+  <div class="bulb-caption" id="bulb-caption">
+    A brighter way to find your space
+  </div>
+</div>
+
       <div class="tabs" role="tablist" aria-label="Account action">
         <button class="tab active" id="signin-tab" type="button"
           role="tab" aria-selected="true">
