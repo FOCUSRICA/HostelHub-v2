@@ -915,26 +915,19 @@ submitButton.disabled = true;
             );
             return;
           }
+if (profile.role === "owner") {
+  window.location.href = "./owner-dashboard.html";
+} else if (profile.role === "student") {
+  window.location.href = "./student-dashboard.html";
+} else {
+  await import("./js/auth.js").then(({ signOut }) => signOut());
 
-          if (profile.role === "owner") {
-            showMessage(
-              "Signed in successfully as an owner. Owner dashboard " +
-              "features still need to be connected.",
-              "success"
-            );
-          } else if (profile.role === "student") {
-            showMessage(
-              "Signed in successfully as a student. Student dashboard " +
-              "features still need to be connected.",
-              "success"
-            );
-          } else {
-            showMessage(
-              "Your account role is not recognized. Please contact " +
-              "the site administrator.",
-              "error"
-            );
-          }
+  showMessage(
+    "Your account role is not recognized. Please contact " +
+    "the site administrator.",
+    "error"
+  );
+}
         }
       } catch (error) {
         showMessage(
