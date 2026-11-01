@@ -757,22 +757,27 @@ const passwordGuidance = document.getElementById("password-guidance");
 const passwordChecks = [
   {
     id: "pw-length",
+    label: "At least 8 characters",
     test: value => value.length >= 8
   },
   {
     id: "pw-upper",
+    label: "One uppercase letter (A–Z)",
     test: value => /[A-Z]/.test(value)
   },
   {
     id: "pw-lower",
+    label: "One lowercase letter (a–z)",
     test: value => /[a-z]/.test(value)
   },
   {
     id: "pw-number",
+    label: "One number (0–9)",
     test: value => /[0-9]/.test(value)
   },
   {
     id: "pw-special",
+    label: "One special character (!@#$...)",
     test: value => /[^A-Za-z0-9]/.test(value)
   }
 ];
@@ -782,17 +787,11 @@ function updatePasswordGuidance() {
 
   passwordChecks.forEach(check => {
     const item = document.getElementById(check.id);
-    const valid = check.test(value);
+    if (!item) return;
 
+    const valid = check.test(value);
     item.classList.toggle("valid", valid);
-    item.textContent =
-      `${valid ? "✓" : "○"} ${{
-        "pw-length": "At least 8 characters",
-        "pw-upper": "One uppercase letter (A–Z)",
-        "pw-lower": "One lowercase letter (a–z)",
-        "pw-number": "One number (0–9)",
-        "pw-special": "One special character (!@#$...)"
-      }[check.id]}`;
+    item.textContent = `${valid ? "✓" : "○"} ${check.label}`;
   });
 }
 
