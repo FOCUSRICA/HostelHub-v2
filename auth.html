@@ -86,16 +86,61 @@
   transition: color .5s ease, transform .5s ease;
 }
 
-.bulb-scene.register-mode {
-  --bulb-brightness: 1.35;
+
+/* Sign-in: emerald green */
+.bulb-scene.signin-mode {
+  --bulb-brightness: 0.8;
+  --bulb-color: #35d98a;
+  --bulb-glow: rgba(53, 217, 138, 0.55);
 }
 
-.bulb-scene.signin-mode {
-  --bulb-brightness: .7;
+/* Create account: warm gold */
+.bulb-scene.register-mode {
+  --bulb-brightness: 1.35;
+  --bulb-color: #ffd166;
+  --bulb-glow: rgba(255, 209, 102, 0.7);
+}
+
+/* Smoothly change the bulb's glow */
+.bulb-halo {
+  background: radial-gradient(
+    ellipse,
+    var(--bulb-glow, rgba(53, 217, 138, 0.55)) 0%,
+    transparent 72%
+  );
+  transition: background 0.8s ease, opacity 0.8s ease,
+    transform 0.8s ease;
+}
+
+/* Change the glass color */
+.bulb-glass {
+  fill: var(--bulb-color, #35d98a);
+  transition: fill 0.8s ease, opacity 0.8s ease;
+}
+
+/* Change the light rays */
+.bulb-rays {
+  stroke: var(--bulb-color, #35d98a);
+  transition: stroke 0.8s ease, opacity 0.8s ease;
+}
+
+/* Change the light around the bulb */
+.bulb-icon {
+  filter: drop-shadow(
+    0 0 8px var(--bulb-glow, rgba(53, 217, 138, 0.55))
+  ) drop-shadow(
+    0 0 24px var(--bulb-glow, rgba(53, 217, 138, 0.55))
+  );
+  transition: filter 0.8s ease;
+}
+
+/* Match the caption to the current mode */
+.bulb-scene.signin-mode .bulb-caption {
+  color: #75e8a5;
 }
 
 .bulb-scene.register-mode .bulb-caption {
-  color: #8af0b2;
+  color: #ffd166;
 }
 
 @keyframes bulbFloat {
