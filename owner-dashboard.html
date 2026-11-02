@@ -1335,10 +1335,38 @@ refreshApplicationsButton.addEventListener("click", () => {
 });
     async function loadDashboard() {
       try {
-        const {
-          data: { user },
-          error
-        } = await supabase.auth.getUser();
+       
+const {
+  data: { session },
+  error: sessionError
+} = await supabase.auth.getSession();
+
+if (sessionError) throw sessionError;
+
+if (!session) {
+  loading.hidden = true;
+  showNotice(
+    "No active sign-in session was found. Please sign in again using your existing owner account.",
+    "error"
+  );
+  return;
+}
+
+const {
+  data: { user },
+  error
+} = await supabase.auth.getUser();
+
+if (error) throw error;
+
+if (!user) {
+  loading.hidden = true;
+  showNotice(
+    "Your session exists, but Supabase could not verify your user. Please sign in again.",
+    "error"
+  );
+  return;
+}
 
         if (error) throw error;
 
