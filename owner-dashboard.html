@@ -945,7 +945,148 @@
         refreshButton.disabled = false;
       }
     }
+async function loadApplications() {
+  if (!currentUser) return;
 
+  applicationsLoading.hidden = false;
+  applicationsLoading.textContent = "Loading student applications...";
+  applicationList.hidden = true;
+  applicationsEmpty.hidden = true;
+  refreshApplicationsButton.disabled = true;
+
+  try {
+    // First, retrieve only hostels belonging to this owner.
+    const { data: hostels, error: hostelsError } = await supabase
+      .from("hostels")
+      .select("id, name")
+      .eq("owner_id", currentUser.id);
+
+    if (hostelsError) throw hostelsError;
+
+    const ownedHostels = hostels || [];
+    const hostelNames = new Map(
+      ownedHostels.map(hostel => [hostel.id, hostel.name])
+    );
+
+    applicationList.replaceChildren();
+
+    if (ownedHostels.length === 0) {
+      applicationCount.textContent = "0 applications";
+      applicationsLoading.hidden = true;
+      applicationsEmpty.hidden = false;
+      return;
+    }
+
+    const hostelIds = ownedHostels.map(hostel => hostel.id);
+
+    // Retrieve applications belonging to the owner's hostels.
+    const { data: applications, error: applicationsError } = await supabase
+      .from("applications")
+      .select(
+        "id, reference, student_id, hostel_id, full_name, phone, status, created_at"
+      )
+      .in("hostel_id", hostelIds)
+      .order("created_at", { ascending: false });
+
+    if (applicationsError) throw applicationsError;
+
+    const rows = applications || [];
+
+    applicationCount.textContent =
+      `${rows.length} ${rows.length === 1 ? "application" : "applications"}`;
+
+    applicationsLoading.hidden = true;
+
+    if (rows.length === 0) {
+      applicationsEmpty.hidden = false;
+      return;
+    }
+
+    for (const application of rows) {
+      const card = document.createElement("article");
+      card.className = "listing-card";
+
+      addTextElement(
+        card,
+        "h3",
+        "",
+        application.full_name || "Student"
+      );
+
+      addTextElement(
+        card,
+        "p",
+        "listing-location",
+        `Hostel: ${hostelNames.get(application.hostel_id) || "Your hostel"}`
+      );
+
+      addTextElement(
+        card,
+        "p",
+        "",
+        `Reference: ${application.reference || "Not available"}`
+      );
+
+      addTextElement(
+        card,
+        "p",
+        "",
+        `Phone: ${application.phone || "Not provided"}`
+      );
+
+      const statusRow = document.createElement("div");
+      statusRow.className = "listing-statuses";
+
+      const status = String(application.status || "unknown").toLowerCase();
+      const statusKind =
+        status === "approved" ? "good" :
+        status === "rejected" ? "warning" : "";
+
+      addPill(
+        statusRow,
+        status.charAt(0).toUpperCase() + status.slice(1),
+        statusKind
+      );
+
+      card.appendChild(statusRow);
+
+      const createdAt = application.created_at
+        ? new Date(application.created_at)
+        : null;
+
+      addTextElement(
+        card,
+        "p",
+        "",
+        `Submitted: ${
+          createdAt && !Number.isNaN(createdAt.getTime())
+            ? createdAt.toLocaleString()
+            : "Date unavailable"
+        }`
+      );
+
+      applicationList.appendChild(card);
+    }
+
+    applicationList.hidden = false;
+  } catch (error) {
+    applicationsLoading.hidden = false;
+    applicationsLoading.textContent =
+      `Could not load applications: ${error?.message || "Unknown error"}`;
+
+    applicationCount.textContent = "Unable to load";
+    applicationList.hidden = true;
+
+    showNotice(
+      `Could not load student applications: ${
+        error?.message || "Unknown error"
+      }`,
+      "error"
+    );
+  } finally {
+    refreshApplicationsButton.disabled = false;
+  }
+}
     function beginEdit(hostel) {
       clearNotice();
       editingHostelId = hostel.id;
@@ -1154,11 +1295,15 @@
       clearNotice();
     });
 
-    refreshButton.addEventListener("click", () => {
-      clearNotice();
-      loadHostels();
-    });
+   refreshButton.addEventListener("click", () => {
+  clearNotice();
+  loadHostels();
+});
 
+refreshApplicationsButton.addEventListener("click", () => {
+  clearNotice();
+  loadApplications();
+});
     async function loadDashboard() {
       try {
         const {
@@ -1206,10 +1351,11 @@
         field("profile-phone").textContent =
           profile.phone || "Not provided";
 
-        loading.hidden = true;
-        content.hidden = false;
+      loading.hidden = true;
+content.hidden = false;
 
-        await loadHostels();
+await loadHostels();
+await loadApplications();
       } catch (error) {
         loading.hidden = true;
         showNotice(
