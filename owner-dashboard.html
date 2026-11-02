@@ -602,30 +602,13 @@
           <p>View your properties, manage room availability, and update listing information.</p>
           <span class="status" id="listing-count">Loading listings...</span>
         </section>
-
+        
         <section class="card">
           <div class="card-icon" aria-hidden="true">▤</div>
           <h2>Student applications</h2>
-          
-<button
-  class="button"
-  id="refresh-applications-button"
-  type="button"
->
-  Refresh applications
-</button>
-
-          <p>Review applications submitted by students interested in your accommodation.</p>
-          <span class="status">Application management coming next</span>
+          <p>Review applications submitted for your accommodation.</p>
+          <span class="status" id="application-count">Loading applications...</span>
         </section>
-
-     
-<section class="card">
-  <div class="card-icon" aria-hidden="true">▤</div>
-  <h2>Student applications</h2>
-  <p>Review applications submitted for your accommodation.</p>
-  <span class="status" id="application-count">Loading applications...</span>
-</section>
 
       </div>
 
@@ -725,6 +708,34 @@
           Add your first hostel using the form above.
         </div>
       </section>
+      
+      <section class="panel" id="applications-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Student applications</h2>
+            <p>Applications for hostels owned by your account.</p>
+          </div>
+          <button
+            class="button"
+            id="refresh-applications-button"
+            type="button"
+          >
+            Refresh applications
+          </button>
+        </div>
+
+        <p id="applications-loading" class="loading">
+          Loading student applications...
+        </p>
+
+        <div id="application-list" class="listing-list" hidden></div>
+
+        <div id="applications-empty" class="empty-state" hidden>
+          <strong>No applications found</strong>
+          Applications submitted for your hostels will appear here.
+        </div>
+      </section>
+
 
       <section class="account-card">
         <h2>Owner account</h2>
