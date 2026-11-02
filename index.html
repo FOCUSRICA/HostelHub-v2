@@ -1053,38 +1053,240 @@ footer a {
       applyFilters();
     }
 
-    function openDetails(hostel, isDemo) {
-      dialogTitle.textContent = hostel.name || "Accommodation details";
+   
+async function openDetails(hostel, isDemo) {
+  dialogTitle.textContent = hostel.name || "Accommodation details";
 
-      const location = escapeHTML(hostel.location || "Not provided");
-      const type = escapeHTML(hostel.room_type || "Not specified");
-      const description = escapeHTML(hostel.description || "No description provided.");
-      const price = escapeHTML(formatPrice(hostel.price));
-      const availability = isDemo
-        ? "This is an example listing. Availability has not been verified."
-        : Number(hostel.available_rooms || 0) > 0 &&
-          hostel.accepting_applications === true
-          ? `${Number(hostel.available_rooms)} room(s) currently listed as available.`
-          : "Applications are not currently shown as open for this listing.";
+  const location = escapeHTML(hostel.location || "Not provided");
+  const type = escapeHTML(hostel.room_type || "Not specified");
+  const description = escapeHTML(
+    hostel.description || "No description provided."
+  );
+  const price = escapeHTML(formatPrice(hostel.price));
 
-      dialogBody.innerHTML = `
-        <p><strong>Location:</strong> ${location}</p>
-        <p><strong>Room type:</strong> ${type}</p>
-        <p><strong>Rent:</strong> ${price} per month</p>
-        <p><strong>Description:</strong> ${description}</p>
-        <p>${escapeHTML(availability)}</p>
-      `;
+  const canApply =
+    !isDemo &&
+    hostel.is_active === true &&
+    hostel.accepting_applications === true &&
+    Number(hostel.available_rooms || 0) > 0;
 
-      dialogAccountLink.href = "./auth.html";
+  const availability = isDemo
+    ? "Example listing only. Applications are unavailable."
+    : canApply
+      ? `${Number(hostel.available_rooms)} room(s) listed as available.`
+      : "Applications are closed or no rooms are currently available.";
 
-      if (typeof listingDialog.showModal === "function") {
-        listingDialog.showModal();
-      } else {
-        alert(
-          `${hostel.name}\n${hostel.location}\n${formatPrice(hostel.price)} per month`
-        );
+  dialogBody.innerHTML = `
+    <p><strong>Location:</strong> ${location}</p>
+    <p><strong>Room type:</strong> ${type}</p>
+    <p><strong>Rent:</strong> ${price} per month</p>
+    <p><strong>Description:</strong> ${description}</p>
+    <p>${escapeHTML(availability)}</p>
+
+    ${canApply ? `
+      <button class="button" id="start-application" type="button">
+        Apply Now
+      </button>
+      <div id="application-area" aria-live="polite"></div>
+    ` : ""}
+  `;
+
+  dialogAccountLink.href = "./auth.html";
+  dialogAccountLink.textContent = "Sign in";
+
+  const applyButton = document.getElementById("start-application");
+
+  if (applyButton) {
+    applyButton.addEventListener("click", async () => {
+      applyButton.disabled = true;
+
+      try {
+        const {
+          data: { user },
+          error
+        } = await supabase.auth.getUser();
+
+        if (error) throw error;
+
+        const area = document.getElementById("application-area");
+
+        if (!user) {
+          area.textContent =
+            "Please sign in with your student account before applying.";
+          dialogAccountLink.textContent = "Sign in to apply";
+          return;
+        }
+
+        const profile = await getMyProfile();
+
+        if (!profile || profile.role !== "student") {
+          area.textContent =
+            "Only student accounts can submit applications.";
+          return;
+        }
+
+        area.innerHTML = `
+          <form id="hostel-application-form">
+            <h3>Apply for ${escapeHTML(hostel.name)}</h3>
+
+            <label for="application-full-name">Full name</label>
+            <input
+              id="application-full-name"
+              name="full_name"
+              type="text"
+              maxlength="120"
+              autocomplete="name"
+              required
+              value="${escapeHTML(profile.full_name || "")}"
+            >
+
+            <label for="application-phone">Phone number</label>
+            <input
+              id="application-phone"
+              name="phone"
+              type="tel"
+              maxlength="30"
+              autocomplete="tel"
+              required
+              value="${escapeHTML(profile.phone || "")}"
+            >
+
+            <button class="button" type="submit">
+              Submit application
+            </button>
+            <p id="application-message" role="status"></p>
+          </form>
+        `;
+
+        const form = document.getElementById("hostel-application-form");
+
+        form.addEventListener("submit", async event => {
+          event.preventDefault();
+
+          const button = form.querySelector('button[type="submit"]');
+          const message = document.getElementById("application-message");
+
+          button.disabled = true;
+          button.textContent = "Submitting...";
+
+          try {
+            await submitApplication({
+              hostel,
+              user,
+              fullName: form.elements.full_name.value.trim(),
+              phone: form.elements.phone.value.trim()
+            });
+
+            message.textContent =
+              "Application submitted successfully. Status: pending.";
+
+            button.textContent = "Application submitted";
+            form.querySelectorAll("input").forEach(input => {
+              input.disabled = true;
+            });
+          } catch (error) {
+            console.error("Application submission failed:", error);
+
+            message.textContent =
+              error.message || "Could not submit your application.";
+
+            button.disabled = false;
+            button.textContent = "Submit application";
+          }
+        });
+
+      } catch (error) {
+        console.error("Could not start application:", error);
+
+        const area = document.getElementById("application-area");
+        if (area) {
+          area.textContent =
+            "Could not verify your account. Please try again.";
+        }
+      } finally {
+        applyButton.disabled = false;
+        applyButton.textContent = "Apply Now";
       }
-    }
+    });
+  }
+
+  if (typeof listingDialog.showModal === "function") {
+    listingDialog.showModal();
+  } else {
+    alert(
+      `${hostel.name}\n${hostel.location}\n${formatPrice(hostel.price)} per month`
+    );
+  }
+}
+
+async function submitApplication({ hostel, user, fullName, phone }) {
+  if (!user?.id) {
+    throw new Error("Please sign in before applying.");
+  }
+
+  if (!fullName || !phone) {
+    throw new Error("Enter your full name and phone number.");
+  }
+
+  // Verify the hostel's current database values.
+  const { data: currentHostel, error: hostelError } = await supabase
+    .from("hostels")
+    .select(
+      "id, is_active, accepting_applications, available_rooms"
+    )
+    .eq("id", hostel.id)
+    .maybeSingle();
+
+  if (hostelError) throw hostelError;
+
+  if (!currentHostel || currentHostel.is_active !== true) {
+    throw new Error("This hostel is no longer active.");
+  }
+
+  if (currentHostel.accepting_applications !== true) {
+    throw new Error("This hostel is not accepting applications.");
+  }
+
+  if (Number(currentHostel.available_rooms || 0) <= 0) {
+    throw new Error("No rooms are currently available.");
+  }
+
+  // Check whether the student has already applied.
+  const { data: existing, error: existingError } = await supabase
+    .from("applications")
+    .select("id, status")
+    .eq("student_id", user.id)
+    .eq("hostel_id", hostel.id)
+    .limit(1);
+
+  if (existingError) throw existingError;
+
+  if (existing && existing.length > 0) {
+    throw new Error(
+      `You have already applied. Current status: ${existing[0].status}.`
+    );
+  }
+
+  const reference =
+    "HH-" +
+    Date.now().toString(36).toUpperCase() +
+    "-" +
+    crypto.randomUUID().slice(0, 8).toUpperCase();
+
+  const { error: insertError } = await supabase
+    .from("applications")
+    .insert({
+      reference,
+      student_id: user.id,
+      hostel_id: currentHostel.id,
+      full_name: fullName,
+      phone,
+      status: "pending"
+    });
+
+  if (insertError) throw insertError;
+}
+
 
     function closeDetails() {
       if (listingDialog.open) listingDialog.close();
