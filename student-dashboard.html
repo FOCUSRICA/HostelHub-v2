@@ -488,7 +488,65 @@
               "Your application is awaiting a decision from the hostel owner.";
           }
 
+        
           card.append(hostelName, reference, statusLabel, message);
+
+          if (status === "approved") {
+            const reserveButton = document.createElement("button");
+            reserveButton.type = "button";
+            reserveButton.className = "button";
+            reserveButton.textContent = "Reserve Room";
+
+            reserveButton.addEventListener("click", async () => {
+              const confirmed = window.confirm(
+                "Create a room reservation with a MK 10,000 booking fee? " +
+                "You must complete payment within 24 hours."
+              );
+
+              if (!confirmed) return;
+
+              reserveButton.disabled = true;
+              reserveButton.textContent = "Creating reservation...";
+
+              try {
+                const { data, error } = await supabase.rpc(
+                  "create_reservation",
+                  {
+                    p_application_id: application.id
+                  }
+                );
+
+                if (error) throw error;
+
+                if (!data) {
+                  throw new Error("No reservation ID was returned.");
+                }
+
+                showNotice(
+                  "Reservation created successfully. Your booking fee is MK 10,000. " +
+                  "Complete payment within 24 hours to avoid expiry.",
+                  "success"
+                );
+
+                reserveButton.textContent = "Reservation Created";
+              } catch (error) {
+                showNotice(
+                  `Could not create reservation: ${
+                    error?.message || "Please try again."
+                  }`,
+                  "error"
+                );
+
+                reserveButton.disabled = false;
+                reserveButton.textContent = "Reserve Room";
+              }
+            });
+
+            card.appendChild(reserveButton);
+          }
+
+          applicationsList.appendChild(card);
+
           applicationsList.appendChild(card);
         });
 
