@@ -373,6 +373,59 @@
   </button>
 </section>
 
+<section class="card" id="reservation-payment-section" hidden>
+  <h2>Complete your booking</h2>
+  <p>
+    Your room reservation requires a booking fee of
+    <strong>MK 10,000</strong>. Payment must be completed
+    within 24 hours of reservation creation.
+  </p>
+
+  <p>
+    Reservation reference:
+    <strong id="payment-reservation-reference">Not available</strong>
+  </p>
+
+  <p id="payment-reservation-status">
+    Choose a payment method to continue.
+  </p>
+
+  <div class="form-group">
+    <label for="booking-payment-method">Payment method</label>
+    <select id="booking-payment-method">
+      <option value="">Select a payment method</option>
+      <option value="online">Pay online with PayChangu</option>
+      <option value="external">I have paid externally</option>
+    </select>
+  </div>
+
+  <div class="form-group" id="external-payment-reference-group" hidden>
+    <label for="external-payment-reference">
+      External payment reference
+    </label>
+    <input
+      id="external-payment-reference"
+      type="text"
+      maxlength="120"
+      placeholder="Enter your payment transaction reference"
+    >
+    <p>
+      Your payment will remain unverified until the hostel owner
+      or administrator confirms receipt.
+    </p>
+  </div>
+
+  <button
+    class="button"
+    id="submit-booking-payment"
+    type="button"
+  >
+    Continue to payment
+  </button>
+
+  <p id="booking-payment-message" role="status"></p>
+</section>
+
 
         <section class="card">
           <h2>Rent and payments</h2>
@@ -544,8 +597,6 @@
 
             card.appendChild(reserveButton);
           }
-
-          applicationsList.appendChild(card);
 
           applicationsList.appendChild(card);
         });
