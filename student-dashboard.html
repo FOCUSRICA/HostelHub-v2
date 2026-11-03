@@ -353,11 +353,26 @@
           </a>
         </section>
 
-        <section class="card">
-          <h2>My applications</h2>
-          <p>Use the accommodation page to explore listings and submit an application. Application history will be connected after verifying your existing database structure and permissions.</p>
-          <span class="status">Application history coming next</span>
-        </section>
+      
+<section class="card">
+  <h2>My applications</h2>
+  <p>Track your accommodation applications and see when an owner makes a decision.</p>
+
+  <div id="applications-loading" class="loading">
+    Loading your applications...
+  </div>
+
+  <div id="applications-list"></div>
+
+  <button
+    class="button"
+    id="refresh-applications-button"
+    type="button"
+  >
+    Refresh applications
+  </button>
+</section>
+
 
         <section class="card">
           <h2>Rent and payments</h2>
@@ -383,6 +398,124 @@
       notice.textContent = text;
       notice.className = `notice show ${type}`;
     }
+    
+    const applicationsLoading = document.getElementById("applications-loading");
+    const applicationsList = document.getElementById("applications-list");
+    const refreshApplicationsButton = document.getElementById(
+      "refresh-applications-button"
+    );
+
+    async function loadApplications(studentId) {
+      applicationsLoading.hidden = false;
+      applicationsLoading.textContent = "Loading your applications...";
+      applicationsList.replaceChildren();
+      refreshApplicationsButton.disabled = true;
+
+      try {
+        const { data: applications, error } = await supabase
+          .from("applications")
+          .select("id, reference, hostel_id, full_name, status, created_at")
+          .eq("student_id", studentId)
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        if (!applications || applications.length === 0) {
+          applicationsLoading.textContent =
+            "You have not submitted any accommodation applications yet.";
+          return;
+        }
+
+        const hostelIds = [
+          ...new Set(applications.map((application) => application.hostel_id))
+        ];
+
+        const { data: hostels, error: hostelsError } = await supabase
+          .from("hostels")
+          .select("id, name")
+          .in("id", hostelIds);
+
+        if (hostelsError) throw hostelsError;
+
+        const hostelNames = new Map(
+          (hostels || []).map((hostel) => [hostel.id, hostel.name])
+        );
+
+        applications.forEach((application) => {
+          const card = document.createElement("div");
+          card.style.cssText =
+            "padding:16px 0;border-bottom:1px solid var(--border);";
+
+          const hostelName = document.createElement("h3");
+          hostelName.style.cssText = "margin:0 0 8px;font-size:15px;";
+          hostelName.textContent =
+            hostelNames.get(application.hostel_id) || "Hostel";
+
+          const reference = document.createElement("p");
+          reference.style.cssText =
+            "margin:0 0 8px;color:var(--muted);font-size:13px;";
+          reference.textContent = `Reference: ${application.reference}`;
+
+          const status = String(application.status || "pending").toLowerCase();
+          const statusLabel = document.createElement("span");
+          statusLabel.className = "status";
+          statusLabel.textContent =
+            status.charAt(0).toUpperCase() + status.slice(1);
+
+          if (status === "approved") {
+            statusLabel.style.background = "#e7f7ed";
+            statusLabel.style.color = "#105532";
+          } else if (status === "rejected") {
+            statusLabel.style.background = "#fff0f0";
+            statusLabel.style.color = "#9c202b";
+          } else {
+            statusLabel.style.background = "#fff5db";
+            statusLabel.style.color = "#805600";
+          }
+
+          const message = document.createElement("p");
+          message.style.cssText =
+            "margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.6;";
+
+          if (status === "approved") {
+            message.textContent =
+              "Your application has been approved! You can proceed to the room reservation stage.";
+          } else if (status === "rejected") {
+            message.textContent =
+              "Your application was not approved. Please contact the hostel owner if you need more information.";
+          } else {
+            message.textContent =
+              "Your application is awaiting a decision from the hostel owner.";
+          }
+
+          card.append(hostelName, reference, statusLabel, message);
+          applicationsList.appendChild(card);
+        });
+
+        applicationsLoading.hidden = true;
+      } catch (error) {
+        applicationsLoading.textContent =
+          "Could not load your applications.";
+        showNotice(
+          `Application loading failed: ${error?.message || "Unknown error"}`,
+          "error"
+        );
+      } finally {
+        refreshApplicationsButton.disabled = false;
+      }
+    }
+
+    refreshApplicationsButton.addEventListener("click", async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+
+      if (error || !user) {
+        showNotice("Please sign in again to view your applications.", "error");
+        return;
+      }
+
+      await loadApplications(user.id);
+    });
+
 
     async function loadDashboard() {
       try {
@@ -431,6 +564,7 @@
 
         document.getElementById("profile-phone").textContent =
           profile.phone || "Not provided";
+                  await loadApplications(user.id);
 
         loading.hidden = true;
         content.hidden = false;
