@@ -1093,6 +1093,33 @@ async function loadApplications() {
             : "Date unavailable"
         }`
       );
+      
+      if (status === "pending") {
+        const actions = document.createElement("div");
+        actions.className = "listing-actions";
+
+        const approveButton = document.createElement("button");
+        approveButton.type = "button";
+        approveButton.className = "button button-primary";
+        approveButton.textContent = "Approve";
+        approveButton.addEventListener("click", () => {
+          decideApplication(application, "approved", approveButton);
+        });
+
+        const rejectButton = document.createElement("button");
+        rejectButton.type = "button";
+        rejectButton.className = "button button-danger";
+        rejectButton.textContent = "Reject";
+        rejectButton.addEventListener("click", () => {
+          decideApplication(application, "rejected", rejectButton);
+        });
+
+        actions.append(approveButton, rejectButton);
+        card.appendChild(actions);
+      }
+
+      applicationList.appendChild(card);
+
 
       applicationList.appendChild(card);
     }
@@ -1116,6 +1143,70 @@ async function loadApplications() {
     refreshApplicationsButton.disabled = false;
   }
 }
+    
+    async function decideApplication(application, decision, button) {
+      if (!currentUser) {
+        showNotice("Please sign in again before deciding on an application.", "error");
+        return;
+      }
+
+      if (!["approved", "rejected"].includes(decision)) {
+        showNotice("Invalid application decision.", "error");
+        return;
+      }
+
+      if (String(application.status || "").toLowerCase() !== "pending") {
+        showNotice("This application is no longer pending. Refresh the list.", "error");
+        await loadApplications();
+        return;
+      }
+
+      const actionLabel = decision === "approved" ? "approve" : "reject";
+
+      if (!window.confirm(`Are you sure you want to ${actionLabel} this application?`)) {
+        return;
+      }
+
+      clearNotice();
+      button.disabled = true;
+      button.textContent = decision === "approved" ? "Approving..." : "Rejecting...";
+
+      try {
+        const { data, error } = await supabase
+          .from("applications")
+          .update({ status: decision })
+          .eq("id", application.id)
+          .eq("status", "pending")
+          .select("id, status")
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          throw new Error(
+            "No application was updated. It may no longer be pending, or your existing database permissions may have denied the change."
+          );
+        }
+
+        showNotice(
+          decision === "approved"
+            ? "Application approved. The student can proceed to the reservation stage."
+            : "Application rejected."
+        );
+
+        await loadApplications();
+      } catch (error) {
+        showNotice(
+          `Could not ${actionLabel} the application: ${
+            error?.message || "Unknown error"
+          }`,
+          "error"
+        );
+
+        await loadApplications();
+      }
+    }
+
     function beginEdit(hostel) {
       clearNotice();
       editingHostelId = hostel.id;
