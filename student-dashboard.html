@@ -581,7 +581,35 @@
                   "success"
                 );
 
+               
+                const paymentSection = document.getElementById(
+                  "reservation-payment-section"
+                );
+                const reservationReference = document.getElementById(
+                  "payment-reservation-reference"
+                );
+                const paymentStatus = document.getElementById(
+                  "payment-reservation-status"
+                );
+                const paymentMessage = document.getElementById(
+                  "booking-payment-message"
+                );
+
+                paymentSection.dataset.reservationId = data;
+                reservationReference.textContent =
+                  "Reservation created successfully";
+                paymentStatus.textContent =
+                  "Reservation created. Choose a payment method below.";
+                paymentMessage.textContent = "";
+
+                paymentSection.hidden = false;
+                paymentSection.scrollIntoView({
+                  behavior: "smooth",
+                  block: "start"
+                });
+
                 reserveButton.textContent = "Reservation Created";
+
               } catch (error) {
                 showNotice(
                   `Could not create reservation: ${
@@ -623,6 +651,105 @@
       }
 
       await loadApplications(user.id);
+    });
+   
+    const paymentMethodSelect = document.getElementById(
+      "booking-payment-method"
+    );
+    const externalReferenceGroup = document.getElementById(
+      "external-payment-reference-group"
+    );
+    const externalReferenceInput = document.getElementById(
+      "external-payment-reference"
+    );
+    const submitPaymentButton = document.getElementById(
+      "submit-booking-payment"
+    );
+    const paymentMessage = document.getElementById(
+      "booking-payment-message"
+    );
+    const paymentStatus = document.getElementById(
+      "payment-reservation-status"
+    );
+
+    paymentMethodSelect.addEventListener("change", () => {
+      const method = paymentMethodSelect.value;
+
+      externalReferenceGroup.hidden = method !== "external";
+      submitPaymentButton.disabled = method !== "external";
+
+      if (method === "online") {
+        paymentMessage.textContent =
+          "PayChangu checkout is not connected yet. Please use external payment for now.";
+      } else {
+        paymentMessage.textContent = "";
+      }
+    });
+
+    submitPaymentButton.addEventListener("click", async () => {
+      const reservationId =
+        document.getElementById("reservation-payment-section")
+          .dataset.reservationId;
+
+      const method = paymentMethodSelect.value;
+
+      if (!reservationId) {
+        paymentMessage.textContent =
+          "Reservation ID is missing. Please create or reload your reservation.";
+        return;
+      }
+
+      if (method !== "external") {
+        paymentMessage.textContent =
+          "Online checkout is not available yet. Select external payment.";
+        return;
+      }
+
+      const externalReference = externalReferenceInput.value.trim();
+
+      if (!externalReference) {
+        paymentMessage.textContent =
+          "Enter the transaction reference for your external payment.";
+        externalReferenceInput.focus();
+        return;
+      }
+
+      submitPaymentButton.disabled = true;
+      submitPaymentButton.textContent = "Submitting reference...";
+      paymentMessage.textContent = "";
+
+      try {
+        const { data, error } = await supabase.rpc(
+          "create_booking_payment_attempt",
+          {
+            p_reservation_id: reservationId,
+            p_payment_method: "external",
+            p_external_reference: externalReference
+          }
+        );
+
+        if (error) throw error;
+
+        if (!data) {
+          throw new Error("No payment attempt ID was returned.");
+        }
+
+        paymentStatus.textContent =
+          "External payment reference submitted. Your reservation is awaiting payment verification.";
+
+        paymentMessage.textContent =
+          "Reference submitted successfully. Your hostel owner or administrator must verify the payment before your reservation can be confirmed.";
+
+        submitPaymentButton.textContent = "Reference Submitted";
+      } catch (error) {
+        paymentMessage.textContent =
+          `Could not submit payment reference: ${
+            error?.message || "Please try again."
+          }`;
+
+        submitPaymentButton.disabled = false;
+        submitPaymentButton.textContent = "Continue to payment";
+      }
     });
 
 
