@@ -651,6 +651,7 @@
       }
 
       await loadApplications(user.id);
+
     });
    
     const paymentMethodSelect = document.getElementById(
@@ -751,6 +752,70 @@
         submitPaymentButton.textContent = "Continue to payment";
       }
     });
+   
+    async function loadActiveReservation() {
+      const paymentSection = document.getElementById(
+        "reservation-payment-section"
+      );
+      const reservationReference = document.getElementById(
+        "payment-reservation-reference"
+      );
+      const paymentStatus = document.getElementById(
+        "payment-reservation-status"
+      );
+      const paymentMessage = document.getElementById(
+        "booking-payment-message"
+      );
+
+      paymentSection.hidden = true;
+
+      try {
+        const { data, error } = await supabase.rpc(
+          "get_my_active_reservation"
+        );
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          return;
+        }
+
+        const reservation = data[0];
+
+        if (reservation.reservation_status === "confirmed") {
+          showNotice(
+            `Your reservation ${reservation.reservation_reference} is confirmed.`,
+            "success"
+          );
+          return;
+        }
+
+        if (reservation.reservation_status !== "payment_pending") {
+          return;
+        }
+
+        paymentSection.dataset.reservationId =
+          reservation.reservation_id;
+
+        reservationReference.textContent =
+          reservation.reservation_reference;
+
+        paymentStatus.textContent =
+          `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
+          "Your reservation is awaiting payment verification.";
+
+        paymentMessage.textContent = "";
+
+        paymentSection.hidden = false;
+      } catch (error) {
+        showNotice(
+          `Could not restore your reservation: ${
+            error?.message || "Please refresh and try again."
+          }`,
+          "error"
+        );
+      }
+    }
 
 
     async function loadDashboard() {
@@ -801,6 +866,7 @@
         document.getElementById("profile-phone").textContent =
           profile.phone || "Not provided";
                   await loadApplications(user.id);
+                  await loadActiveReservation();
 
         loading.hidden = true;
         content.hidden = false;
