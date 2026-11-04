@@ -776,9 +776,14 @@
 
         if (error) throw error;
 
-        if (!data || data.length === 0) {
-          return;
-        }
+        console.log("Active reservation response:", data);
+
+if (!data || data.length === 0) {
+  console.log("No active reservation was returned by Supabase.");
+  return;
+}
+
+console.log("Reservation restored:", data[0]);
 
         const reservation = data[0];
 
