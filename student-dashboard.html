@@ -423,7 +423,16 @@
     Continue to payment
   </button>
 
-  <p id="booking-payment-message" role="status"></p>
+ <p id="booking-payment-message" role="status"></p>
+
+<button
+  class="button"
+  id="refresh-booking-payment"
+  type="button"
+  hidden
+>
+  Refresh payment status
+</button>
 </section>
 
 
@@ -683,6 +692,8 @@
   if (error) throw error;
 
   const payment = data?.[0];
+      refreshBookingPaymentButton.hidden =
+  payment?.payment_status !== "verification_pending";
 
   if (!payment) {
     paymentStatus.textContent =
@@ -742,7 +753,32 @@
 
   return payment;
 }
+refreshBookingPaymentButton.addEventListener("click", async () => {
+  const reservationId = document.getElementById(
+    "reservation-payment-section"
+  ).dataset.reservationId;
 
+  if (!reservationId) {
+    paymentMessage.textContent = "Reservation ID is missing.";
+    return;
+  }
+
+  refreshBookingPaymentButton.disabled = true;
+  refreshBookingPaymentButton.textContent = "Refreshing...";
+
+  try {
+    await loadBookingPaymentStatus(reservationId);
+  } catch (error) {
+    paymentMessage.textContent =
+      `Could not refresh payment status: ${
+        error?.message || "Please try again."
+      }`;
+  } finally {
+    refreshBookingPaymentButton.disabled = false;
+    refreshBookingPaymentButton.textContent =
+      "Refresh payment status";
+  }
+});
     paymentMethodSelect.addEventListener("change", () => {
       const method = paymentMethodSelect.value;
 
@@ -827,6 +863,9 @@
       const paymentStatus = document.getElementById(
         "payment-reservation-status"
       );
+      const refreshBookingPaymentButton = document.getElementById(
+  "refresh-booking-payment"
+);
       const paymentMessage = document.getElementById(
         "booking-payment-message"
       );
