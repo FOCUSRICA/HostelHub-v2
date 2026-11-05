@@ -735,6 +735,33 @@
           Applications submitted for your hostels will appear here.
         </div>
       </section>
+      
+<section class="panel" id="booking-payments-panel">
+  <div class="panel-heading">
+    <div>
+      <h2>Booking payment verification</h2>
+      <p>Review external booking fee payments submitted by students for your hostels.</p>
+    </div>
+
+    <div>
+      <span class="status" id="payment-count">Loading payments...</span>
+      <button class="button" id="refresh-payments-button" type="button">
+        Refresh payments
+      </button>
+    </div>
+  </div>
+
+  <p id="payments-loading" class="loading">
+    Loading pending external payments...
+  </p>
+
+  <div id="payment-list" class="listing-list" hidden></div>
+
+  <div id="payments-empty" class="empty-state" hidden>
+    <strong>No pending external payments</strong>
+    External booking fee submissions will appear here when students submit them.
+  </div>
+</section>
 
 
       <section class="account-card">
@@ -786,6 +813,16 @@ const applicationsEmpty = document.getElementById("applications-empty");
 const refreshApplicationsButton = document.getElementById(
   "refresh-applications-button"
 );
+    
+const paymentCount = document.getElementById("payment-count");
+const paymentList = document.getElementById("payment-list");
+const paymentsLoading = document.getElementById("payments-loading");
+const paymentsEmpty = document.getElementById("payments-empty");
+
+const refreshPaymentsButton = document.getElementById(
+  "refresh-payments-button"
+);
+
     
     let currentUser = null;
     let editingHostelId = null;
@@ -1144,6 +1181,280 @@ async function loadApplications() {
   }
 }
     
+async function loadPendingPayments() {
+  if (!currentUser) return;
+
+  paymentsLoading.hidden = false;
+  paymentsLoading.textContent = "Loading pending external payments...";
+  paymentList.hidden = true;
+  paymentsEmpty.hidden = true;
+  refreshPaymentsButton.disabled = true;
+
+  try {
+    const { data, error } = await supabase.rpc(
+      "get_owner_pending_external_payments"
+    );
+
+    if (error) throw error;
+
+    const payments = data || [];
+
+    paymentList.replaceChildren();
+
+    paymentCount.textContent =
+      `${payments.length} pending ${payments.length === 1 ? "payment" : "payments"}`;
+
+    paymentsLoading.hidden = true;
+
+    if (payments.length === 0) {
+      paymentsEmpty.hidden = false;
+      return;
+    }
+
+    for (const payment of payments) {
+      const card = document.createElement("article");
+      card.className = "listing-card";
+
+      addTextElement(
+        card,
+        "h3",
+        "",
+        payment.student_name || "Student"
+      );
+
+      addTextElement(
+        card,
+        "p",
+        "listing-location",
+        `Hostel: ${payment.hostel_name || "Unknown hostel"}`
+      );
+
+      const details = document.createElement("div");
+      details.className = "listing-details";
+
+      createDetail(
+        details,
+        "Booking fee",
+        formatMoney(payment.amount)
+      );
+
+      createDetail(
+        details,
+        "Currency",
+        payment.currency || "MWK"
+      );
+
+      createDetail(
+        details,
+        "Student phone",
+        payment.student_phone || "Not provided"
+      );
+
+      createDetail(
+        details,
+        "Application reference",
+        payment.application_reference || "Not available"
+      );
+
+      createDetail(
+        details,
+        "Reservation reference",
+        payment.reservation_reference || "Not available"
+      );
+
+      card.appendChild(details);
+
+      addTextElement(
+        card,
+        "p",
+        "",
+        `External payment reference: ${payment.external_reference || "Not provided"}`
+      );
+
+      const submittedAt = payment.submitted_at
+        ? new Date(payment.submitted_at)
+        : null;
+
+      addTextElement(
+        card,
+        "p",
+        "",
+        `Submitted: ${
+          submittedAt && !Number.isNaN(submittedAt.getTime())
+            ? submittedAt.toLocaleString()
+            : "Date unavailable"
+        }`
+      );
+
+      const expiresAt = payment.hold_expires_at
+        ? new Date(payment.hold_expires_at)
+        : null;
+
+      const holdExpired =
+        !expiresAt ||
+        Number.isNaN(expiresAt.getTime()) ||
+        expiresAt.getTime() <= Date.now();
+
+      const statusRow = document.createElement("div");
+      statusRow.className = "listing-statuses";
+
+      addPill(
+        statusRow,
+        holdExpired ? "Reservation hold expired" : "Awaiting payment verification",
+        holdExpired ? "warning" : ""
+      );
+
+      card.appendChild(statusRow);
+
+      const actions = document.createElement("div");
+      actions.className = "listing-actions";
+
+      const verifyButton = document.createElement("button");
+      verifyButton.type = "button";
+      verifyButton.className = "button button-primary";
+      verifyButton.textContent = "Verify payment";
+
+      verifyButton.addEventListener("click", () => {
+        reviewExternalPayment(payment, "verify", verifyButton);
+      });
+
+      const rejectButton = document.createElement("button");
+      rejectButton.type = "button";
+      rejectButton.className = "button button-danger";
+      rejectButton.textContent = "Reject payment";
+
+      rejectButton.addEventListener("click", () => {
+        reviewExternalPayment(payment, "reject", rejectButton);
+      });
+
+      actions.append(verifyButton, rejectButton);
+      card.appendChild(actions);
+
+      paymentList.appendChild(card);
+    }
+
+    paymentList.hidden = false;
+
+  } catch (error) {
+    paymentsLoading.hidden = false;
+    paymentsLoading.textContent =
+      `Could not load payments: ${error?.message || "Unknown error"}`;
+
+    paymentCount.textContent = "Unable to load";
+
+    showNotice(
+      `Could not load pending payments: ${error?.message || "Unknown error"}`,
+      "error"
+    );
+
+  } finally {
+    refreshPaymentsButton.disabled = false;
+  }
+}
+
+
+async function reviewExternalPayment(payment, decision, button) {
+  if (!currentUser) {
+    showNotice("Please sign in again before reviewing payments.", "error");
+    return;
+  }
+
+  if (!["verify", "reject"].includes(decision)) {
+    showNotice("Invalid payment decision.", "error");
+    return;
+  }
+
+  if (decision === "verify") {
+    const confirmed = window.confirm(
+      "Have you checked the actual payment receipt and confirmed that the MK 10,000 payment was received?"
+    );
+
+    if (!confirmed) return;
+  }
+
+  let rejectionReason = "";
+
+  if (decision === "reject") {
+    const reason = window.prompt(
+      "Enter the reason for rejecting this payment:"
+    );
+
+    if (reason === null) return;
+
+    rejectionReason = reason.trim();
+
+    if (!rejectionReason) {
+      showNotice("A rejection reason is required.", "error");
+      return;
+    }
+
+    if (rejectionReason.length > 500) {
+      showNotice("The rejection reason must not exceed 500 characters.", "error");
+      return;
+    }
+  }
+
+  clearNotice();
+  button.disabled = true;
+
+  try {
+    let data;
+    let error;
+
+    if (decision === "verify") {
+      ({ data, error } = await supabase.rpc(
+        "verify_external_booking_payment",
+        {
+          p_payment_id: payment.payment_id
+        }
+      ));
+    } else {
+      ({ data, error } = await supabase.rpc(
+        "reject_external_booking_payment",
+        {
+          p_payment_id: payment.payment_id,
+          p_reason: rejectionReason
+        }
+      ));
+    }
+
+    if (error) throw error;
+
+    if (data === "confirmed") {
+      showNotice(
+        "Payment verified successfully. The reservation has been confirmed.",
+        "info"
+      );
+    } else if (data === "late_payment_review") {
+      showNotice(
+        "The reservation hold has expired. This payment requires late-payment reconciliation and has not confirmed the reservation.",
+        "error"
+      );
+    } else if (data === "rejected") {
+      showNotice(
+        "External payment rejected. The reservation hold remains subject to its original expiry time.",
+        "info"
+      );
+    } else {
+      showNotice(
+        `Payment review returned: ${String(data)}. Please check the reservation status.`,
+        "info"
+      );
+    }
+
+    await loadPendingPayments();
+
+  } catch (error) {
+    showNotice(
+      `Could not ${decision} the payment: ${error?.message || "Unknown error"}`,
+      "error"
+    );
+
+    await loadPendingPayments();
+  }
+}
+
+    
     async function decideApplication(application, decision, button) {
       if (!currentUser) {
         showNotice("Please sign in again before deciding on an application.", "error");
@@ -1424,6 +1735,10 @@ refreshApplicationsButton.addEventListener("click", () => {
   clearNotice();
   loadApplications();
 });
+    refreshPaymentsButton.addEventListener("click", () => {
+  clearNotice();
+  loadPendingPayments();
+});
     async function loadDashboard() {
       try {
        
@@ -1504,6 +1819,7 @@ content.hidden = false;
 
 await loadHostels();
 await loadApplications();
+await loadPendingPayments();
       } catch (error) {
         loading.hidden = true;
         showNotice(
