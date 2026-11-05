@@ -122,6 +122,20 @@
   }
 
   .button-primary:hover:not(:disabled) {
+    #applications-list .button,
+#submit-booking-payment {
+  color: #fff;
+  background: var(--green);
+  border-color: var(--green);
+  box-shadow: 0 5px 13px rgba(25,118,71,.13);
+}
+
+#applications-list .button:hover:not(:disabled),
+#submit-booking-payment:hover:not(:disabled) {
+  color: #fff;
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
     background: var(--green-dark);
     border-color: var(--green-dark);
   }
@@ -216,6 +230,49 @@
     font-weight: 800;
     letter-spacing: -.5px;
   }
+  .overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.overview-card {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 0;
+  padding: 23px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.overview-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(24,64,40,.08);
+}
+
+.overview-card span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.overview-card strong {
+  color: var(--green-dark);
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  overflow-wrap: anywhere;
+}
+
+.overview-card small {
+  color: var(--muted);
+  font-size: 11px;
+}
 
   .grid {
     display: grid;
@@ -235,10 +292,31 @@
     transition: transform .22s ease, box-shadow .22s ease;
   }
 
-  .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 13px 34px rgba(24,64,40,.09);
-  }
+ .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 13px 34px rgba(24,64,40,.09);
+}
+
+/* Card entrance animations */
+#dashboard-content > .grid > .card:nth-child(1) {
+  animation-delay: .05s;
+}
+
+#dashboard-content > .grid > .card:nth-child(2) {
+  animation-delay: .12s;
+}
+
+#dashboard-content > .grid > .card:nth-child(3) {
+  animation-delay: .19s;
+}
+
+#dashboard-content > .grid > .card:nth-child(4) {
+  animation-delay: .26s;
+}
+
+#dashboard-content > .grid > .card:nth-child(5) {
+  animation-delay: .33s;
+}
 
   .card h2 {
     margin: 0 0 9px;
@@ -294,6 +372,16 @@
     font-weight: 800;
     letter-spacing: .15px;
   }
+  .status::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: .8;
+}
 
   #applications-list > div {
     margin-top: 12px;
@@ -446,6 +534,23 @@
       transform: translateY(0);
     }
   }
+  /* Give important student activity sections more space */
+#dashboard-content > .grid > section:nth-child(3),
+#reservation-payment-section,
+#dashboard-content > .grid > section:last-child {
+  grid-column: 1 / -1;
+}
+  button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(53, 184, 121, .45);
+  outline-offset: 3px;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(.98);
+}
 
   @media (max-width: 760px) {
     main {
@@ -456,6 +561,10 @@
       grid-template-columns: 1fr;
       gap: 15px;
     }
+    .overview-grid {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
 
     .welcome {
       padding: 30px 25px;
@@ -546,7 +655,27 @@
     <div id="dashboard-content" hidden>
       <h2 class="section-heading">Your dashboard</h2>
 
-      <div class="grid">
+<section class="overview-grid">
+  <div class="overview-card">
+    <span>Total Applications</span>
+    <strong id="total-applications">0</strong>
+    <small>Applications submitted</small>
+  </div>
+
+  <div class="overview-card">
+    <span>Approved Applications</span>
+    <strong id="approved-applications">0</strong>
+    <small>Applications approved</small>
+  </div>
+
+  <div class="overview-card">
+    <span>Booking Status</span>
+    <strong id="student-booking-status">None</strong>
+    <small>Your current reservation</small>
+  </div>
+</section>
+
+<div class="grid">
         <section class="card">
           <h2>Profile information</h2>
           <p>Your details associated with your HostelHub account.</p>
@@ -710,6 +839,15 @@
           .order("created_at", { ascending: false });
 
         if (error) throw error;
+        // Update the student dashboard overview
+document.getElementById("total-applications").textContent =
+  (applications || []).length;
+
+document.getElementById("approved-applications").textContent =
+  (applications || []).filter(
+    (application) =>
+      String(application.status || "").toLowerCase() === "approved"
+  ).length;
 
         if (!applications || applications.length === 0) {
           applicationsLoading.textContent =
@@ -1155,6 +1293,7 @@ window.refreshBookingPaymentButton.addEventListener("click", async () => {
         console.log("Active reservation response:", data);
 
 if (!data || data.length === 0) {
+  document.getElementById("student-booking-status").textContent = "None";
   console.log("No active reservation was returned by Supabase.");
   return;
 }
@@ -1162,6 +1301,15 @@ if (!data || data.length === 0) {
 console.log("Reservation restored:", data[0]);
 
         const reservation = data[0];
+        const bookingStatusElement = document.getElementById(
+  "student-booking-status"
+);
+
+bookingStatusElement.textContent =
+  reservation.reservation_status === "payment_pending"
+    ? "Payment Pending"
+    : reservation.reservation_status.charAt(0).toUpperCase() +
+      reservation.reservation_status.slice(1);
 
         if (reservation.reservation_status === "confirmed") {
           showNotice(
