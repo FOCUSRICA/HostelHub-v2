@@ -678,10 +678,11 @@
     const paymentMessage = document.getElementById(
       "booking-payment-message"
     );
-    const paymentStatus = document.getElementById(
-      "payment-reservation-status"
-    );
-    const refreshBookingPaymentButton = document.getElementById(
+const paymentStatus = document.getElementById(
+  "payment-reservation-status"
+);
+
+window.refreshBookingPaymentButton = document.getElementById(
   "refresh-booking-payment"
 );
     async function loadBookingPaymentStatus(reservationId) {
@@ -695,14 +696,15 @@
   if (error) throw error;
 
   const payment = data?.[0];
-      refreshBookingPaymentButton.hidden =
-  payment?.payment_status !== "verification_pending";
+   if (!payment) {
+  paymentStatus.textContent =
+    "No payment reference has been submitted yet.";
+  window.refreshBookingPaymentButton.hidden = true;
+  return null;
+}
 
-  if (!payment) {
-    paymentStatus.textContent =
-      "No payment reference has been submitted yet.";
-    return null;
-  }
+window.refreshBookingPaymentButton.hidden =
+  payment.payment_status !== "verification_pending";
 
   paymentMethodSelect.value = payment.payment_method || "";
 
@@ -756,7 +758,7 @@
 
   return payment;
 }
-refreshBookingPaymentButton.addEventListener("click", async () => {
+window.refreshBookingPaymentButton.addEventListener("click", async () => {
   const reservationId = document.getElementById(
     "reservation-payment-section"
   ).dataset.reservationId;
@@ -766,8 +768,8 @@ refreshBookingPaymentButton.addEventListener("click", async () => {
     return;
   }
 
-  refreshBookingPaymentButton.disabled = true;
-  refreshBookingPaymentButton.textContent = "Refreshing...";
+ window.refreshBookingPaymentButton.disabled = true;
+ window.refreshBookingPaymentButton.textContent = "Refreshing...";
 
   try {
     await loadBookingPaymentStatus(reservationId);
@@ -777,8 +779,8 @@ refreshBookingPaymentButton.addEventListener("click", async () => {
         error?.message || "Please try again."
       }`;
   } finally {
-    refreshBookingPaymentButton.disabled = false;
-    refreshBookingPaymentButton.textContent =
+   window.refreshBookingPaymentButton.disabled = false;
+    window.refreshBookingPaymentButton.textContent =
       "Refresh payment status";
   }
 });
