@@ -121,8 +121,13 @@
     box-shadow: 0 5px 13px rgba(25,118,71,.15);
   }
 
-  .button-primary:hover:not(:disabled) {
-    #applications-list .button,
+.button-primary:hover:not(:disabled) {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
+
+/* Application and payment action buttons */
+#applications-list .button,
 #submit-booking-payment {
   color: #fff;
   background: var(--green);
@@ -136,10 +141,6 @@
   background: var(--green-dark);
   border-color: var(--green-dark);
 }
-    background: var(--green-dark);
-    border-color: var(--green-dark);
-  }
-
   .button-danger {
     color: var(--danger);
     background: #fff;
@@ -279,12 +280,13 @@
   font-size: 11px;
 }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    align-items: start;
-  }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: stretch;
+  width: 100%;
+}
 
   .card {
     min-width: 0;
