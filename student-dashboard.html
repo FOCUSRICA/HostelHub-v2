@@ -162,17 +162,16 @@
     margin: 36px auto 65px;
   }
 
-  .welcome {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    padding: 39px 40px;
-    border-radius: 23px;
-    color: white;
-    background: linear-gradient(115deg, #104b30 0%, #197647 58%, #35b879 100%);
-    box-shadow: 0 14px 36px rgba(16,85,50,.15);
-    animation: riseIn .55s ease both;
-  }
+.welcome {
+  position: relative;
+  overflow: hidden;
+  padding: 42px 38px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 22px;
+  background: linear-gradient(120deg, var(--green-dark), var(--green));
+  color: #fff;
+  box-shadow: 0 14px 35px rgba(16, 85, 50, .16);
+}
 
   .welcome::before,
   .welcome::after {
@@ -543,6 +542,10 @@
       transform: translateY(0);
     }
   }
+  main {
+  width: min(1180px, 92%);
+  margin: 38px auto 55px;
+}
   /* Give important student activity sections more space */
 #dashboard-content > .grid > section:nth-child(3),
 #reservation-payment-section,
