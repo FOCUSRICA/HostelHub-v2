@@ -585,6 +585,19 @@
 if (!data) {
   throw new Error("No reservation ID was returned.");
 }
+                const { data: reservationRows, error: reservationLookupError } =
+  await supabase.rpc("get_my_active_reservation");
+
+if (reservationLookupError) {
+  console.warn(
+    "Could not retrieve reservation reference:",
+    reservationLookupError
+  );
+}
+
+const createdReservation = (reservationRows || []).find(
+  (reservation) => reservation.reservation_id === data
+);
 
                 showNotice(
                   "Reservation created successfully. Your booking fee is MK 10,000. " +
@@ -607,10 +620,18 @@ if (!data) {
                 );
 
                 paymentSection.dataset.reservationId = data;
-                reservationReference.textContent =
-                  "Reservation created successfully";
+                reservationReference.textContent = createdReservation
+  ? `Reservation reference: ${createdReservation.reservation_reference}`
+  : "Reservation created successfully";
                 paymentStatus.textContent =
-                  "Reservation created. Choose a payment method below.";
+  "Reservation created. Choose a payment method below.";
+
+if (createdReservation?.hold_expires_at) {
+  paymentStatus.textContent +=
+    ` Payment deadline: ${new Date(
+      createdReservation.hold_expires_at
+    ).toLocaleString()}.`;
+}
                 paymentMessage.textContent = "";
 
                 paymentSection.hidden = false;
@@ -932,6 +953,11 @@ console.log("Reservation restored:", data[0]);
 
 reservationReference.textContent =
   reservation.reservation_reference;
+        const expiryDate = new Date(reservation.hold_expires_at);
+
+paymentStatus.textContent =
+  `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
+  `Payment deadline: ${expiryDate.toLocaleString()}.`;
 
 paymentStatus.textContent =
   `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
@@ -942,6 +968,10 @@ paymentMessage.textContent = "";
 paymentSection.hidden = false;
 
 await loadBookingPaymentStatus(reservation.reservation_id);
+        paymentStatus.textContent +=
+  ` Payment deadline: ${new Date(
+    reservation.hold_expires_at
+  ).toLocaleString()}.`;
       } catch (error) {
         showNotice(
           `Could not restore your reservation: ${
