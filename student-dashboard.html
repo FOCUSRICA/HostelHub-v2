@@ -326,47 +326,51 @@
   animation-delay: .33s;
 }
 
-  .card h2 {
-    margin: 0 0 9px;
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: -.35px;
-  }
+ .card h2 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -.4px;
+  line-height: 1.4;
+}
 
-  .card > p {
-    margin: 0 0 19px;
-    color: var(--muted);
-    font-size: 13px;
-    line-height: 1.75;
-  }
+.card > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
 
-  .profile-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 15px 0;
-    border-bottom: 1px solid var(--border);
-  }
+ .profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background .2s ease;
+}
 
-  .profile-row:last-child {
-    border-bottom: 0;
-    padding-bottom: 0;
-  }
+.profile-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
 
-  .profile-label {
-    color: var(--muted);
-    font-size: 13px;
-  }
+.profile-label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+}
 
-  .profile-value {
-    max-width: 65%;
-    text-align: right;
-    overflow-wrap: anywhere;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
+.profile-value {
+  max-width: 65%;
+  color: var(--ink);
+  text-align: right;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 700;
+}
   .status {
     display: inline-flex;
     align-items: center;
@@ -391,18 +395,28 @@
   opacity: .8;
 }
 
-  #applications-list > div {
-    margin-top: 12px;
-    padding: 16px !important;
-    border: 1px solid var(--border);
-    border-radius: 13px;
-    background: #fbfdfb;
-  }
+ #applications-list > div {
+  margin-top: 14px;
+  padding: 20px !important;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #f8fbf9);
+  box-shadow: 0 4px 14px rgba(24, 64, 40, .035);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
 
-  #applications-list h3 {
-    color: var(--ink);
-  }
+#applications-list > div:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 22px rgba(24, 64, 40, .07);
+}
 
+ #applications-list h3 {
+  margin: 0 0 10px;
+  color: var(--green-dark);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.4;
+}
   #applications-list .button {
     margin-top: 14px;
   }
@@ -610,11 +624,6 @@ select:focus-visible {
       min-height: 39px;
       padding: 9px 12px;
       font-size: 12px;
-    }
-
-    main {
-      width: 91%;
-      margin-bottom: 40px;
     }
 
     .welcome {
