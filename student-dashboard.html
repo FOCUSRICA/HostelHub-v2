@@ -236,6 +236,11 @@
   gap: 18px;
   margin-bottom: 24px;
 }
+  #dashboard-content > .overview-grid {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
 
 .overview-card {
   display: flex;
@@ -655,10 +660,7 @@ select:focus-visible {
     <div id="dashboard-content" hidden>
       <h2 class="section-heading">Your dashboard</h2>
 
-<section
-  class="overview-grid"
-  style="display:grid !important; visibility:visible !important; opacity:1 !important; min-height:120px; outline:3px solid red;"
->
+<section class="overview-grid">
   <div class="overview-card">
     <span>Total Applications</span>
     <strong id="total-applications">0</strong>
