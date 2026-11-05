@@ -672,6 +672,76 @@
     const paymentStatus = document.getElementById(
       "payment-reservation-status"
     );
+    async function loadBookingPaymentStatus(reservationId) {
+  const { data, error } = await supabase.rpc(
+    "get_my_booking_payment_status",
+    {
+      p_reservation_id: reservationId
+    }
+  );
+
+  if (error) throw error;
+
+  const payment = data?.[0];
+
+  if (!payment) {
+    paymentStatus.textContent =
+      "No payment reference has been submitted yet.";
+    return null;
+  }
+
+  paymentMethodSelect.value = payment.payment_method || "";
+
+  externalReferenceGroup.hidden =
+    payment.payment_method !== "external";
+
+  externalReferenceInput.value =
+    payment.external_reference || "";
+
+  if (payment.payment_status === "verification_pending") {
+    paymentStatus.textContent =
+      "Your external payment reference has been submitted. Awaiting owner verification.";
+
+    paymentMessage.textContent =
+      "Your payment is awaiting verification. You do not need to submit it again.";
+
+    submitPaymentButton.disabled = true;
+    submitPaymentButton.textContent = "Reference Submitted";
+
+  } else if (payment.payment_status === "verified") {
+    paymentStatus.textContent =
+      "Your booking payment has been verified successfully.";
+
+    paymentMessage.textContent =
+      "Payment verified. Your reservation is confirmed.";
+
+    submitPaymentButton.disabled = true;
+    submitPaymentButton.textContent = "Payment Verified";
+
+  } else if (payment.payment_status === "rejected") {
+    paymentStatus.textContent =
+      "Your payment submission was rejected.";
+
+    paymentMessage.textContent =
+      "Reason: " +
+      (payment.rejection_reason || "Please contact the hostel owner.");
+
+    submitPaymentButton.disabled = false;
+    submitPaymentButton.textContent = "Submit a New Reference";
+
+  } else if (payment.payment_status === "failed") {
+    paymentStatus.textContent =
+      "Your previous payment attempt failed.";
+
+    paymentMessage.textContent =
+      "You can submit a new payment reference.";
+
+    submitPaymentButton.disabled = false;
+    submitPaymentButton.textContent = "Submit a New Reference";
+  }
+
+  return payment;
+}
 
     paymentMethodSelect.addEventListener("change", () => {
       const method = paymentMethodSelect.value;
@@ -735,13 +805,7 @@
           throw new Error("No payment attempt ID was returned.");
         }
 
-        paymentStatus.textContent =
-          "External payment reference submitted. Your reservation is awaiting payment verification.";
-
-        paymentMessage.textContent =
-          "Reference submitted successfully. Your hostel owner or administrator must verify the payment before your reservation can be confirmed.";
-
-        submitPaymentButton.textContent = "Reference Submitted";
+       await loadBookingPaymentStatus(reservationId);
       } catch (error) {
         paymentMessage.textContent =
           `Could not submit payment reference: ${
@@ -799,19 +863,21 @@ console.log("Reservation restored:", data[0]);
           return;
         }
 
-        paymentSection.dataset.reservationId =
-          reservation.reservation_id;
+      paymentSection.dataset.reservationId =
+  reservation.reservation_id;
 
-        reservationReference.textContent =
-          reservation.reservation_reference;
+reservationReference.textContent =
+  reservation.reservation_reference;
 
-        paymentStatus.textContent =
-          `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
-          "Your reservation is awaiting payment verification.";
+paymentStatus.textContent =
+  `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
+  "Checking your payment status...";
 
-        paymentMessage.textContent = "";
+paymentMessage.textContent = "";
 
-        paymentSection.hidden = false;
+paymentSection.hidden = false;
+
+await loadBookingPaymentStatus(reservation.reservation_id);
       } catch (error) {
         showNotice(
           `Could not restore your reservation: ${
