@@ -681,6 +681,9 @@
     const paymentStatus = document.getElementById(
       "payment-reservation-status"
     );
+    const refreshBookingPaymentButton = document.getElementById(
+  "refresh-booking-payment"
+);
     async function loadBookingPaymentStatus(reservationId) {
   const { data, error } = await supabase.rpc(
     "get_my_booking_payment_status",
@@ -863,13 +866,10 @@ refreshBookingPaymentButton.addEventListener("click", async () => {
       const paymentStatus = document.getElementById(
         "payment-reservation-status"
       );
-      const refreshBookingPaymentButton = document.getElementById(
-  "refresh-booking-payment"
-);
       const paymentMessage = document.getElementById(
         "booking-payment-message"
       );
-
+   
       paymentSection.hidden = true;
 
       try {
