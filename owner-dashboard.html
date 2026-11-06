@@ -164,6 +164,19 @@
       color: #e3f6e9;
       line-height: 1.7;
     }
+    .welcome-date {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 17px !important;
+  padding: 8px 12px;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+  color: #fff !important;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
 
     .section-heading {
       margin: 30px 0 16px;
@@ -817,6 +830,7 @@ html {
       <p class="eyebrow">Hostel owner portal</p>
       <h1 id="welcome-title">Welcome to your dashboard</h1>
       <p>Manage your accommodation, review student applications, and keep track of rent and payments from one place.</p>
+      <p class="welcome-date" id="welcome-date"></p>
     </section>
 
     <div id="notice" class="notice" role="status" aria-live="polite"></div>
@@ -2063,6 +2077,12 @@ if (!user) {
 
         field("welcome-title").textContent =
           `Welcome, ${profile.full_name || "Hostel Owner"}`;
+        field("welcome-date").textContent = new Intl.DateTimeFormat("en-MW", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+}).format(new Date());
         field("profile-name").textContent =
           profile.full_name || "Not provided";
         field("profile-email").textContent =
