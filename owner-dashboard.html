@@ -566,6 +566,163 @@
         transition: none !important;
       }
     }
+    
+/* ==================================
+   HOSTELHUB OWNER DASHBOARD POLISH
+================================== */
+
+:root {
+  --background: #f1f6f2;
+  --surface: #ffffff;
+  --border: #e3ebe5;
+}
+
+/* General page appearance */
+body {
+  background:
+    radial-gradient(circle at 90% 5%, #e5f3e9 0, transparent 27%),
+    var(--background);
+  letter-spacing: -0.15px;
+}
+
+main {
+  padding-bottom: 30px;
+}
+
+/* Header refinement */
+header {
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 3px 16px rgba(20, 60, 35, 0.035);
+}
+
+.brand {
+  letter-spacing: -0.6px;
+}
+
+.brand-mark {
+  box-shadow: 0 5px 12px rgba(25, 118, 71, 0.2);
+}
+
+/* Welcome banner */
+.welcome {
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 16px 35px rgba(16,85,50,.15);
+}
+
+.welcome::after {
+  width: 290px;
+  height: 290px;
+  right: -75px;
+  top: -130px;
+  border: 35px solid rgba(255,255,255,.08);
+  background: transparent;
+}
+
+/* Section headings */
+.section-heading {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+
+/* Dashboard cards */
+.card {
+  border-radius: 19px;
+  box-shadow: 0 7px 22px rgba(25,55,35,.045);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 13px 28px rgba(25,55,35,.09);
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 15px;
+  background: linear-gradient(135deg, #e8f8ed, #d9f1e1);
+}
+
+/* Panels and account sections */
+.panel,
+.account-card {
+  border-radius: 19px;
+  box-shadow: 0 7px 24px rgba(25,55,35,.04);
+}
+
+.panel-heading {
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Buttons */
+.button {
+  min-height: 44px;
+  border-radius: 11px;
+  transition: transform .2s ease,
+              box-shadow .2s ease,
+              background .2s ease;
+}
+
+.button-primary {
+  box-shadow: 0 5px 12px rgba(25,118,71,.15);
+}
+
+.button-primary:hover {
+  box-shadow: 0 8px 17px rgba(25,118,71,.22);
+}
+
+/* Form fields */
+.field input,
+.field textarea,
+.field select {
+  border-radius: 11px;
+  transition: border-color .2s ease,
+              box-shadow .2s ease;
+}
+
+.field input:hover,
+.field textarea:hover,
+.field select:hover {
+  border-color: #a9cdb5;
+}
+
+/* Hostel listing cards */
+.listing-card {
+  border-radius: 17px;
+  box-shadow: 0 5px 17px rgba(25,55,35,.035);
+  transition: transform .22s ease,
+              box-shadow .22s ease;
+}
+
+.listing-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 11px 24px rgba(25,55,35,.075);
+}
+
+.detail-box {
+  border: 1px solid #edf2ee;
+  border-radius: 11px;
+}
+
+/* Mobile refinement */
+@media (max-width: 580px) {
+  .welcome {
+    border-radius: 17px;
+  }
+
+  .card,
+  .panel,
+  .account-card {
+    border-radius: 15px;
+  }
+
+  .listing-card {
+    padding: 17px;
+  }
+}
+
   </style>
 </head>
 
