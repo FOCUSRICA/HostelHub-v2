@@ -1287,8 +1287,11 @@ window.refreshBookingPaymentButton.addEventListener("click", async () => {
         submitPaymentButton.textContent = "Continue to payment";
       }
     });
-   
+   let lastObservedReservationStatus = null;
+let isCheckingReservation = false;
     async function loadActiveReservation() {
+        if (isCheckingReservation) return;
+  isCheckingReservation = true;
       const paymentSection = document.getElementById(
         "reservation-payment-section"
       );
@@ -1322,6 +1325,9 @@ if (!data || data.length === 0) {
 console.log("Reservation restored:", data[0]);
 
         const reservation = data[0];
+        const previousStatus = lastObservedReservationStatus;
+
+lastObservedReservationStatus = reservation.reservation_status;
         const bookingStatusElement = document.getElementById(
   "student-booking-status"
 );
@@ -1332,13 +1338,16 @@ bookingStatusElement.textContent =
     : reservation.reservation_status.charAt(0).toUpperCase() +
       reservation.reservation_status.slice(1);
 
-        if (reservation.reservation_status === "confirmed") {
-          showNotice(
-            `Your reservation ${reservation.reservation_reference} is confirmed.`,
-            "success"
-          );
-          return;
-        }
+     if (reservation.reservation_status === "confirmed") {
+  if (previousStatus === "payment_pending") {
+    showNotice(
+      `Payment successful! Your reservation ${reservation.reservation_reference} has been confirmed.`,
+      "success"
+    );
+  }
+
+  return;
+}
 
         if (reservation.reservation_status !== "payment_pending") {
           return;
@@ -1368,16 +1377,17 @@ await loadBookingPaymentStatus(reservation.reservation_id);
   ` Payment deadline: ${new Date(
     reservation.hold_expires_at
   ).toLocaleString()}.`;
-      } catch (error) {
+           } catch (error) {
         showNotice(
           `Could not restore your reservation: ${
             error?.message || "Please refresh and try again."
           }`,
           "error"
         );
+      } finally {
+        isCheckingReservation = false;
       }
     }
-
 
     async function loadDashboard() {
       try {
@@ -1426,11 +1436,16 @@ await loadBookingPaymentStatus(reservation.reservation_id);
 
         document.getElementById("profile-phone").textContent =
           profile.phone || "Not provided";
-                  await loadApplications(user.id);
-                  await loadActiveReservation();
+        await loadApplications(user.id);
+await loadActiveReservation();
 
-        loading.hidden = true;
-        content.hidden = false;
+loading.hidden = true;
+content.hidden = false;
+
+// Check reservation status every 15 seconds.
+setInterval(() => {
+  loadActiveReservation();
+}, 15000);
       } catch (error) {
         loading.hidden = true;
         showNotice(
