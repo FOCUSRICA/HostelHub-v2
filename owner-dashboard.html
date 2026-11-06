@@ -856,22 +856,27 @@ html {
     </span>
   </a>
 
-  <a href="#applications-panel" class="quick-action">
-    <span class="quick-action-icon">▤</span>
-    <span>
-      <strong>Applications</strong>
-      <small>Review student requests</small>
-    </span>
-  </a>
+ <a href="#applications-panel" class="quick-action">
+  <span class="quick-action-icon">▤</span>
+  <span>
+    <strong>Applications</strong>
+    <small>
+      <span id="pending-applications-count">Checking...</span>
+      awaiting review
+    </small>
+  </span>
+</a>
 
   <a href="#booking-payments-panel" class="quick-action">
-    <span class="quick-action-icon">₭</span>
-    <span>
-      <strong>Payments</strong>
-      <small>Verify booking payments</small>
-    </span>
-  </a>
-
+  <span class="quick-action-icon">₭</span>
+  <span>
+    <strong>Payments</strong>
+    <small>
+      <span id="pending-payments-count">Checking...</span>
+      awaiting verification
+    </small>
+  </span>
+</a>
 </div>
 
       <div class="grid">
@@ -1085,6 +1090,13 @@ html {
     const listingCount = document.getElementById("listing-count");
     const refreshButton = document.getElementById("refresh-listings-button");
     const applicationCount = document.getElementById("application-count");
+    const pendingApplicationsCount = document.getElementById(
+  "pending-applications-count"
+);
+
+const pendingPaymentsCount = document.getElementById(
+  "pending-payments-count"
+);
 const applicationList = document.getElementById("application-list");
 const applicationsLoading = document.getElementById("applications-loading");
 const applicationsEmpty = document.getElementById("applications-empty");
@@ -1331,6 +1343,12 @@ async function loadApplications() {
     if (applicationsError) throw applicationsError;
 
     const rows = applications || [];
+    const pendingApplications = rows.filter(
+  application =>
+    String(application.status || "").toLowerCase() === "pending"
+).length;
+
+pendingApplicationsCount.textContent = pendingApplications;
 
     applicationCount.textContent =
       `${rows.length} ${rows.length === 1 ? "application" : "applications"}`;
@@ -1469,6 +1487,7 @@ async function loadPendingPayments() {
     if (error) throw error;
 
     const payments = data || [];
+    pendingPaymentsCount.textContent = payments.length;
 
     paymentList.replaceChildren();
 
