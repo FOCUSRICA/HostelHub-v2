@@ -1170,20 +1170,28 @@ async function openDetails(hostel, isDemo) {
           button.textContent = "Submitting...";
 
           try {
-            await submitApplication({
-              hostel,
-              user,
-              fullName: form.elements.full_name.value.trim(),
-              phone: form.elements.phone.value.trim()
-            });
+           await submitApplication({
+  hostel,
+  user,
+  fullName: form.elements.full_name.value.trim(),
+  phone: form.elements.phone.value.trim()
+});
 
-            message.textContent =
-              "Application submitted successfully. Status: pending.";
+message.textContent =
+  "Application submitted successfully! Redirecting to your dashboard...";
 
-            button.textContent = "Application submitted";
-            form.querySelectorAll("input").forEach(input => {
-              input.disabled = true;
-            });
+button.textContent = "Application submitted";
+
+form.querySelectorAll("input").forEach(input => {
+  input.disabled = true;
+});
+
+button.disabled = true;
+
+// Keep the existing Supabase session and open the student dashboard.
+setTimeout(() => {
+  window.location.href = "./student-dashboard.html";
+}, 1200);
           } catch (error) {
             console.error("Application submission failed:", error);
 
