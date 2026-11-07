@@ -1082,7 +1082,11 @@ let currentStudentId = null;
     async function loadNotifications() {
   if (!currentStudentId) return;
 
- notificationsLoading.hidden = false;
+ const isFirstLoad = notificationsList.children.length === 0;
+
+if (isFirstLoad) {
+  notificationsLoading.hidden = false;
+}
 notificationsEmpty.hidden = true;
 
   try {
