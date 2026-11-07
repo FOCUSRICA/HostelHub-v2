@@ -1082,9 +1082,8 @@ let currentStudentId = null;
     async function loadNotifications() {
   if (!currentStudentId) return;
 
-  notificationsLoading.hidden = false;
-  notificationsEmpty.hidden = true;
-  notificationsList.replaceChildren();
+ notificationsLoading.hidden = false;
+notificationsEmpty.hidden = true;
 
   try {
     const { data, error } = await supabase
@@ -1097,6 +1096,7 @@ let currentStudentId = null;
     if (error) throw error;
 
     const notifications = data || [];
+    notificationsList.replaceChildren();
 
     const unreadCount = notifications.filter(
       (notification) => !notification.is_read
@@ -1744,8 +1744,6 @@ let isCheckingReservation = false;
         "booking-payment-message"
       );
    
-      paymentSection.hidden = true;
-
       try {
         const { data, error } = await supabase.rpc(
           "get_my_active_reservation"
