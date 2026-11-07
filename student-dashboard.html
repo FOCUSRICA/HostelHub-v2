@@ -149,6 +149,38 @@ main.notification-view-active > #dashboard-content > .notification-panel {
   border-left: 4px solid var(--green);
   background: #f2faf5;
 }
+  .notification-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-bottom: 9px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .3px;
+}
+
+.notification-category.payment {
+  color: #176b42;
+  background: #e6f5ec;
+}
+
+.notification-category.booking {
+  color: #2456a6;
+  background: #eaf1ff;
+}
+
+.notification-category.application {
+  color: #8053a5;
+  background: #f3eaff;
+}
+
+.notification-category.general {
+  color: #59665e;
+  background: #edf1ee;
+}
 
 .notification-item h3 {
   margin: 0 0 7px;
@@ -1087,6 +1119,24 @@ let currentStudentId = null;
         : "notification-item unread";
 
       const details = document.createElement("div");
+      const category = document.createElement("span");
+
+const categoryInfo = {
+  payment: { label: "💳 Payment", className: "payment" },
+payment_success: { label: "💳 Payment", className: "payment" },
+  booking: { label: "🏠 Booking", className: "booking" },
+  application: { label: "📄 Application", className: "application" },
+  general: { label: "🔔 General", className: "general" }
+};
+
+const categoryType = categoryInfo[notification.type]
+  ? notification.type
+  : "general";
+
+category.className =
+  `notification-category ${categoryInfo[categoryType].className}`;
+
+category.textContent = categoryInfo[categoryType].label;
 
       const title = document.createElement("h3");
       title.textContent = notification.title;
@@ -1100,7 +1150,7 @@ let currentStudentId = null;
         notification.created_at
       ).toLocaleString();
 
-      details.append(title, message, date);
+     details.append(category, title, message, date);
       item.appendChild(details);
 
       if (!notification.is_read) {
