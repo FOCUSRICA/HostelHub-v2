@@ -97,6 +97,20 @@
   background: var(--surface);
   box-shadow: 0 8px 25px rgba(20, 60, 35, 0.06);
 }
+  main.notification-view-active > .welcome,
+main.notification-view-active > #notice,
+main.notification-view-active > #dashboard-content > .section-heading,
+main.notification-view-active > #dashboard-content > .overview-grid,
+main.notification-view-active > #dashboard-content > .grid {
+  display: none !important;
+}
+
+main.notification-view-active > #dashboard-content > .notification-panel {
+  display: block !important;
+  width: 100%;
+  margin-top: 10px;
+  min-height: 60vh;
+}
 
 .notification-heading {
   display: flex;
@@ -156,9 +170,11 @@
 }
 
 .notification-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
   flex-shrink: 0;
 }
-
 @media (max-width: 600px) {
   .notification-heading,
   .notification-item {
@@ -829,15 +845,29 @@ select:focus-visible {
 </section>
       <section class="card notification-panel" id="notification-panel" hidden>
   <div class="notification-heading">
-    <div>
-      <h2>Notifications</h2>
-      <p>Your latest account updates and important messages.</p>
-    </div>
+  <div>
+    <h2>Notifications</h2>
+    <p>Your latest account updates and important messages.</p>
+  </div>
 
-    <button class="button" id="mark-all-notifications-read" type="button">
+  <div class="notification-actions">
+    <button
+      class="button"
+      id="back-to-dashboard"
+      type="button"
+    >
+      ← Back to Dashboard
+    </button>
+
+    <button
+      class="button"
+      id="mark-all-notifications-read"
+      type="button"
+    >
       Mark all as read
     </button>
   </div>
+</div>
 
   <div id="notifications-loading" class="loading" hidden>
     Loading notifications...
@@ -1003,6 +1033,9 @@ const notificationsEmpty = document.getElementById("notifications-empty");
 const markAllNotificationsReadButton = document.getElementById(
   "mark-all-notifications-read"
 );
+    const backToDashboardButton = document.getElementById(
+  "back-to-dashboard"
+);
 
 const refreshNotificationsButton = document.getElementById(
   "refresh-notifications-button"
@@ -1120,23 +1153,42 @@ let currentStudentId = null;
   }
 }
     // Open and close the notification panel
+const mainElement = document.querySelector("main");
+
 notificationButton.addEventListener("click", async () => {
-  const isOpening = notificationPanel.hidden;
-
-  notificationPanel.hidden = !isOpening;
-
-  notificationButton.setAttribute(
-    "aria-expanded",
-    String(isOpening)
-  );
+  const isOpening =
+    !mainElement.classList.contains("notification-view-active");
 
   if (isOpening) {
+    mainElement.classList.add("notification-view-active");
+    notificationPanel.hidden = false;
+
+    notificationButton.setAttribute("aria-expanded", "true");
+
     await loadNotifications();
-    notificationPanel.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
     });
+  } else {
+    mainElement.classList.remove("notification-view-active");
+    notificationPanel.hidden = true;
+
+    notificationButton.setAttribute("aria-expanded", "false");
   }
+});
+    backToDashboardButton.addEventListener("click", () => {
+  mainElement.classList.remove("notification-view-active");
+
+  notificationPanel.hidden = true;
+
+  notificationButton.setAttribute("aria-expanded", "false");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 });
 
 // Refresh notifications
