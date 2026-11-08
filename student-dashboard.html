@@ -1759,6 +1759,9 @@ let isCheckingReservation = false;
 
 if (!data || data.length === 0) {
   document.getElementById("student-booking-status").textContent = "None";
+
+  paymentSection.hidden = true;
+
   console.log("No active reservation was returned by Supabase.");
   return;
 }
@@ -1779,7 +1782,9 @@ bookingStatusElement.textContent =
     : reservation.reservation_status.charAt(0).toUpperCase() +
       reservation.reservation_status.slice(1);
 
-     if (reservation.reservation_status === "confirmed") {
+ if (reservation.reservation_status === "confirmed") {
+  paymentSection.hidden = true;
+
   if (previousStatus === "payment_pending") {
     showNotice(
       `Payment successful! Your reservation ${reservation.reservation_reference} has been confirmed.`,
@@ -1790,10 +1795,10 @@ bookingStatusElement.textContent =
   return;
 }
 
-        if (reservation.reservation_status !== "payment_pending") {
-          return;
-        }
-
+   if (reservation.reservation_status !== "payment_pending") {
+  paymentSection.hidden = true;
+  return;
+}
       paymentSection.dataset.reservationId =
   reservation.reservation_id;
 
