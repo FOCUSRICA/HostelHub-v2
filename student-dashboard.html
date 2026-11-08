@@ -1556,9 +1556,17 @@ window.refreshBookingPaymentButton = document.getElementById(
   if (error) throw error;
 
   const payment = data?.[0];
- if (!payment) {
-  paymentStatus.textContent =
-    "No payment reference has been submitted yet.";
+const setPaymentStatus = (message) => {
+  paymentStatus.textContent = [
+    paymentStatus.dataset.summary,
+    message
+  ].filter(Boolean).join("\n");
+};
+
+if (!payment) {
+  setPaymentStatus(
+    "No payment reference has been submitted yet."
+  );
 
   paymentMessage.textContent = "";
 
@@ -1586,8 +1594,9 @@ window.refreshBookingPaymentButton.hidden =
     payment.external_reference || "";
 
   if (payment.payment_status === "verification_pending") {
-    paymentStatus.textContent =
-      "Your external payment reference has been submitted. Awaiting owner verification.";
+   setPaymentStatus(
+  "Your external payment reference has been submitted. Awaiting owner verification."
+);
 
     paymentMessage.textContent =
       "Your payment is awaiting verification. You do not need to submit it again.";
@@ -1596,8 +1605,9 @@ window.refreshBookingPaymentButton.hidden =
     submitPaymentButton.textContent = "Reference Submitted";
 
   } else if (payment.payment_status === "verified") {
-    paymentStatus.textContent =
-      "Your booking payment has been verified successfully.";
+    setPaymentStatus(
+  "Your booking payment has been verified successfully."
+);
 
     paymentMessage.textContent =
       "Payment verified. Your reservation is confirmed.";
@@ -1606,8 +1616,9 @@ window.refreshBookingPaymentButton.hidden =
     submitPaymentButton.textContent = "Payment Verified";
 
   } else if (payment.payment_status === "rejected") {
-    paymentStatus.textContent =
-      "Your payment submission was rejected.";
+   setPaymentStatus(
+  "Your payment submission was rejected."
+);
         externalReferenceInput.value = "";
 
     paymentMessage.textContent =
@@ -1619,8 +1630,9 @@ window.refreshBookingPaymentButton.hidden =
 
   } else if (payment.payment_status === "failed") {
         externalReferenceInput.value = "";
-    paymentStatus.textContent =
-      "Your previous payment attempt failed.";
+   setPaymentStatus(
+  "Your previous payment attempt failed."
+);
 
     paymentMessage.textContent =
       "You can submit a new payment reference.";
@@ -1805,24 +1817,17 @@ bookingStatusElement.textContent =
 reservationReference.textContent =
   reservation.reservation_reference;
         const expiryDate = new Date(reservation.hold_expires_at);
-
-paymentStatus.textContent =
+        paymentStatus.dataset.summary =
+          paymentStatus.textContent = paymentStatus.dataset.summary;
   `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
   `Payment deadline: ${expiryDate.toLocaleString()}.`;
-
-paymentStatus.textContent =
-  `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
-  "Checking your payment status...";
 
 paymentMessage.textContent = "";
 
 paymentSection.hidden = false;
 
 await loadBookingPaymentStatus(reservation.reservation_id);
-        paymentStatus.textContent +=
-  ` Payment deadline: ${new Date(
-    reservation.hold_expires_at
-  ).toLocaleString()}.`;
+        
            } catch (error) {
         showNotice(
           `Could not restore your reservation: ${
