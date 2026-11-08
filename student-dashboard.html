@@ -1990,6 +1990,7 @@ bookingStatusElement.textContent =
 
 reservationReference.textContent =
   reservation.reservation_reference;
+        const expiryDate = new Date(reservation.hold_expires_at);
        paymentStatus.dataset.summary =
   `Booking fee: MK ${Number(reservation.booking_fee).toLocaleString()}. ` +
   `Payment deadline: ${expiryDate.toLocaleString()}.`;
