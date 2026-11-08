@@ -851,6 +851,78 @@ select:focus-visible {
   font-size: 12px;
   font-weight: 600;
 }
+  .application-progress {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 20px 0 16px;
+  position: relative;
+}
+
+.progress-step {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  padding-top: 25px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.progress-step::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #e5ece7;
+  border: 3px solid #e5ece7;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.progress-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: calc(50% + 9px);
+  width: calc(100% - 18px);
+  height: 3px;
+  background: #e5ece7;
+}
+
+.progress-step.complete::before {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.progress-step.complete::after {
+  background: var(--green);
+}
+
+.progress-step.active::before {
+  background: #fff;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(25, 118, 71, 0.12);
+}
+
+.application-progress.rejected .progress-step.rejected::before {
+  background: #b42332;
+  border-color: #b42332;
+}
+
+.application-progress.rejected .progress-step.rejected {
+  color: #b42332;
+}
+
+@media (max-width: 480px) {
+  .progress-step {
+    font-size: 9px;
+  }
+}
 
 .application-status {
   display: inline-flex;
@@ -1432,6 +1504,36 @@ const statusLabel = document.createElement("span");
 statusLabel.className = `status application-status ${status}`;
           statusLabel.textContent =
             status.charAt(0).toUpperCase() + status.slice(1);
+          const progress = document.createElement("div");
+progress.className = `application-progress ${status}`;
+progress.setAttribute("aria-label", `Application progress: ${status}`);
+
+const progressSteps = [
+  {
+    label: "Submitted",
+    state: "complete"
+  },
+  {
+    label: "Owner review",
+    state:
+      status === "pending"
+        ? "active"
+        : status === "approved"
+          ? "complete"
+          : "rejected"
+  },
+  {
+    label: status === "rejected" ? "Decision" : "Ready to reserve",
+    state: status === "approved" ? "active" : "upcoming"
+  }
+];
+
+progressSteps.forEach((step) => {
+  const stepElement = document.createElement("div");
+  stepElement.className = `progress-step ${step.state}`;
+  stepElement.textContent = step.label;
+  progress.appendChild(stepElement);
+});
 
          const message = document.createElement("p");
 message.className = "application-message";
