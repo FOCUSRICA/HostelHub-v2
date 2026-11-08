@@ -816,6 +816,71 @@ select:focus-visible {
       scroll-behavior: auto !important;
     }
   }
+  .application-item {
+  position: relative;
+  padding: 20px;
+  margin: 14px 0;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(23, 37, 28, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.application-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(23, 37, 28, 0.09);
+}
+
+.application-hostel-name {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.application-reference {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.application-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.application-status.approved {
+  background: #e7f7ed;
+  color: #105532;
+}
+
+.application-status.pending {
+  background: #fff5db;
+  color: #805600;
+}
+
+.application-status.rejected {
+  background: #fff0f0;
+  color: #9c202b;
+}
+
+.application-message {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.application-item .button {
+  margin-top: 16px;
+}
 </style>
 </head>
 
@@ -1335,40 +1400,23 @@ document.getElementById("approved-applications").textContent =
         );
 
         applications.forEach((application) => {
-          const card = document.createElement("div");
-          card.style.cssText =
-            "padding:16px 0;border-bottom:1px solid var(--border);";
+          const card = document.createElement("article");
+card.className = "application-item";
 
-          const hostelName = document.createElement("h3");
-          hostelName.style.cssText = "margin:0 0 8px;font-size:15px;";
-          hostelName.textContent =
-            hostelNames.get(application.hostel_id) || "Hostel";
+const hostelName = document.createElement("h3");
+hostelName.className = "application-hostel-name";
 
-          const reference = document.createElement("p");
-          reference.style.cssText =
-            "margin:0 0 8px;color:var(--muted);font-size:13px;";
-          reference.textContent = `Reference: ${application.reference}`;
+const reference = document.createElement("p");
+reference.className = "application-reference";
 
-          const status = String(application.status || "pending").toLowerCase();
-          const statusLabel = document.createElement("span");
-          statusLabel.className = "status";
+const status = String(application.status || "pending").toLowerCase();
+const statusLabel = document.createElement("span");
+statusLabel.className = `status application-status ${status}`;
           statusLabel.textContent =
             status.charAt(0).toUpperCase() + status.slice(1);
 
-          if (status === "approved") {
-            statusLabel.style.background = "#e7f7ed";
-            statusLabel.style.color = "#105532";
-          } else if (status === "rejected") {
-            statusLabel.style.background = "#fff0f0";
-            statusLabel.style.color = "#9c202b";
-          } else {
-            statusLabel.style.background = "#fff5db";
-            statusLabel.style.color = "#805600";
-          }
-
-          const message = document.createElement("p");
-          message.style.cssText =
-            "margin:10px 0 0;color:var(--muted);font-size:13px;line-height:1.6;";
+         const message = document.createElement("p");
+message.className = "application-message";
 
           if (status === "approved") {
             message.textContent =
