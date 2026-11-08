@@ -845,6 +845,12 @@ select:focus-visible {
   font-size: 12px;
   overflow-wrap: anywhere;
 }
+  .application-date {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
 
 .application-status {
   display: inline-flex;
@@ -1408,6 +1414,18 @@ hostelName.className = "application-hostel-name";
 
 const reference = document.createElement("p");
 reference.className = "application-reference";
+reference.textContent = `Reference: ${application.reference}`;
+
+const submittedDate = document.createElement("p");
+submittedDate.className = "application-date";
+
+submittedDate.textContent = application.created_at
+  ? `Submitted: ${new Date(application.created_at).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    })}`
+  : "Submission date unavailable";
 
 const status = String(application.status || "pending").toLowerCase();
 const statusLabel = document.createElement("span");
@@ -1430,7 +1448,13 @@ message.className = "application-message";
           }
 
         
-          card.append(hostelName, reference, statusLabel, message);
+          card.append(
+  hostelName,
+  reference,
+  submittedDate,
+  statusLabel,
+  message
+);
 
           if (status === "approved") {
             const reserveButton = document.createElement("button");
