@@ -1955,6 +1955,15 @@ if (!data || data.length === 0) {
 console.log("Reservation restored:", data[0]);
 
         const reservation = data[0];
+        // Prevent duplicate reservations while an active reservation exists.
+document.querySelectorAll(
+  "#applications-list .application-item button"
+).forEach((button) => {
+  if (button.textContent.trim() === "Reserve Room") {
+    button.disabled = true;
+    button.textContent = "Reservation already created";
+  }
+});
         const previousStatus = lastObservedReservationStatus;
 
 lastObservedReservationStatus = reservation.reservation_status;
