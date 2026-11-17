@@ -1663,7 +1663,11 @@ applicationFilterButtons.forEach((button) => {
     applyApplicationFilter(button.dataset.applicationFilter);
   });
 });
-    function openApplicationDetails(application, hostel) {
+   
+function openApplicationDetails(application, hostel) {
+  // Remember which element opened the modal
+  const previouslyFocusedElement = document.activeElement;
+
   // Remove an existing details window, if present
   document.querySelector(".application-details-overlay")?.remove();
 
@@ -1672,8 +1676,12 @@ applicationFilterButtons.forEach((button) => {
 
   const modal = document.createElement("div");
   modal.className = "application-details-modal";
+  modal.setAttribute("role", "dialog");
+  modal.setAttribute("aria-modal", "true");
+  modal.setAttribute("aria-labelledby", "application-details-heading");
 
   const heading = document.createElement("h2");
+  heading.id = "application-details-heading";
   heading.textContent = "Application Details";
 
   const closeButton = document.createElement("button");
@@ -1713,12 +1721,44 @@ applicationFilterButtons.forEach((button) => {
 
   function closeModal() {
     overlay.remove();
-    document.removeEventListener("keydown", handleEscape);
+    document.removeEventListener("keydown", handleKeyboard);
+
+    // Return focus to the button that opened the modal
+    if (previouslyFocusedElement?.isConnected) {
+      previouslyFocusedElement.focus();
+    }
   }
 
-  function handleEscape(event) {
+  function handleKeyboard(event) {
     if (event.key === "Escape") {
       closeModal();
+      return;
+    }
+
+    // Keep keyboard focus inside the modal
+    if (event.key === "Tab") {
+      const focusableElements = modal.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (
+        !event.shiftKey &&
+        document.activeElement === lastElement
+      ) {
+        event.preventDefault();
+        firstElement.focus();
+      }
     }
   }
 
@@ -1734,7 +1774,10 @@ applicationFilterButtons.forEach((button) => {
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
 
-  document.addEventListener("keydown", handleEscape);
+  // Move keyboard focus into the modal
+  closeButton.focus();
+
+  document.addEventListener("keydown", handleKeyboard);
 }
 
     async function loadApplications(studentId) {
