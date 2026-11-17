@@ -1550,14 +1550,14 @@ message.className = "application-message";
           }
 
         
-          card.append(
+   card.append(
   hostelName,
   reference,
   submittedDate,
   statusLabel,
+  progress,
   message
 );
-
           if (status === "approved") {
             const reserveButton = document.createElement("button");
             reserveButton.type = "button";
