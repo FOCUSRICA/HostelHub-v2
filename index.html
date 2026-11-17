@@ -1124,9 +1124,45 @@ async function openDetails(hostel, isDemo) {
             "Only student accounts can submit applications.";
           return;
         }
+        
+// Count the student's active applications.
+const { count: activeCount, error: countError } = await supabase
+  .from("applications")
+  .select("id", { count: "exact", head: true })
+  .eq("student_id", user.id)
+  .in("status", ["pending", "approved"]);
 
-        area.innerHTML = `
-          <form id="hostel-application-form">
+if (countError) throw countError;
+
+if (activeCount >= 3) {
+  area.innerHTML = `
+    <div class="application-limit-notice">
+      <h3>Application limit reached</h3>
+      <p>
+        You currently have 3 active hostel applications.
+        You must receive a rejection on an existing application
+        before submitting another one.
+      </p>
+      <a href="./student-dashboard.html" class="button">
+        View my applications
+      </a>
+    </div>
+  `;
+  return;
+}
+
+const remainingSlots = 3 - activeCount;
+
+area.innerHTML = `
+  <p>
+    You have ${remainingSlots} application
+    slot(s) remaining.
+  </p>
+`;
+
+
+     area.innerHTML += `
+  <form id="hostel-application-form">
             <h3>Apply for ${escapeHTML(hostel.name)}</h3>
 
             <label for="application-full-name">Full name</label>
@@ -1292,7 +1328,17 @@ async function submitApplication({ hostel, user, fullName, phone }) {
       status: "pending"
     });
 
-  if (insertError) throw insertError;
+  if (insertError) {
+  if (
+    insertError.message?.includes("APPLICATION_LIMIT_REACHED")
+  ) {
+    throw new Error(
+      "You have reached your maximum of 3 active applications. Please wait until an existing application is rejected before applying again."
+    );
+  }
+
+  throw insertError;
+}
 }
 
 
