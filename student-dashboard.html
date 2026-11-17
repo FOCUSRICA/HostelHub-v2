@@ -959,6 +959,36 @@ select:focus-visible {
 .application-item .button {
   margin-top: 16px;
 }
+  .application-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 18px 0;
+}
+
+.application-filter {
+  min-height: 38px;
+  padding: 8px 15px;
+  font-size: 12px;
+}
+
+.application-filter.active {
+  color: #fff;
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.application-filter.active:hover {
+  background: var(--green-dark);
+  border-color: var(--green-dark);
+}
+
+@media (max-width: 480px) {
+  .application-filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 </style>
 </head>
 
@@ -1011,6 +1041,17 @@ select:focus-visible {
     <strong id="approved-applications">0</strong>
     <small>Applications approved</small>
   </div>
+  <div class="overview-card">
+  <span>Pending Applications</span>
+  <strong id="pending-applications">0</strong>
+  <small>Awaiting owner decisions</small>
+</div>
+
+<div class="overview-card">
+  <span>Rejected Applications</span>
+  <strong id="rejected-applications">0</strong>
+  <small>Applications not approved</small>
+</div>
 
   <div class="overview-card">
     <span>Booking Status</span>
@@ -1097,6 +1138,47 @@ select:focus-visible {
 <section class="card">
   <h2>My applications</h2>
   <p>Track your accommodation applications and see when an owner makes a decision.</p>
+  <div class="application-filters" aria-label="Filter applications">
+  <button
+    class="button application-filter active"
+    type="button"
+    data-application-filter="all"
+    aria-pressed="true"
+  >
+    All
+  </button>
+
+  <button
+    class="button application-filter"
+    type="button"
+    data-application-filter="pending"
+    aria-pressed="false"
+  >
+    Pending
+  </button>
+
+  <button
+    class="button application-filter"
+    type="button"
+    data-application-filter="approved"
+    aria-pressed="false"
+  >
+    Approved
+  </button>
+
+  <button
+    class="button application-filter"
+    type="button"
+    data-application-filter="rejected"
+    aria-pressed="false"
+  >
+    Rejected
+  </button>
+</div>
+
+<p id="applications-filter-empty" class="loading" hidden>
+  No applications match this filter.
+</p>
 
   <div id="applications-loading" class="loading">
     Loading your applications...
@@ -1431,12 +1513,52 @@ markAllNotificationsReadButton.addEventListener("click", async () => {
     const refreshApplicationsButton = document.getElementById(
       "refresh-applications-button"
     );
+    const applicationFilterButtons = document.querySelectorAll(
+  "[data-application-filter]"
+);
+
+const applicationsFilterEmpty = document.getElementById(
+  "applications-filter-empty"
+);
+
+function applyApplicationFilter(filter) {
+  const cards = applicationsList.querySelectorAll(".application-item");
+  let visibleCount = 0;
+
+  cards.forEach((card) => {
+    const matches =
+      filter === "all" || card.dataset.status === filter;
+
+    card.hidden = !matches;
+
+    if (matches) {
+      visibleCount += 1;
+    }
+  });
+
+  applicationsFilterEmpty.hidden =
+    cards.length === 0 || visibleCount > 0;
+
+  applicationFilterButtons.forEach((button) => {
+    const active = button.dataset.applicationFilter === filter;
+
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+applicationFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    applyApplicationFilter(button.dataset.applicationFilter);
+  });
+});
 
     async function loadApplications(studentId) {
       applicationsLoading.hidden = false;
       applicationsLoading.textContent = "Loading your applications...";
       applicationsList.replaceChildren();
       refreshApplicationsButton.disabled = true;
+      
 
       try {
         const { data: applications, error } = await supabase
@@ -1454,6 +1576,17 @@ document.getElementById("approved-applications").textContent =
   (applications || []).filter(
     (application) =>
       String(application.status || "").toLowerCase() === "approved"
+  ).length;
+        document.getElementById("pending-applications").textContent =
+  (applications || []).filter(
+    (application) =>
+      String(application.status || "").toLowerCase() === "pending"
+  ).length;
+
+document.getElementById("rejected-applications").textContent =
+  (applications || []).filter(
+    (application) =>
+      String(application.status || "").toLowerCase() === "rejected"
   ).length;
 
         if (!applications || applications.length === 0) {
@@ -1500,6 +1633,7 @@ submittedDate.textContent = application.created_at
   : "Submission date unavailable";
 
 const status = String(application.status || "pending").toLowerCase();
+          card.dataset.status = status;
 const statusLabel = document.createElement("span");
 statusLabel.className = `status application-status ${status}`;
           statusLabel.textContent =
@@ -1671,6 +1805,7 @@ window.refreshBookingPaymentButton.hidden = true;
 
           applicationsList.appendChild(card);
         });
+        applyApplicationFilter("all");
 
         applicationsLoading.hidden = true;
       } catch (error) {
