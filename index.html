@@ -497,6 +497,51 @@ button.button:hover,
 }
 
 /* ACCOMMODATION CARDS */
+   
+/* TEMPORARY ACCOMMODATION IMAGES */
+
+.hostel-card .card-visual {
+  position: relative;
+  height: 175px;
+  margin: -23px -23px 18px;
+  overflow: hidden;
+  background: #202a25;
+  border-radius: 17px 17px 0 0;
+}
+
+.hostel-card .card-visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .88;
+  transition: transform .35s ease;
+}
+
+.hostel-card:hover .card-visual img {
+  transform: scale(1.04);
+}
+
+.hostel-card .image-disclaimer {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 5px 9px;
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 7px;
+  background: rgba(10,15,12,.8);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+@media (max-width: 650px) {
+  .hostel-card .card-visual {
+    margin: -20px -20px 17px;
+    height: 185px;
+  }
+}
+ 
 
 #hostel-grid,
 .hostel-grid {
@@ -1139,10 +1184,33 @@ footer a {
         card.dataset.hostelId = String(hostel.id || "");
         card.dataset.demo = String(isDemo);
 
-        const visual = document.createElement("div");
-        visual.className = "card-visual";
-        visual.setAttribute("aria-hidden", "true");
-        visual.textContent = "🏡";
+       
+const visual = document.createElement("div");
+visual.className = "card-visual";
+
+const hostelImage = document.createElement("img");
+
+const imageUrls = {
+  shared:
+    "https://images.unsplash.com/photo-1753819994795-0d797b06705f?auto=format&fit=crop&w=900&q=70",
+  private:
+    "https://images.unsplash.com/photo-1775595224323-94a84b9be802?auto=format&fit=crop&w=900&q=70"
+};
+
+const roomTypeForImage = normalise(roomType);
+
+hostelImage.src = roomTypeForImage.includes("shared")
+  ? imageUrls.shared
+  : imageUrls.private;
+
+hostelImage.alt = "Illustrative student accommodation bedroom";
+hostelImage.loading = "lazy";
+
+const imageDisclaimer = document.createElement("span");
+imageDisclaimer.className = "image-disclaimer";
+imageDisclaimer.textContent = "Illustrative image";
+
+visual.append(hostelImage, imageDisclaimer);
 
         const content = document.createElement("div");
         content.className = "card-content";
