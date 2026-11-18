@@ -1716,7 +1716,14 @@ function openApplicationDetails(application, hostel) {
   addDetail("Hostel name", hostel?.name);
   addDetail("Location", hostel?.location);
   addDetail("Room type", hostel?.room_type);
-  addDetail("Price", hostel?.price);
+  addDetail(
+  "Price",
+  hostel?.price !== null &&
+  hostel?.price !== undefined &&
+  hostel?.price !== ""
+    ? `MK ${Number(hostel.price).toLocaleString("en-US")}`
+    : null
+);
   addDetail("Description", hostel?.description);
 
   function closeModal() {
