@@ -632,12 +632,22 @@ footer a {
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="./index.html" aria-label="HostelHub home">
-        <span class="brand-mark">H</span>
-        <span>HostelHub</span>
-      </a>
+     <a class="brand" href="./index.html" aria-label="HostelHub home">
+  <span class="brand-mark">H</span>
+  <span>HostelHub</span>
+</a>
 
-      <nav aria-label="Main navigation">
+<button
+  id="menu-toggle"
+  type="button"
+  aria-label="Open navigation menu"
+  aria-expanded="false"
+  aria-controls="main-nav"
+>
+  ☰
+</button>
+
+<nav id="main-nav" aria-label="Main navigation">
         <a href="#hostels">Find accommodation</a>
         <a href="#how-it-works">How it works</a>
         <a href="#about">About</a>
@@ -1409,6 +1419,41 @@ async function submitApplication({ hostel, user, fullName, phone }) {
     listingDialog.addEventListener("click", event => {
       if (event.target === listingDialog) closeDetails();
     });
+    
+    // MOBILE NAVIGATION
+    const menuToggle = document.getElementById("menu-toggle");
+    const mainNav = document.getElementById("main-nav");
+
+    function closeMobileMenu() {
+      mainNav.classList.remove("open");
+      menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation menu");
+      menuToggle.textContent = "☰";
+    }
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = mainNav.classList.toggle("open");
+
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation menu" : "Open navigation menu"
+      );
+      menuToggle.textContent = isOpen ? "×" : "☰";
+    });
+
+    // Close the menu after selecting a navigation link
+    mainNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMobileMenu);
+    });
+
+    // Close the menu when Escape is pressed
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMobileMenu();
+      }
+    });
+
 
     // A registration link can use #register. The auth page must
     // support that fragment to automatically select its registration tab.
