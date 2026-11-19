@@ -888,19 +888,190 @@ button.button:hover,
 }
 
 /* LISTING DETAILS */
+/* HOSTEL DETAILS EXPERIENCE */
 
+.details-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.details-photo {
+  position: relative;
+  min-height: 350px;
+  overflow: hidden;
+  border-radius: 17px;
+  background: #202a25;
+}
+
+.details-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 350px;
+  display: block;
+  object-fit: cover;
+}
+
+.details-photo span {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  background: rgba(8, 15, 11, .85);
+  color: white;
+  font-size: 11px;
+}
+
+.details-information {
+  min-width: 0;
+}
+
+.details-label {
+  color: var(--green-light);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.details-heading h2 {
+  margin: 10px 0;
+  color: white;
+  font-size: 27px;
+  line-height: 1.25;
+}
+
+.details-location {
+  color: #c2cec6;
+  font-size: 14px;
+}
+
+.details-price {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 20px 0;
+  padding: 17px;
+  border: 1px solid rgba(53, 184, 121, .25);
+  border-radius: 13px;
+  background: rgba(53, 184, 121, .08);
+}
+
+.details-price span,
+.details-price small {
+  color: #b9c5bd;
+  font-size: 12px;
+}
+
+.details-price strong {
+  color: var(--green-light);
+  font-size: 25px;
+}
+
+.details-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.details-fact {
+  padding: 13px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: rgba(255,255,255,.035);
+}
+
+.details-fact span,
+.details-fact strong {
+  display: block;
+}
+
+.details-fact span {
+  margin-bottom: 7px;
+  color: #a9b5ad;
+  font-size: 11px;
+}
+
+.details-fact strong {
+  color: white;
+  font-size: 13px;
+}
+
+.details-description {
+  margin-top: 22px;
+}
+
+.details-description h3 {
+  margin-bottom: 8px;
+  color: white;
+  font-size: 16px;
+}
+
+.details-description p {
+  margin: 0;
+  color: #b9c5bd;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.details-availability {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 13px;
+  border-radius: 11px;
+  background: rgba(255,255,255,.045);
+}
+
+.details-availability p {
+  margin: 0;
+  font-size: 12px;
+}
+
+.availability-dot {
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  margin-top: 5px;
+  border-radius: 50%;
+  background: var(--green-light);
+}
+
+.details-apply-button {
+  width: 100%;
+  margin-top: 18px;
+}
+
+@media (max-width: 650px) {
+  .details-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .details-photo,
+  .details-photo img {
+    min-height: 230px;
+    max-height: 260px;
+  }
+
+  .details-heading h2 {
+    font-size: 23px;
+  }
+}
 dialog,
 #listing-dialog {
-  width: min(560px, calc(100% - 28px));
-  max-height: 85vh;
+  width: min(850px, calc(100% - 28px));
+  max-height: 90vh;
   overflow-y: auto;
-  padding: 28px;
-  border: 1px solid rgba(255, 255, 255, .17);
-  border-top: 2px solid var(--green-light);
-  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-top: 3px solid var(--green-light);
+  border-radius: 22px;
   background: #171b1e;
   color: var(--ink);
-  box-shadow: 0 30px 100px rgba(0, 0, 0, .55);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .6);
 }
 
 dialog::backdrop,
@@ -1544,6 +1715,17 @@ async function openDetails(hostel, isDemo) {
   );
   const price = escapeHTML(formatPrice(hostel.price));
 
+  const imageUrls = {
+    shared:
+      "https://images.unsplash.com/photo-1753819994795-0d797b06705f?auto=format&fit=crop&w=1200&q=85",
+    private:
+      "https://images.unsplash.com/photo-1775595224323-94a84b9be802?auto=format&fit=crop&w=1200&q=85"
+  };
+
+  const roomImage = normalise(hostel.room_type).includes("shared")
+    ? imageUrls.shared
+    : imageUrls.private;
+
   const canApply =
     !isDemo &&
     hostel.is_active === true &&
@@ -1557,18 +1739,61 @@ async function openDetails(hostel, isDemo) {
       : "Applications are closed or no rooms are currently available.";
 
   dialogBody.innerHTML = `
-    <p><strong>Location:</strong> ${location}</p>
-    <p><strong>Room type:</strong> ${type}</p>
-    <p><strong>Rent:</strong> ${price} per month</p>
-    <p><strong>Description:</strong> ${description}</p>
-    <p>${escapeHTML(availability)}</p>
+    <div class="details-layout">
 
-    ${canApply ? `
-      <button class="button" id="start-application" type="button">
-        Apply Now
-      </button>
-      <div id="application-area" aria-live="polite"></div>
-    ` : ""}
+      <div class="details-photo">
+        <img
+          src="${roomImage}"
+          alt="Illustrative ${type} accommodation"
+        >
+        <span>Illustrative image — not a verified hostel photograph</span>
+      </div>
+
+      <div class="details-information">
+
+        <div class="details-heading">
+          <span class="details-label">ACCOMMODATION DETAILS</span>
+          <h2>${escapeHTML(hostel.name || "Untitled hostel")}</h2>
+          <p class="details-location">📍 ${location}</p>
+        </div>
+
+        <div class="details-price">
+          <span>Monthly accommodation fee</span>
+          <strong>${price}</strong>
+          <small>Per month</small>
+        </div>
+
+        <div class="details-facts">
+          <div class="details-fact">
+            <span>Room type</span>
+            <strong>${type}</strong>
+          </div>
+
+          <div class="details-fact">
+            <span>Available rooms</span>
+            <strong>${isDemo ? "Not applicable" : Number(hostel.available_rooms || 0)}</strong>
+          </div>
+        </div>
+
+        <div class="details-description">
+          <h3>About this hostel</h3>
+          <p>${description}</p>
+        </div>
+
+        <div class="details-availability">
+          <span class="availability-dot"></span>
+          <p>${escapeHTML(availability)}</p>
+        </div>
+
+        ${canApply ? `
+          <button class="button details-apply-button" id="start-application" type="button">
+            Apply for this accommodation
+          </button>
+          <div id="application-area" aria-live="polite"></div>
+        ` : ""}
+
+      </div>
+    </div>
   `;
 
   dialogAccountLink.href = "./auth.html";
