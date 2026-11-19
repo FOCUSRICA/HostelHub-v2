@@ -698,8 +698,8 @@ button.button:hover,
 
 .hostel-card .card-visual {
   position: relative;
-  height: 165px;
-  margin: -23px -23px 18px;
+  height: 185px;
+  margin: -18px -18px 18px;
   overflow: hidden;
   background: #202a25;
   border-radius: 17px 17px 0 0;
@@ -792,6 +792,62 @@ button.button:hover,
 .hostel-card button,
 .hostel-card .button {
   margin-top: 12px;
+}
+    /* HOSTEL CARD CONTENT STYLING */
+
+.hostel-card .card-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hostel-card h3 {
+  margin: 5px 0 12px;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -.4px;
+}
+
+.hostel-card .location {
+  margin: 0 0 10px;
+  color: #c4d0c8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.hostel-card .room-type {
+  display: inline-flex;
+  align-self: flex-start;
+  margin: 5px 0 12px;
+  padding: 6px 10px;
+  border: 1px solid rgba(53, 184, 121, .25);
+  border-radius: 20px;
+  background: rgba(53, 184, 121, .09);
+  color: #79dfa9;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.hostel-card .price {
+  display: block;
+  margin-top: 12px;
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.hostel-card .card-bottom {
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.hostel-card .details-button,
+.hostel-card .button {
+  width: 100%;
+  justify-content: center;
+  border-radius: 10px;
 }
 
 /* EMPTY AND STATUS MESSAGES */
