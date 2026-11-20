@@ -1927,10 +1927,40 @@ async function reviewExternalPayment(payment, decision, button) {
         await loadApplications();
       }
     }
+    async function loadExistingHostelPhotos(hostelId) {
+  photoPreview.replaceChildren();
+
+  const { data: photos, error } = await supabase
+    .from("hostel_photos")
+    .select("storage_path, display_order")
+    .eq("hostel_id", hostelId)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("Could not load existing hostel photos:", error);
+    showNotice("Hostel details loaded, but existing photos could not be displayed.", "error");
+    return;
+  }
+
+  for (const photo of photos || []) {
+    const { data } = supabase.storage
+      .from("hostel-photos")
+      .getPublicUrl(photo.storage_path);
+
+    const img = document.createElement("img");
+    img.src = data.publicUrl;
+    img.alt = "Existing hostel photograph";
+    img.loading = "lazy";
+
+    photoPreview.appendChild(img);
+  }
+}
 
     function beginEdit(hostel) {
       clearNotice();
       editingHostelId = hostel.id;
+      photoInput.value = "";
+loadExistingHostelPhotos(hostel.id);
 
       field("hostel-name").value = hostel.name || "";
       field("hostel-location").value = hostel.location || "";
@@ -1956,6 +1986,7 @@ async function reviewExternalPayment(payment, decision, button) {
 
     function resetHostelForm() {
       hostelForm.reset();
+      photoPreview.replaceChildren();
       editingHostelId = null;
       field("form-title").textContent = "Add a hostel";
       saveButton.textContent = "Save hostel";
@@ -2000,7 +2031,7 @@ async function reviewExternalPayment(payment, decision, button) {
             "No listing was updated. Check that this hostel belongs to your account and that your owner permissions allow updates."
           );
         }
-        savedHostelId = data.id;
+        
         showNotice("Hostel listing updated successfully.");
         await loadHostels();
       } catch (error) {
