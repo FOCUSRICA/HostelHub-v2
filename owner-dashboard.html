@@ -809,6 +809,28 @@ html {
 #booking-payments-panel {
   scroll-margin-top: 100px;
 }
+    .photo-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.photo-preview-grid img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #dce8df;
+}
+
+#hostel-photos {
+  width: 100%;
+  padding: 12px;
+  border: 1px dashed #a8cbb5;
+  border-radius: 10px;
+  background: #f7fbf8;
+}
   </style>
 </head>
 
@@ -941,6 +963,20 @@ html {
               <label for="hostel-description">Description</label>
               <textarea id="hostel-description" name="description" maxlength="3000" placeholder="Describe the accommodation, facilities, and nearby services."></textarea>
             </div>
+            <div class="field full">
+  <label for="hostel-photos">Hostel photographs</label>
+  <input
+    id="hostel-photos"
+    name="photos"
+    type="file"
+    accept="image/jpeg,image/png,image/webp"
+    multiple
+  >
+  <small>
+    Select up to 8 photos. JPEG, PNG or WebP format, maximum 5 MB per photo.
+  </small>
+  <div id="hostel-photo-preview" class="photo-preview-grid"></div>
+</div>
 
             <div class="field full">
               <div class="check-row">
@@ -1116,6 +1152,47 @@ const refreshApplicationsButton = document.getElementById(
     let isLoadingListings = false;
 
     const field = (id) => document.getElementById(id);
+    const photoInput = document.getElementById("hostel-photos");
+const photoPreview = document.getElementById("hostel-photo-preview");
+
+photoInput.addEventListener("change", () => {
+  photoPreview.innerHTML = "";
+
+  const files = Array.from(photoInput.files);
+
+  if (files.length > 8) {
+    showNotice("Please select no more than 8 photos.", "error");
+    photoInput.value = "";
+    return;
+  }
+
+  for (const file of files) {
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      showNotice("Only JPEG, PNG and WebP photos are allowed.", "error");
+      photoInput.value = "";
+      photoPreview.innerHTML = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      showNotice("Each photo must be 5 MB or smaller.", "error");
+      photoInput.value = "";
+      photoPreview.innerHTML = "";
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      const img = document.createElement("img");
+      img.src = event.target.result;
+      img.alt = "Selected hostel photograph preview";
+      photoPreview.appendChild(img);
+    };
+
+    reader.readAsDataURL(file);
+  }
+});
 
     function showNotice(message, type = "info") {
       notice.textContent = message;
