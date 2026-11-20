@@ -953,6 +953,21 @@ button.button:hover,
 
 /* LISTING DETAILS */
 /* HOSTEL DETAILS EXPERIENCE */
+    .hostel-details-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin: 0 0 20px;
+}
+
+.hostel-details-gallery img {
+  display: block;
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
 
 .details-layout {
   display: grid;
@@ -1702,17 +1717,25 @@ const imageUrls = {
 };
 
 const roomTypeForImage = normalise(roomType);
+const hasRealPhotos = Array.isArray(hostel.photos) && hostel.photos.length > 0;
 
-hostelImage.src = roomTypeForImage.includes("shared")
-  ? imageUrls.shared
-  : imageUrls.private;
+hostelImage.src = hasRealPhotos
+  ? hostel.photos[0]
+  : roomTypeForImage.includes("shared")
+    ? imageUrls.shared
+    : imageUrls.private;
 
-hostelImage.alt = "Illustrative student accommodation bedroom";
+hostelImage.alt = hasRealPhotos
+  ? `${name} hostel photograph`
+  : "Illustrative student accommodation bedroom";
+
 hostelImage.loading = "lazy";
 
 const imageDisclaimer = document.createElement("span");
 imageDisclaimer.className = "image-disclaimer";
-imageDisclaimer.textContent = "Illustrative image";
+imageDisclaimer.textContent = hasRealPhotos
+  ? "Hostel photograph"
+  : "Illustrative image";
 
 visual.append(hostelImage, imageDisclaimer);
 
@@ -1778,6 +1801,19 @@ async function openDetails(hostel, isDemo) {
     hostel.description || "No description provided."
   );
   const price = escapeHTML(formatPrice(hostel.price));
+  const photoGallery = Array.isArray(hostel.photos) && hostel.photos.length > 0
+  ? `
+    <div class="hostel-details-gallery">
+      ${hostel.photos.map((photo, index) => `
+        <img
+          src="${escapeHTML(photo)}"
+          alt="${escapeHTML(hostel.name)} photograph ${index + 1}"
+          loading="lazy"
+        >
+      `).join("")}
+    </div>
+  `
+  : "";
 
   const imageUrls = {
     shared:
@@ -1804,7 +1840,7 @@ async function openDetails(hostel, isDemo) {
 
   dialogBody.innerHTML = `
     <div class="details-layout">
-
+        ${photoGallery}
       <div class="details-photo">
         <img
           src="${roomImage}"
@@ -2130,6 +2166,32 @@ async function submitApplication({ hostel, user, fullName, phone }) {
         if (error) throw error;
 
         databaseHostels = data || [];
+        if (databaseHostels.length > 0) {
+  const hostelIds = databaseHostels.map(hostel => hostel.id);
+
+  const { data: photos, error: photoError } = await supabase
+    .from("hostel_photos")
+    .select("hostel_id, storage_path, display_order")
+    .in("hostel_id", hostelIds)
+    .order("display_order", { ascending: true });
+
+  if (photoError) {
+    console.error("Could not load hostel photos:", photoError);
+  } else {
+    databaseHostels = databaseHostels.map(hostel => ({
+      ...hostel,
+      photos: (photos || [])
+        .filter(photo => photo.hostel_id === hostel.id)
+        .map(photo => {
+          const { data } = supabase.storage
+            .from("hostel-photos")
+            .getPublicUrl(photo.storage_path);
+
+          return data.publicUrl;
+        })
+    }));
+  }
+}
 
         if (databaseHostels.length > 0) {
           usingDemoListings = false;
