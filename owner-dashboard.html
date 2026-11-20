@@ -1199,6 +1199,50 @@ photoInput.addEventListener("change", () => {
       notice.className = `notice show ${type}`;
       notice.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
+    async function uploadHostelPhotos(hostelId, files) {
+  const uploadedPhotos = [];
+
+  for (const [index, file] of Array.from(files).entries()) {
+    const extension = file.name.split(".").pop().toLowerCase();
+    const safeExtension = ["jpg", "jpeg", "png", "webp"].includes(extension)
+      ? extension
+      : "jpg";
+
+    const storagePath =
+      `${currentUser.id}/${hostelId}/${crypto.randomUUID()}.${safeExtension}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("hostel-photos")
+      .upload(storagePath, file, {
+        cacheControl: "3600",
+        upsert: false,
+        contentType: file.type
+      });
+
+    if (uploadError) throw uploadError;
+
+    const { error: insertError } = await supabase
+      .from("hostel_photos")
+      .insert({
+        hostel_id: hostelId,
+        owner_id: currentUser.id,
+        storage_path: storagePath,
+        display_order: index
+      });
+
+    if (insertError) {
+      await supabase.storage
+        .from("hostel-photos")
+        .remove([storagePath]);
+
+      throw insertError;
+    }
+
+    uploadedPhotos.push(storagePath);
+  }
+
+  return uploadedPhotos;
+}
 
     function clearNotice() {
       notice.textContent = "";
@@ -1956,7 +2000,7 @@ async function reviewExternalPayment(payment, decision, button) {
             "No listing was updated. Check that this hostel belongs to your account and that your owner permissions allow updates."
           );
         }
-
+        savedHostelId = data.id;
         showNotice("Hostel listing updated successfully.");
         await loadHostels();
       } catch (error) {
@@ -2027,6 +2071,7 @@ async function reviewExternalPayment(payment, decision, button) {
         is_active: isActive,
         accepting_applications: acceptingApplications && isActive
       };
+      const selectedPhotos = Array.from(photoInput.files);
 
       isSaving = true;
       saveButton.disabled = true;
@@ -2034,6 +2079,7 @@ async function reviewExternalPayment(payment, decision, button) {
       saveButton.textContent = editingHostelId
         ? "Saving changes..."
         : "Adding hostel...";
+      let savedHostelId = editingHostelId;
 
       try {
         if (editingHostelId) {
@@ -2066,9 +2112,26 @@ async function reviewExternalPayment(payment, decision, button) {
 
           if (error) throw error;
           if (!data) throw new Error("The new hostel could not be confirmed.");
+          savedHostelId = data.id;
 
           showNotice("Your hostel has been added successfully.");
         }
+        if (selectedPhotos.length > 0) {
+  try {
+    await uploadHostelPhotos(savedHostelId, selectedPhotos);
+
+    showNotice(
+      `Hostel saved successfully with ${selectedPhotos.length} photograph(s).`
+    );
+  } catch (photoError) {
+    showNotice(
+      `Hostel was saved, but photo upload failed: ${
+        photoError?.message || "Unknown error"
+      }. You can edit the hostel and try again.`,
+      "error"
+    );
+  }
+}
 
         resetHostelForm();
         await loadHostels();
