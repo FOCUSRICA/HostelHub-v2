@@ -2073,6 +2073,41 @@ lightboxControls.appendChild(lightboxNext);
 lightbox.appendChild(lightboxControls);
 
   lightbox.appendChild(enlargedImage);
+  let touchStartX = 0;
+let touchStartY = 0;
+
+lightbox.addEventListener("touchstart", (event) => {
+  if (event.touches.length !== 1) return;
+
+  touchStartX = event.touches[0].clientX;
+  touchStartY = event.touches[0].clientY;
+}, { passive: true });
+
+lightbox.addEventListener("touchend", (event) => {
+  if (event.changedTouches.length !== 1) return;
+
+  const touchEndX = event.changedTouches[0].clientX;
+  const touchEndY = event.changedTouches[0].clientY;
+
+  const differenceX = touchEndX - touchStartX;
+  const differenceY = touchEndY - touchStartY;
+
+  // Ignore vertical scrolling and small movements.
+  if (
+    Math.abs(differenceX) < 50 ||
+    Math.abs(differenceX) < Math.abs(differenceY)
+  ) return;
+
+  if (differenceX < 0) {
+    // Swipe left: next photograph.
+    showGalleryPhoto(currentPhotoIndex + 1);
+  } else {
+    // Swipe right: previous photograph.
+    showGalleryPhoto(currentPhotoIndex - 1);
+  }
+
+  enlargedImage.src = hostelPhotos[currentPhotoIndex];
+}, { passive: true });
   const leftTapZone = document.createElement("div");
 const rightTapZone = document.createElement("div");
 
