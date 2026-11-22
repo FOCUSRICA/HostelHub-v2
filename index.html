@@ -2100,6 +2100,35 @@ const handleGalleryKeys = (event) => {
 };
 
 document.addEventListener("keydown", handleGalleryKeys);
+  const closeButton = document.createElement("button");
+
+closeButton.type = "button";
+closeButton.textContent = "×";
+closeButton.setAttribute("aria-label", "Close enlarged photograph");
+
+closeButton.style.cssText = `
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #35b879;
+  border-radius: 50%;
+  background: #197647;
+  color: white;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+closeButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  lightbox.remove();
+  document.removeEventListener("keydown", handleGalleryKeys);
+});
+
+lightbox.appendChild(closeButton);
 
   document.addEventListener("keydown", closeOnEscape);
 });
