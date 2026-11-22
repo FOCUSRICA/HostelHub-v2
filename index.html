@@ -953,11 +953,63 @@ button.button:hover,
 
 /* LISTING DETAILS */
 /* HOSTEL DETAILS EXPERIENCE */
-    .hostel-details-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 10px;
-  margin: 0 0 20px;
+   .hostel-details-gallery {
+  width: 100%;
+  margin: 0 0 22px;
+  padding: 12px;
+  border: 1px solid rgba(53, 184, 121, .25);
+  border-radius: 16px;
+  background: rgba(18, 25, 21, .8);
+}
+
+.hostel-details-gallery img {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  border-radius: 11px;
+  background: #17221b;
+}
+
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 13px;
+}
+
+.gallery-controls button {
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid #35b879;
+  border-radius: 9px;
+  background: #197647;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.gallery-controls button:hover {
+  background: #105532;
+}
+
+#gallery-counter {
+  color: #d5e5da;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .hostel-details-gallery img {
+    height: 240px;
+  }
+
+  .gallery-controls button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
 }
 
 .hostel-details-gallery img {
@@ -1801,20 +1853,33 @@ async function openDetails(hostel, isDemo) {
     hostel.description || "No description provided."
   );
   const price = escapeHTML(formatPrice(hostel.price));
-  const photoGallery = Array.isArray(hostel.photos) && hostel.photos.length > 0
+const hostelPhotos = Array.isArray(hostel.photos)
+  ? hostel.photos
+  : [];
+
+const photoGallery = hostelPhotos.length > 0
   ? `
     <div class="hostel-details-gallery">
-      ${hostel.photos.map((photo, index) => `
-        <img
-          src="${escapeHTML(photo)}"
-          alt="${escapeHTML(hostel.name)} photograph ${index + 1}"
-          loading="lazy"
-        >
-      `).join("")}
+      <img
+        id="hostel-gallery-image"
+        src="${escapeHTML(hostelPhotos[0])}"
+        alt="${escapeHTML(hostel.name)} photograph 1"
+      >
+
+      <div class="gallery-controls">
+        <button type="button" id="gallery-previous" aria-label="Previous photograph">
+          &#10094; Previous
+        </button>
+
+        <span id="gallery-counter">1 / ${hostelPhotos.length}</span>
+
+        <button type="button" id="gallery-next" aria-label="Next photograph">
+          Next &#10095;
+        </button>
+      </div>
     </div>
   `
   : "";
-
   const imageUrls = {
     shared:
       "https://images.unsplash.com/photo-1753819994795-0d797b06705f?auto=format&fit=crop&w=1200&q=85",
@@ -1896,6 +1961,34 @@ async function openDetails(hostel, isDemo) {
       </div>
     </div>
   `;
+  if (hostelPhotos.length > 0) {
+  let currentPhotoIndex = 0;
+
+  const galleryImage = document.getElementById("hostel-gallery-image");
+  const galleryCounter = document.getElementById("gallery-counter");
+  const previousButton = document.getElementById("gallery-previous");
+  const nextButton = document.getElementById("gallery-next");
+
+  function showGalleryPhoto(index) {
+    currentPhotoIndex =
+      (index + hostelPhotos.length) % hostelPhotos.length;
+
+    galleryImage.src = hostelPhotos[currentPhotoIndex];
+    galleryImage.alt =
+      `${hostel.name} photograph ${currentPhotoIndex + 1}`;
+
+    galleryCounter.textContent =
+      `${currentPhotoIndex + 1} / ${hostelPhotos.length}`;
+  }
+
+  previousButton.addEventListener("click", () => {
+    showGalleryPhoto(currentPhotoIndex - 1);
+  });
+
+  nextButton.addEventListener("click", () => {
+    showGalleryPhoto(currentPhotoIndex + 1);
+  });
+}
 
   dialogAccountLink.href = "./auth.html";
   dialogAccountLink.textContent = "Sign in";
