@@ -831,6 +831,130 @@ html {
   border-radius: 10px;
   background: #f7fbf8;
 }
+   
+/* =====================================
+   HOSTEL FACILITIES FORM — PREMIUM UI
+===================================== */
+
+.facility-section {
+  padding: 20px;
+  border: 1px solid #e0ebe3;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #ffffff, #f8fbf9);
+}
+
+.facility-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 7px;
+  color: var(--green-dark);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.facility-heading .facility-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #e5f5e9;
+  font-size: 17px;
+}
+
+.facility-description {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.facility-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.facility-option {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 11px 12px;
+  border: 1px solid #dfe9e2;
+  border-radius: 11px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.facility-option:hover {
+  border-color: #8fc5a2;
+  background: #f5fbf6;
+  transform: translateY(-1px);
+}
+
+.facility-option:has(input:checked) {
+  border-color: var(--green);
+  background: #eaf7ee;
+  color: var(--green-dark);
+  box-shadow: 0 0 0 2px rgba(25,118,71,.07);
+}
+
+.facility-option input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  flex-shrink: 0;
+  accent-color: var(--green);
+}
+
+.facility-field {
+  padding: 17px;
+  border: 1px solid #e2ebe4;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.facility-field > label {
+  color: var(--green-dark);
+  font-weight: 800;
+}
+
+.facility-field select,
+.facility-field textarea {
+  margin-top: 5px;
+}
+
+.facility-field textarea {
+  min-height: 95px;
+}
+
+.facility-section:focus-within {
+  border-color: #b6d9c1;
+}
+
+@media (max-width: 700px) {
+  .facility-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .facility-section {
+    padding: 15px;
+  }
+
+  .facility-options {
+    grid-template-columns: 1fr;
+  }
+}
+ 
   </style>
 </head>
 
