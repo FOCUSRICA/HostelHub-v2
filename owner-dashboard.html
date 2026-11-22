@@ -1223,6 +1223,7 @@ photoInput.addEventListener("change", () => {
 
     const { error: insertError } = await supabase
       .from("hostel_photos")
+      console.log("PHOTO METADATA INSERT SUCCEEDED:", path);
       .insert({
         hostel_id: hostelId,
         owner_id: currentUser.id,
