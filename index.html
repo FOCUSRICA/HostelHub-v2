@@ -2073,6 +2073,12 @@ lightboxControls.appendChild(lightboxNext);
 lightbox.appendChild(lightboxControls);
 
   lightbox.appendChild(enlargedImage);
+  lightbox.style.zIndex = "99999";
+enlargedImage.style.position = "relative";
+enlargedImage.style.zIndex = "10";
+enlargedImage.style.display = "block";
+enlargedImage.style.opacity = "1";
+enlargedImage.style.visibility = "visible";
   let touchStartX = 0;
 let touchStartY = 0;
 
