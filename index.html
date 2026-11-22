@@ -1840,14 +1840,15 @@ async function openDetails(hostel, isDemo) {
 
   dialogBody.innerHTML = `
     <div class="details-layout">
-        ${photoGallery}
-      <div class="details-photo">
-        <img
-          src="${roomImage}"
-          alt="Illustrative ${type} accommodation"
-        >
-        <span>Illustrative image — not a verified hostel photograph</span>
-      </div>
+      ${photoGallery || `
+  <div class="details-photo">
+    <img
+      src="${roomImage}"
+      alt="Illustrative ${type} accommodation"
+    >
+    <span>Illustrative image — not a verified hostel photograph</span>
+  </div>
+`}
 
       <div class="details-information">
 
