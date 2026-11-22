@@ -2073,6 +2073,46 @@ lightboxControls.appendChild(lightboxNext);
 lightbox.appendChild(lightboxControls);
 
   lightbox.appendChild(enlargedImage);
+  const leftTapZone = document.createElement("div");
+const rightTapZone = document.createElement("div");
+
+leftTapZone.setAttribute("aria-label", "Previous photograph");
+rightTapZone.setAttribute("aria-label", "Next photograph");
+
+const tapZoneStyle = `
+  position: absolute;
+  top: 70px;
+  bottom: 90px;
+  width: 18%;
+  z-index: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+`;
+
+leftTapZone.style.cssText = `
+  ${tapZoneStyle}
+  left: 0;
+`;
+
+rightTapZone.style.cssText = `
+  ${tapZoneStyle}
+  right: 0;
+`;
+
+leftTapZone.addEventListener("click", (event) => {
+  event.stopPropagation();
+  showGalleryPhoto(currentPhotoIndex - 1);
+  enlargedImage.src = hostelPhotos[currentPhotoIndex];
+});
+
+rightTapZone.addEventListener("click", (event) => {
+  event.stopPropagation();
+  showGalleryPhoto(currentPhotoIndex + 1);
+  enlargedImage.src = hostelPhotos[currentPhotoIndex];
+});
+
+lightbox.appendChild(leftTapZone);
+lightbox.appendChild(rightTapZone);
   document.body.appendChild(lightbox);
 
 lightbox.addEventListener("click", (event) => {
