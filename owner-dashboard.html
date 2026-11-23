@@ -2435,6 +2435,8 @@ await loadPendingPayments();
         signoutButton.textContent = "Sign out";
       }
     });
+    document.getElementById("loading").textContent =
+  "JavaScript reached the dashboard initialization.";
 
     loadDashboard();
   </script>
