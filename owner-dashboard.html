@@ -2360,7 +2360,11 @@ if (!user) {
   return;
 }
 
-        const profile = await getMyProfile();
+        console.log("[OWNER DEBUG] Starting profile verification");
+
+const profile = await getMyProfile();
+
+console.log("[OWNER DEBUG] Profile verification completed:", profile);
 
         if (!profile) {
           loading.hidden = true;
