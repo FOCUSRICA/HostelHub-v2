@@ -1518,12 +1518,13 @@ photoInput.addEventListener("change", () => {
       refreshButton.disabled = true;
 
       try {
-        const { data, error } = await supabase
-          .from("hostels")
-          .select(
-          "id, owner_id, name, location, description, room_type, price, is_active, total_rooms, available_rooms, accepting_applications, created_at"
-          .eq("owner_id", currentUser.id)
-          .order("created_at", { ascending: false });
+const { data, error } = await supabase
+  .from("hostels")
+  .select(
+    "id, owner_id, name, location, description, room_type, price, is_active, total_rooms, available_rooms, accepting_applications, created_at"
+  )
+  .eq("owner_id", currentUser.id)
+  .order("created_at", { ascending: false });
 
         if (error) throw error;
 
