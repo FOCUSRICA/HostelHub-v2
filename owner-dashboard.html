@@ -2360,13 +2360,6 @@ if (!user) {
   return;
 }
 
-        if (error) throw error;
-
-        if (!user) {
-          window.location.replace("./auth.html");
-          return;
-        }
-
         const profile = await getMyProfile();
 
         if (!profile) {
