@@ -1087,83 +1087,7 @@ html {
               <label for="hostel-description">Description</label>
               <textarea id="hostel-description" name="description" maxlength="3000" placeholder="Describe the accommodation, facilities, and nearby services."></textarea>
             </div>
-            
-<!-- ROOM AMENITIES -->
-<div class="field full">
-  <label>Room amenities</label>
-  <small>Select the facilities actually provided in the room.</small>
-  <div class="form-grid">
-    <label><input type="checkbox" name="room_amenities" value="Bed"> Bed</label>
-    <label><input type="checkbox" name="room_amenities" value="Mattress"> Mattress</label>
-    <label><input type="checkbox" name="room_amenities" value="Wardrobe"> Wardrobe</label>
-    <label><input type="checkbox" name="room_amenities" value="Study desk"> Study desk</label>
-    <label><input type="checkbox" name="room_amenities" value="Chair"> Chair</label>
-    <label><input type="checkbox" name="room_amenities" value="Wi-Fi"> Wi-Fi</label>
-  </div>
-</div>
 
-<!-- BATHROOM -->
-<div class="field">
-  <label for="hostel-bathroom-type">Bathroom arrangement</label>
-  <select id="hostel-bathroom-type">
-    <option value="">Select arrangement</option>
-    <option value="Private">Private bathroom</option>
-    <option value="Shared">Shared bathroom</option>
-    <option value="No bathroom">No bathroom provided</option>
-  </select>
-</div>
-
-<div class="field">
-  <label>Bathroom facilities</label>
-  <label><input type="checkbox" name="bathroom_facilities" value="Shower"> Shower</label>
-  <label><input type="checkbox" name="bathroom_facilities" value="Toilet"> Toilet</label>
-  <label><input type="checkbox" name="bathroom_facilities" value="Sink"> Sink</label>
-</div>
-
-<!-- UTILITIES -->
-<div class="field">
-  <label for="hostel-water">Water availability</label>
-  <select id="hostel-water">
-    <option value="">Select availability</option>
-    <option value="24-hour water">24-hour water</option>
-    <option value="Scheduled water supply">Scheduled supply</option>
-    <option value="Limited water supply">Limited supply</option>
-    <option value="No reliable water supply">No reliable supply</option>
-  </select>
-</div>
-
-<div class="field">
-  <label for="hostel-electricity">Electricity availability</label>
-  <select id="hostel-electricity">
-    <option value="">Select availability</option>
-    <option value="Available">Available</option>
-    <option value="Limited">Limited</option>
-    <option value="Not available">Not available</option>
-  </select>
-</div>
-
-<!-- SECURITY -->
-<div class="field full">
-  <label>Security features</label>
-  <label><input type="checkbox" name="security_features" value="Fenced property"> Fenced property</label>
-  <label><input type="checkbox" name="security_features" value="Security guard"> Security guard</label>
-  <label><input type="checkbox" name="security_features" value="CCTV"> CCTV</label>
-  <label><input type="checkbox" name="security_features" value="Secure gate"> Secure gate</label>
-</div>
-
-<!-- NEARBY SERVICES -->
-<div class="field full">
-  <label for="hostel-nearby">Nearby services and facilities</label>
-  <textarea id="hostel-nearby" maxlength="1000"
-    placeholder="e.g. Shops, public transport, university, hospital..."></textarea>
-</div>
-
-<!-- ADDITIONAL CHARGES -->
-<div class="field full">
-  <label for="hostel-extra-charges">Additional charges</label>
-  <textarea id="hostel-extra-charges" maxlength="1000"
-    placeholder="e.g. Electricity, water, Wi-Fi or maintenance charges. Enter None if there are no extra charges."></textarea>
-</div>
 
             <div class="field full">
   <label for="hostel-photos">Hostel photographs</label>
@@ -1354,18 +1278,7 @@ const refreshApplicationsButton = document.getElementById(
     let isLoadingListings = false;
 
     const field = (id) => document.getElementById(id);
-    function getCheckedValues(name) {
-  return Array.from(
-    hostelForm.querySelectorAll(`input[name="${name}"]:checked`)
-  ).map(input => input.value);
-}
-    function setCheckedValues(name, values = []) {
-  const selected = new Set(Array.isArray(values) ? values : []);
-
-  hostelForm.querySelectorAll(`input[name="${name}"]`).forEach(input => {
-    input.checked = selected.has(input.value);
-  });
-}
+   
     const photoInput = document.getElementById("hostel-photos");
 const photoPreview = document.getElementById("hostel-photo-preview");
 
@@ -1607,8 +1520,7 @@ photoInput.addEventListener("change", () => {
         const { data, error } = await supabase
           .from("hostels")
           .select(
-            "id, owner_id, name, location, description, room_type, price, is_active, total_rooms, available_rooms, accepting_applications, room_amenities, bathroom_type, bathroom_facilities, water_availability, electricity_availability, security_features, nearby_services, additional_charges, created_at"
-          )
+          "id, owner_id, name, location, description, room_type, price, is_active, total_rooms, available_rooms, accepting_applications, created_at"
           .eq("owner_id", currentUser.id)
           .order("created_at", { ascending: false });
 
@@ -2183,14 +2095,6 @@ loadExistingHostelPhotos(hostel.id);
       field("hostel-total-rooms").value = hostel.total_rooms ?? 0;
       field("hostel-available-rooms").value = hostel.available_rooms ?? 0;
       field("hostel-description").value = hostel.description || "";
-      setCheckedValues("room_amenities", hostel.room_amenities);
-field("hostel-bathroom-type").value = hostel.bathroom_type || "";
-setCheckedValues("bathroom_facilities", hostel.bathroom_facilities);
-field("hostel-water").value = hostel.water_availability || "";
-field("hostel-electricity").value = hostel.electricity_availability || "";
-setCheckedValues("security_features", hostel.security_features);
-field("hostel-nearby").value = hostel.nearby_services || "";
-field("hostel-extra-charges").value = hostel.additional_charges || "";
       field("hostel-active").checked = Boolean(hostel.is_active);
       field("hostel-accepting").checked =
         Boolean(hostel.accepting_applications);
@@ -2321,14 +2225,6 @@ const payload = {
   total_rooms: totalRooms,
   available_rooms: availableRooms,
   description,
-  room_amenities: getCheckedValues("room_amenities"),
-  bathroom_type: field("hostel-bathroom-type").value,
-  bathroom_facilities: getCheckedValues("bathroom_facilities"),
-  water_availability: field("hostel-water").value,
-  electricity_availability: field("hostel-electricity").value,
-  security_features: getCheckedValues("security_features"),
-  nearby_services: field("hostel-nearby").value.trim(),
-  additional_charges: field("hostel-extra-charges").value.trim(),
   is_active: isActive,
   accepting_applications: acceptingApplications && isActive
 };
