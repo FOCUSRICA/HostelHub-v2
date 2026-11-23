@@ -2439,7 +2439,12 @@ await loadPendingPayments();
     document.getElementById("loading").textContent =
   "JavaScript reached the dashboard initialization.";
 
-    loadDashboard();
+   loadDashboard().catch((error) => {
+  console.error("[OWNER DASHBOARD ERROR]", error);
+
+  document.getElementById("loading").textContent =
+    "Dashboard error: " + (error.message || error);
+});
   </script>
 </body>
 </html>
