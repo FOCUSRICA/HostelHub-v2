@@ -2352,10 +2352,16 @@ if (!session) {
   return;
 }
 
+loading.textContent = "Verifying your signed-in user...";
+console.log("[OWNER DEBUG] Before getUser");
+
 const {
   data: { user },
   error
 } = await supabase.auth.getUser();
+
+console.log("[OWNER DEBUG] After getUser");
+loading.textContent = "User verification completed.";
 
 if (error) throw error;
 
