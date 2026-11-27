@@ -2374,11 +2374,15 @@ if (!user) {
   return;
 }
 
-        console.log("[OWNER DEBUG] Starting profile verification");
+       loading.textContent = "Loading your owner profile...";
+
+console.log("[OWNER DEBUG] Starting profile verification");
 
 const profile = await getMyProfile();
 
 console.log("[OWNER DEBUG] Profile verification completed:", profile);
+
+loading.textContent = "Owner profile loaded.";
 
         if (!profile) {
           loading.hidden = true;
