@@ -2330,10 +2330,16 @@ refreshApplicationsButton.addEventListener("click", () => {
     async function loadDashboard() {
       try {
        
+loading.textContent = "Checking your Supabase session...";
+console.log("[OWNER DEBUG] Before getSession");
+
 const {
   data: { session },
   error: sessionError
 } = await supabase.auth.getSession();
+
+console.log("[OWNER DEBUG] After getSession");
+loading.textContent = "Supabase session check completed.";
 
 if (sessionError) throw sessionError;
 
