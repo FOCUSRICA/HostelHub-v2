@@ -2421,12 +2421,20 @@ loading.textContent = "Owner profile loaded.";
         field("profile-phone").textContent =
           profile.phone || "Not provided";
 
-      loading.hidden = true;
-content.hidden = false;
+   loading.hidden = false;
+content.hidden = true;
 
+loading.textContent = "Loading hostel listings...";
 await loadHostels();
+
+loading.textContent = "Loading student applications...";
 await loadApplications();
+
+loading.textContent = "Loading pending payments...";
 await loadPendingPayments();
+
+loading.hidden = true;
+content.hidden = false;
       } catch (error) {
         loading.hidden = true;
         showNotice(
